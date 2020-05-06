@@ -8,8 +8,8 @@ public class Sample : MonoBehaviour {
     public Sprite icon;
 
     void Start() {
-        item.Set(new Contact { 
-            name = "vatsal", 
+        item.Set(new Contact {
+            name = "vatsal",
             description = "cool",
             displayPic = icon,
             fontColor = Color.yellow
@@ -18,15 +18,16 @@ public class Sample : MonoBehaviour {
         item.OnClick += () => Debug.Log("s");
     }
 
+    private void Person_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        Debug.Log(e.PropertyName);
+    }
+
     // Update is called once per frame
     void Update() {
         if(Input.GetKeyDown(KeyCode.Y)){
-            item.Set(new Contact {
-                name = "ambastha",
-                description = "cool",
-                displayPic = icon,
-                fontColor = Color.red
-            });
+            (item.Model as Contact).name = "New Name";
+            (item.Model as Contact).fontColor = Color.blue;
+            item.Model.Update("name", "color");
         }
     }
 }

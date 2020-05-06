@@ -7,7 +7,7 @@ using System.Reflection;
 
 [Serializable]
 public class BindingPair {
-    [SerializeField] string comment;
+    public string id;
     public BindingMember destination;
     public BindingMember source;
 }
@@ -27,46 +27,50 @@ public class BindingMember {
 [Serializable]
 public abstract class Binding<T> : MonoBehaviour where T : Component {
     [SerializeField] [ReorderableList] List<BindingPair> pairs;
-    [SerializeField] BindingContext context;
+    [SerializeField] BindingSource context;
     [SerializeField] protected T destination;
 
     void Start() {
         if (context != null) {
-            if (context.Data != null)
+            if (context.Model != null)
                 Pull();
-            context.OnDataChange += Pull;
+            context.OnDataChange += () => Pull();
+            context.OnMemberChange += id => Pull(id);
         }
     }
 
-    public void Pull() {
+    public void Pull(string id = null) {
         try {
             foreach (var update in pairs) {
+                if (!string.IsNullOrWhiteSpace(id) && !update.id.Equals(id))
+                    continue;
+
                 try {
                     MemberInfo dest = destination.GetType().GetMember(update.destination.path)[0];
-                    MemberInfo source = context.Data.GetType().GetMember(update.source.path)[0];
+                    MemberInfo source = context.Model.GetType().GetMember(update.source.path)[0];
 
                     if (update.destination.type == MemberType.Property) {
                         if (update.source.type == MemberType.Property)
                             (dest as PropertyInfo).SetValue(
                                 destination,
-                                (source as PropertyInfo).GetValue(context.Data)
+                                (source as PropertyInfo).GetValue(context.Model)
                             );
                         else
                             (dest as PropertyInfo).SetValue(
                                 destination,
-                                (source as FieldInfo).GetValue(context.Data)
+                                (source as FieldInfo).GetValue(context.Model)
                             );
                     }
                     else {
                         if (update.source.type == MemberType.Property)
                             (dest as FieldInfo).SetValue(
                                 destination,
-                                (source as PropertyInfo).GetValue(context.Data)
+                                (source as PropertyInfo).GetValue(context.Model)
                             );
                         else
                             (dest as FieldInfo).SetValue(
                                 destination,
-                                (source as FieldInfo).GetValue(context.Data)
+                                (source as FieldInfo).GetValue(context.Model)
                             );
                     }
                 }
@@ -85,7 +89,7 @@ public abstract class Binding<T> : MonoBehaviour where T : Component {
     }
 
     void TrySetReferencesAutomatically() {
-        var _context = GetComponentInParent<BindingContext>();
+        var _context = GetComponentInParent<BindingSource>();
         if (_context != null && context == null)
             context = _context;
 
