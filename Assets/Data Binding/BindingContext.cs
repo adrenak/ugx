@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public class BindingContext : MonoBehaviour {
-    public event Action OnSetData;
+    public event Action OnDataChange;
     [SerializeField] string typeName;
 
     public string TypeName {
@@ -26,7 +26,7 @@ public class BindingContext : MonoBehaviour {
         set {
             data = value;
             HandleDataChange();
-            OnSetData?.Invoke();
+            OnDataChange?.Invoke();
         }
     }
 

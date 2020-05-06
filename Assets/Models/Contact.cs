@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Contact {
-    public string name;
-    public string description;
-    public Sprite displayPic;
+namespace SomeNamespace{
+    public class Contact {
+        public string name;
+        public string description;
+        public Sprite displayPic;
+        public Color fontColor;
+    }
 }
