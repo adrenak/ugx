@@ -112,6 +112,83 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &244185218
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 244185219}
+  - component: {fileID: 244185221}
+  - component: {fileID: 244185220}
+  m_Layer: 5
+  m_Name: Message
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &244185219
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244185218}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 717613319}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.000022888, y: 591}
+  m_SizeDelta: {x: 434.8, y: 111.3}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &244185220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244185218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 49
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 49
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: New Text
+--- !u!222 &244185221
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244185218}
+  m_CullTransparentMesh: 0
 --- !u!1 &572651171
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,8 +226,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 239.65, y: -69}
-  m_SizeDelta: {x: 479.3, y: 1014.8}
+  m_AnchoredPosition: {x: -0.000022888, y: -245}
+  m_SizeDelta: {x: 691.1, y: 1369.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &572651174
 MonoBehaviour:
@@ -164,9 +241,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ef321354202eb4da0d46472c96f640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scrollRect: {fileID: 572651177}
+  _layoutGroup: {fileID: 1654330136}
+  _bgImage: {fileID: 572651175}
   prefab: {fileID: 356261530262157095, guid: 4d1fd26349e66d1419da104dcc1e98ee, type: 3}
-  _itemsSource: []
   _container: {fileID: 1654330134}
+  _itemsSource: []
 --- !u!114 &572651175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +403,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 572651172}
+  - {fileID: 244185219}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -500,7 +581,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000009117235}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1654330135
@@ -538,7 +619,7 @@ MonoBehaviour:
   m_Spacing: 5.59
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
 --- !u!1 &1899858009
 GameObject:
@@ -700,12 +781,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d20931e1a0a9241aa2ee954a9c2d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  message: {fileID: 244185220}
   listView: {fileID: 572651174}
   contacts:
-  - _name: Vatsal
-    _status: Enjoying some beer
-  - _name: Adrenak
-    _status: Developing UPF
+  - _name: Tom
+    _status: Just hanging... off of a plane.
+  - _name: Christian
+    _status: Just returning some video tapes.
+  - _name: Joaquin
+    _status: Hanging out with Oscar
+  - _name: Al
+    _status: What are you looking at, punk?
+  - _name: Matt
+    _status: Mars is delicious
 --- !u!4 &2125086535
 Transform:
   m_ObjectHideFlags: 0
