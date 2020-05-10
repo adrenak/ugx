@@ -11,9 +11,12 @@ namespace Adrenak.UPF {
         public event Action<ListItemView<T>> Clicked;
         public event Action OnPullToRefresh;
 
+        [Header("Pull Down Refresh")]
         [SerializeField] bool pullToRefresh;
         [SerializeField] float pullRefreshDistance;
+        [SerializeField] ListRefreshIndicator indicator;
 
+        [Header("Unity UI Components")]
         [SerializeField] ScrollRect _scrollRect;
         public ScrollRect ScrollRect => _scrollRect;
 
@@ -23,12 +26,12 @@ namespace Adrenak.UPF {
         [SerializeField] Image _bgImage;
         public Image BGImage => _bgImage;
 
+        [Header("Instantiation")]
         [SerializeField] V prefab;
 
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
-        [SerializeField] ListRefreshIndicator indicator;
 
         [SerializeField] List<T> _itemsSource;
         public List<T> ItemsSource {
@@ -39,7 +42,6 @@ namespace Adrenak.UPF {
                 Instantiate();
             }
         }
-
 
         void Clear() {
             foreach (Transform child in _container)

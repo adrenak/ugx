@@ -320,12 +320,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pullToRefresh: 1
   pullRefreshDistance: 250
+  indicator: {fileID: 2071892483}
   _scrollRect: {fileID: 572651177}
   _layoutGroup: {fileID: 1654330136}
   _bgImage: {fileID: 572651175}
   prefab: {fileID: 356261530262157095, guid: 4d1fd26349e66d1419da104dcc1e98ee, type: 3}
   _container: {fileID: 1654330134}
-  indicator: {fileID: 2071892483}
   _itemsSource: []
 --- !u!114 &572651175
 MonoBehaviour:
