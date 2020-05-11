@@ -3,6 +3,6 @@
         public string name;
         public string description;
         public string phoneNumer;
-        public bool isMarrier;
+        public bool isMarried;
     }
 }

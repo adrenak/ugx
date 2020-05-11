@@ -3,11 +3,11 @@ using UnityWeld.Binding;
 
 namespace Adrenak.UPF {
     [Binding]
-    public class ListItemView<T> : View<T> where T : ViewModel {
-        public event Action<ListItemView<T>> Clicked;
+    public abstract class ListItemView<T> : View<T> where T : ViewModel {
+        public event EventHandler OnClick;
 
-        public void OnClick() {
-            Clicked?.Invoke(this);
+        public void Click() {
+            OnClick?.Invoke(this, EventArgs.Empty);
         }
     }
 }

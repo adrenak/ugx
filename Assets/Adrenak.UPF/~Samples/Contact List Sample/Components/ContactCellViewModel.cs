@@ -2,10 +2,13 @@
 using UnityEngine;
 using UnityWeld.Binding;
 
-namespace Adrenak.UPF.Examples{
+namespace Adrenak.UPF.Examples {
     [Binding]
     [Serializable]
-    public class ContactListItemViewModel : ViewModel {
+    public class ContactCellViewModel : ViewModel {
+        public event EventHandler OnCall;
+        public event EventHandler OnDelete;
+
         [SerializeField] string _name;
         [Binding]
         public string Name {
@@ -18,6 +21,14 @@ namespace Adrenak.UPF.Examples{
         public string Status {
             get => _status;
             set => Set(ref _status, value);
+        }
+
+        public void Call() {
+            OnCall?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Delete() {
+            OnDelete?.Invoke(this, EventArgs.Empty);
         }
     }
 }

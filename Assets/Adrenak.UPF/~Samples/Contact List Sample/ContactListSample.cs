@@ -4,27 +4,40 @@ using UnityEngine;
 using Adrenak.UPF.Examples;
 using UnityEngine.UI;
 
-public class ContactListSample : MonoBehaviour {
-    public Text message;
-    public ContactListView listView;
-    public List<ContactListItemViewModel> contacts;
-    public ContactListItemViewModel extraContact;
+namespace Adrenak.UPF.Examples{
+    public class ContactListSample : MonoBehaviour {    
+        public Text message;
+        public ContactListView listView;
+        public List<ContactCellViewModel> contacts;
+        public ContactCellViewModel extraContact;
 
-    void Start() {
-        listView.LayoutGroup.spacing = 5;
-        listView.BGImage.color = Color.black;
+        void Start() {
+            listView.InstanceNamer = instance => instance.BindingContext.Name;
 
-        listView.ItemsSource = contacts;
-        listView.Clicked += obj => {
-            message.text = (obj as ContactListItemView).Model.Name;
-        };
-        
-        listView.OnPullToRefresh += async () => {
-            await Task.Delay(2000);
-            var items = listView.ItemsSource;
-            items.Add(extraContact);
-            listView.ItemsSource = items;
-            listView.StopRefresh();
-        };
+            // TODO: Make an extension method for this
+            foreach(var contact in contacts)
+                listView.ItemsSource.Add(contact);
+
+            listView.OnClick += (sender, e) => 
+                message.text = (sender as ContactCellView).BindingContext.Name;
+
+            listView.OnCall += contactCell => 
+                message.text = "Calling " + contactCell.Name;
+
+            listView.OnDelete += contactCell => {
+                message.text = "Deleting " + contactCell.Name;
+                listView.ItemsSource.Remove(contactCell);
+            };
+
+            listView.OnPullToRefresh += async () => {
+                await Task.Delay(200);
+                listView.ItemsSource.Add(extraContact);
+                listView.StopRefresh();
+            };
+        }
+
+        public void AddExtra(){
+            listView.ItemsSource.Add(extraContact);
+        }
     }
 }
