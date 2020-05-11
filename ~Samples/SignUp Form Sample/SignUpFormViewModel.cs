@@ -5,10 +5,7 @@ using UnityWeld.Binding;
 namespace Adrenak.UPF.Examples {
     [Serializable]
     [Binding]
-    public class SignUpFormViewModel : ViewModel {
-        public event EventHandler OnSubmit;
-        public event EventHandler OnCancel;
-
+    public class SignUpFormViewModel : FormViewModel {
         [SerializeField] string email;
         [Binding]
         public string Email {
@@ -28,14 +25,6 @@ namespace Adrenak.UPF.Examples {
         public bool AgreeWithTNC{
             get => agreeWithTnc;
             set => Set(ref agreeWithTnc, value);
-        }
-
-        public void Submit() {
-            OnSubmit?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void Cancel() {
-            OnCancel?.Invoke(this, EventArgs.Empty);
         }
     }
 }
