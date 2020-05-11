@@ -5,7 +5,7 @@ using UnityWeld.Binding;
 namespace Adrenak.UPF.Examples {
     [Binding]
     [Serializable]
-    public class ContactCellViewModel : ViewModel {
+    public class ContactCellViewModel : ListItemViewModel {
         public event EventHandler OnCall;
         public event EventHandler OnDelete;
 

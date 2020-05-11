@@ -29,7 +29,7 @@ namespace Adrenak.UPF.Examples{
                 listView.ItemsSource.Remove(contactCell);
             };
 
-            listView.OnPullToRefresh += async () => {
+            listView.OnPullToRefresh += async (sender, args) => {
                 await Task.Delay(200);
                 listView.ItemsSource.Add(extraContact);
                 listView.StopRefresh();
