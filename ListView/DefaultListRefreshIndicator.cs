@@ -3,8 +3,10 @@ using UnityEngine.UI;
 
 namespace Adrenak.UPF {
     public class DefaultListRefreshIndicator : ListRefreshIndicator {
+#pragma warning disable 0649
         [SerializeField] Text message;
         [SerializeField] Image spinner;
+#pragma warning restore 0649
 
         void Start() {
             SetValue(0);

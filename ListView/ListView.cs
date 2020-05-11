@@ -8,9 +8,10 @@ using UnityEngine.UI;
 namespace Adrenak.UPF {
     [Binding]
     public abstract class ListView<T, V> : View where T : ViewModel where V : ListItemView<T> {
-        public event Action<ListItemView<T>> Clicked;
+        public event EventHandler OnClick;
         public event Action OnPullToRefresh;
 
+#pragma warning disable 0649
         [Header("Pull Down Refresh")]
         [SerializeField] bool pullToRefresh;
         [SerializeField] float pullRefreshDistance;
@@ -32,29 +33,56 @@ namespace Adrenak.UPF {
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
+        [SerializeField] ObservableList<T> _itemsSource = new ObservableList<T>();
+        public ObservableList<T> ItemsSource => _itemsSource;
 
-        [SerializeField] List<T> _itemsSource;
-        public List<T> ItemsSource {
-            get => _itemsSource;
-            set {
-                _itemsSource = value;
-                Clear();
-                Instantiate();
+        readonly List<V> instantiated = new List<V>();
+#pragma warning restore 0649
+
+        public Func<V, string> InstanceNamer;
+
+        void Awake() {
+            ItemsSource.CollectionChanged += (sender, args) => {
+                switch (args.Action) {
+                    case NotifyCollectionChangedAction.Add:
+                        foreach (var newItem in args.NewItems)
+                            Instantiate(newItem as T);
+                        break;
+                    case NotifyCollectionChangedAction.Remove:
+                        foreach (var removed in args.OldItems)
+                            Destroy(removed as T);
+                        break;
+                }
+            };
+        }
+
+        void Instantiate(T t) {
+            var instance = Instantiate(prefab, _container);
+            instance.BindingContext = t;
+
+            instance.name = InstanceNamer != null ?
+                InstanceNamer(instance) :
+                "#" + instance.transform.GetSiblingIndex();
+
+            instantiated.Add(instance);
+
+            instance.OnClick += (sender, args) =>
+                OnClick?.Invoke(sender, args);
+
+            Init(instance.BindingContext);
+        }
+
+        void Destroy(T t) {
+            foreach (var instance in instantiated) {
+                if (instance.BindingContext == t) {
+                    Deinit(instance.BindingContext);
+                    Destroy(instance.gameObject);
+                }
             }
         }
 
-        void Clear() {
-            foreach (Transform child in _container)
-                Destroy(child.gameObject);
-        }
-
-        void Instantiate() {
-            foreach (var itemSource in _itemsSource) {
-                var instance = Instantiate(prefab, _container);
-                instance.Model = itemSource;
-                instance.Clicked += obj => Clicked?.Invoke(obj);
-            }
-        }
+        abstract protected void Init(T cell);
+        abstract protected void Deinit(T cell);
 
         void Update() {
             TryPullRefresh();
@@ -65,20 +93,21 @@ namespace Adrenak.UPF {
         // ================================================
         bool isRefreshing;
         bool markForRefresh;
+        
         void TryPullRefresh() {
             if (!pullToRefresh) return;
 
             // Make the list move smoothly
             if (isRefreshing)
                 TopPadding = (int)Mathf.Clamp(pullRefreshDistance - NegativeDragDistance, 0, Mathf.Infinity);
-            else 
+            else
                 TopPadding = (int)Mathf.Lerp(TopPadding, 0, Time.deltaTime / _scrollRect.decelerationRate);
 
             // If we're not refreshing, set the value that represents the fraction
             // of how much the list has been draged towards refresh. We only call 
             // this when not refreshing as when it IS refreshing, the Drag Distance
             // will go to 0 
-            if(!isRefreshing)
+            if (!isRefreshing)
                 indicator.SetValue(NegativeDragDistance / pullRefreshDistance);
 
             // We need to do this false->true to force 
