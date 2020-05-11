@@ -1,8 +1,8 @@
 ﻿using UnityWeld.Binding;
 
-namespace Adrenak.UPF.Examples {
+namespace Adrenak.UPF {
     [Binding]
-    public class SignUpFormView : View<SignUpFormViewModel> {
+    public abstract class FormView<T> : View<T> where T : FormViewModel {
         public void Submit() {
             BindingContext.Submit();
         }
