@@ -1,13 +1,10 @@
-﻿using System;
-using UnityWeld.Binding;
+﻿using UnityWeld.Binding;
 
 namespace Adrenak.UPF {
     [Binding]
-    public abstract class ListItemView<T> : View<T> where T : ViewModel {
-        public event EventHandler OnClick;
-
+    public abstract class ListItemView<T> : View<T> where T : ListItemViewModel {
         public void Click() {
-            OnClick?.Invoke(this, EventArgs.Empty);
+            BindingContext.Click();
         }
     }
 }

@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 namespace Adrenak.UPF {
     [Binding]
-    public abstract class ListView<T, V> : View where T : ViewModel where V : ListItemView<T> {
+    public abstract class ListView<T, V> : View where T : ListItemViewModel where V : ListItemView<T> {
         public event EventHandler OnClick;
-        public event Action OnPullToRefresh;
+        public event EventHandler OnPullToRefresh;
 
 #pragma warning disable 0649
         [Header("Pull Down Refresh")]
@@ -33,6 +33,7 @@ namespace Adrenak.UPF {
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
+        // NOTE: This COULD be moved to a ListViewModel too but I'm not doing that right now -adrenak
         [SerializeField] ObservableList<T> _itemsSource = new ObservableList<T>();
         public ObservableList<T> ItemsSource => _itemsSource;
 
@@ -66,7 +67,7 @@ namespace Adrenak.UPF {
 
             instantiated.Add(instance);
 
-            instance.OnClick += (sender, args) =>
+            instance.BindingContext.OnClick += (sender, args) =>
                 OnClick?.Invoke(sender, args);
 
             Init(instance.BindingContext);
@@ -125,7 +126,7 @@ namespace Adrenak.UPF {
                 isRefreshing = true;
                 markForRefresh = false;
                 indicator.SetRefreshing(true);
-                OnPullToRefresh?.Invoke();
+                OnPullToRefresh?.Invoke(this, EventArgs.Empty);
             }
         }
 
