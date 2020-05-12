@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
-using UnityWeld.Binding;
+
 
 namespace Adrenak.UPF {
-    [Binding]
+    
     public abstract class Page : BindableBehaviour {
         [SerializeField] string title;
-        [Binding]
+        
         public string Title {
             get => title;
             set => Set(ref title, value);
         }
 
         [SerializeField] Navigator navigation;
-        [Binding]
+        
         public Navigator Navigation => navigation;
 
         void Start() {

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Adrenak.UPF{
+namespace Adrenak.UPF {
     [Serializable]
     public class Bindable : INotifyPropertyChanged, INotifyPropertyChanging {
         readonly ConcurrentDictionary<string, object> _properties = new ConcurrentDictionary<string, object>();

@@ -1,14 +1,26 @@
-﻿using UnityWeld.Binding;
+﻿
 
 namespace Adrenak.UPF.Examples {
-    [Binding]
+    
     public class ContactCellView : View<ContactCellViewModel> {
         public void Call() {
-            BindingContext.Call();
+            Context.Call();
         }
 
         public void Delete() {
-            BindingContext.Delete();
+            Context.Delete();
+        }
+
+        protected override void InitializeFromContext() {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void BindViewToContext() {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void OnPropertyChange(string propertyName) {
+            throw new System.NotImplementedException();
         }
     }
 }

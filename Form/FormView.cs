@@ -1,14 +1,11 @@
-﻿using UnityWeld.Binding;
-
-namespace Adrenak.UPF {
-    [Binding]
+﻿namespace Adrenak.UPF {
     public abstract class FormView<T> : View<T> where T : Form {
         public void Submit() {
-            BindingContext.Submit();
+            Context.Submit();
         }
 
         public void Cancel() {
-            BindingContext.Cancel();
+            Context.Cancel();
         }
     }
 }

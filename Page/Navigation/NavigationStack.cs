@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityWeld.Binding;
+
 
 namespace Adrenak.UPF {
-    [Binding]
+    
     [System.Serializable]
     public class NavigationStack : Bindable {
         [SerializeField] List<Page> pages;
-        [Binding]
+        
         public List<Page> Pages => pages;
 
         public Page Top {

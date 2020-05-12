@@ -1,12 +1,24 @@
 ﻿using System;
-using UnityWeld.Binding;
+
 
 namespace Adrenak.UPF.Examples {
     [Serializable]
-    [Binding]
+    
     public class MovieListItemView : View<MovieCell> {
         public void Click() {
-            BindingContext.Click();
+            Context.Click();
+        }
+
+        protected override void InitializeFromContext() {
+            throw new NotImplementedException();
+        }
+
+        protected override void BindViewToContext() {
+            throw new NotImplementedException();
+        }
+
+        protected override void OnPropertyChange(string propertyName) {
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Adrenak.UPF.Examples{
                 listView.ItemsSource.Add(model);
 
             listView.OnClick += (sender, args) => {
-                page.Detail.Content.BindingContext = sender as MovieCell;
+                page.Detail.Content.Context = sender as MovieCell;
             };
         }
     }
