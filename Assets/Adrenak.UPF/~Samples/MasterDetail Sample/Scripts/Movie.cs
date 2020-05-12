@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Adrenak.UPF.Examples {
     [Serializable]   
-    public class Movie_Name_Rating : ViewModel {
+    public class Movie : ViewModel {
         public event EventHandler OnClick;
 
         [SerializeField] string name;        
