@@ -1,6 +1,9 @@
 ﻿using System;
+using UnityWeld.Binding;
 
-namespace Adrenak.UPF{
+namespace Adrenak.UPF {
+    [Serializable]
+    [Binding]
     public class ListItemViewModel : ViewModel {
         public event EventHandler OnClick;
 
