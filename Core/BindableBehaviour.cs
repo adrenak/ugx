@@ -54,5 +54,4 @@ namespace Adrenak.UPF{
             return Set(value, name);
         }
     }
-
 }
