@@ -539,7 +539,6 @@ GameObject:
   - component: {fileID: 7896796015666016562}
   - component: {fileID: 7896796015666016527}
   - component: {fileID: 7896796015666016524}
-  - component: {fileID: 7827918521794353483}
   m_Layer: 5
   m_Name: DetailText
   m_TagString: Untagged
@@ -606,22 +605,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
---- !u!114 &7827918521794353483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7896796015666016563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewAdapterTypeName: 
-  viewAdapterOptions: {fileID: 0}
-  viewModelPropertyName: Adrenak.UPF.Examples.ContactCellViewModel.Status
-  viewPropertyName: UnityEngine.UI.Text.text
 --- !u!1 &7896796015729401897
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,7 +688,6 @@ GameObject:
   - component: {fileID: 7896796016219416371}
   - component: {fileID: 7896796016219416333}
   - component: {fileID: 8969726198010893687}
-  - component: {fileID: 8600875400075415256}
   m_Layer: 5
   m_Name: ContactListItem Template
   m_TagString: Untagged
@@ -793,20 +775,8 @@ MonoBehaviour:
   _bindingContext:
     _name: 
     _status: 
---- !u!114 &8600875400075415256
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7896796016219416368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49626dc5a75e18d47b9eedb772ba5906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.ContactCellView.BindingContext
-  viewModelTypeName: Adrenak.UPF.Examples.ContactCellViewModel
+  nameDisplay: {fileID: 7896796017179683310}
+  statusDisplay: {fileID: 7896796015666016524}
 --- !u!1 &7896796017179683309
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,7 +788,6 @@ GameObject:
   - component: {fileID: 7896796017179683308}
   - component: {fileID: 7896796017179683305}
   - component: {fileID: 7896796017179683310}
-  - component: {fileID: 1656145594351653116}
   m_Layer: 5
   m_Name: MainText
   m_TagString: Untagged
@@ -885,19 +854,3 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
---- !u!114 &1656145594351653116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7896796017179683309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewAdapterTypeName: 
-  viewAdapterOptions: {fileID: 0}
-  viewModelPropertyName: Adrenak.UPF.Examples.ContactCellViewModel.Name
-  viewPropertyName: UnityEngine.UI.Text.text

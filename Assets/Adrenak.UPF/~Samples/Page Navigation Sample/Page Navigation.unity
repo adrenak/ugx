@@ -112,22 +112,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &5
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2043867867182211925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewAdapterTypeName: 
-  viewAdapterOptions: {fileID: 0}
-  viewModelPropertyName: Adrenak.UPF.Examples.MarketPage.Title
-  viewPropertyName: UnityEngine.UI.Text.text
 --- !u!1 &42008462
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,7 +692,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 651510783}
-  - component: {fileID: 651510786}
+  - component: {fileID: 651510784}
   m_Layer: 5
   m_Name: NavigationBar
   m_TagString: Untagged
@@ -738,7 +722,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -56.241}
   m_SizeDelta: {x: 0, y: 112.481094}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &651510786
+--- !u!114 &651510784
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -747,10 +731,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 651510782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896c89cf2f6fd6343b574c210155b443, type: 3}
+  m_Script: {fileID: 11500000, guid: 9496e12aae5afd64083951ae7fc0d67e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backButton: {fileID: 1130427033}
   navigator: {fileID: 2055083189}
+  headerDisplay: {fileID: 1256891544}
 --- !u!1 &793091243
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,7 +1017,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 651510786}
+      - m_Target: {fileID: 0}
         m_MethodName: Back
         m_Mode: 1
         m_Arguments:
@@ -1178,7 +1164,6 @@ GameObject:
   - component: {fileID: 1256891543}
   - component: {fileID: 1256891545}
   - component: {fileID: 1256891544}
-  - component: {fileID: 2043867868098037702}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1683,7 +1668,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2043867868587934657}
+      - m_Target: {fileID: 0}
         m_MethodName: Back
         m_Mode: 1
         m_Arguments:
@@ -1744,7 +1729,6 @@ GameObject:
   - component: {fileID: 2043867867182211924}
   - component: {fileID: 2043867867182211930}
   - component: {fileID: 2043867867182211931}
-  - component: {fileID: 5}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1869,35 +1853,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043867867317564822}
   m_CullTransparentMesh: 0
---- !u!114 &2043867868098037702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1256891542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26fff9f3256f02d43b6065b078449891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewAdapterTypeName: 
-  viewAdapterOptions: {fileID: 0}
-  viewModelPropertyName: Adrenak.UPF.Examples.GreetPage.Title
-  viewPropertyName: UnityEngine.UI.Text.text
---- !u!114 &2043867868587934657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2043867868587934781}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896c89cf2f6fd6343b574c210155b443, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  navigator: {fileID: 2055083189}
 --- !u!224 &2043867868587934780
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1929,7 +1884,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2043867868587934780}
-  - component: {fileID: 2043867868587934657}
+  - component: {fileID: 2043867868587934782}
   m_Layer: 5
   m_Name: NavigationBar
   m_TagString: Untagged
@@ -1937,6 +1892,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2043867868587934782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2043867868587934781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9496e12aae5afd64083951ae7fc0d67e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backButton: {fileID: 2043867867038971226}
+  navigator: {fileID: 2055083189}
+  headerDisplay: {fileID: 2043867867182211931}
 --- !u!114 &2378546090843766499
 MonoBehaviour:
   m_ObjectHideFlags: 0

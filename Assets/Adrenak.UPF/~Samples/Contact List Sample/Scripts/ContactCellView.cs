@@ -1,8 +1,11 @@
-﻿
+﻿using UnityEngine;
+using UnityEngine.UI;
 
-namespace Adrenak.UPF.Examples {
-    
+namespace Adrenak.UPF.Examples {  
     public class ContactCellView : View<ContactCellViewModel> {
+        [SerializeField] Text nameDisplay;
+        [SerializeField] Text statusDisplay;
+
         public void Call() {
             Context.Call();
         }
@@ -12,15 +15,23 @@ namespace Adrenak.UPF.Examples {
         }
 
         protected override void InitializeFromContext() {
-            throw new System.NotImplementedException();
+            nameDisplay.text = Context.Name;
+            statusDisplay.text = Context.Status;
         }
 
         protected override void BindViewToContext() {
-            throw new System.NotImplementedException();
+            // This isn't a 2 way binding
         }
 
         protected override void OnPropertyChange(string propertyName) {
-            throw new System.NotImplementedException();
+            switch(propertyName){
+                case nameof(Context.Name):
+                    nameDisplay.text = Context.Name;
+                    break;
+                case nameof(Context.Status):
+                    statusDisplay.text = Context.Status;
+                    break;
+            }
         }
     }
 }
