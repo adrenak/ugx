@@ -705,7 +705,7 @@ GameObject:
   - component: {fileID: 7896796016219416371}
   - component: {fileID: 7896796016219416333}
   - component: {fileID: 8969726198010893687}
-  - component: {fileID: 478965379588208522}
+  - component: {fileID: 8600875400075415256}
   m_Layer: 5
   m_Name: ContactListItem Template
   m_TagString: Untagged
@@ -793,7 +793,7 @@ MonoBehaviour:
   _bindingContext:
     _name: 
     _status: 
---- !u!114 &478965379588208522
+--- !u!114 &8600875400075415256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

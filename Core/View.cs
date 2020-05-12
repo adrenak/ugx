@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityWeld.Binding;
 
 namespace Adrenak.UPF {
+    [Serializable]
     [Binding]
     public class View<T> : View where T : ViewModel {
         [SerializeField] T _bindingContext;
@@ -13,6 +14,8 @@ namespace Adrenak.UPF {
         }
     }
 
+    [Serializable]
+    [Binding]
     public class View : BindableBehaviour {
         public event EventHandler Destroyed;
 

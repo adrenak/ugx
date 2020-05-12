@@ -6,6 +6,7 @@ using UnityWeld.Binding;
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
+    [Serializable]
     [Binding]
     public abstract class ListView<T, V> : View where T : ListItemViewModel where V : ListItemView<T> {
         public event EventHandler OnClick;
