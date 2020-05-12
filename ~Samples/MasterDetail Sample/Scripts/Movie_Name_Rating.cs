@@ -1,22 +1,18 @@
 ﻿using System;
 using UnityEngine;
 
-
 namespace Adrenak.UPF.Examples {
-    [Serializable]
-    
-    public class MovieCell : ViewModel {
+    [Serializable]   
+    public class Movie_Name_Rating : ViewModel {
         public event EventHandler OnClick;
 
-        [SerializeField] string name;
-        
+        [SerializeField] string name;        
         public string Name {
             get => name;
             set => Set(ref name, value);
         }
 
-        [SerializeField] float rating;
-        
+        [SerializeField] float rating;        
         public float Rating {
             get => rating;
             set => Set(ref rating, value);
