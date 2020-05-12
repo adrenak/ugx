@@ -1,8 +1,8 @@
 ﻿using System;
-using UnityWeld.Binding;
+
 
 namespace Adrenak.UPF.Examples {
-    [Binding]
+    
     public class ContactListView : ListView<ContactCellViewModel, ContactCellView> {
         public event Action<ContactCellViewModel> OnCall;
         public event Action<ContactCellViewModel> OnDelete;

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using UnityWeld.Binding;
+
 
 namespace Adrenak.UPF.Examples {
-    [Binding]
+    
     public class GreetPage : ContentPage {
         [SerializeField] MarketPage market;
 

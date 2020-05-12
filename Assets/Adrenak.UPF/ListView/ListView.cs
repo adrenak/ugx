@@ -2,12 +2,14 @@
 using System.Reflection;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityWeld.Binding;
+using System.Collections.Specialized;
+
 using UnityEngine.UI;
+using System.Collections.ObjectModel;
 
 namespace Adrenak.UPF {
     [Serializable]
-    [Binding]
+    
     public abstract class ListView<T, V> : View where T : ViewModel where V : View<T> {
         public event EventHandler OnPullToRefresh;
 
@@ -34,8 +36,8 @@ namespace Adrenak.UPF {
         public Transform Container => _container;
 
         // NOTE: This COULD be moved to a ListViewModel too but I'm not doing that right now -adrenak
-        [SerializeField] ObservableList<T> _itemsSource = new ObservableList<T>();
-        public ObservableList<T> ItemsSource => _itemsSource;
+        [SerializeField] ObservableCollection<T> _itemsSource = new ObservableCollection<T>();
+        public ObservableCollection<T> ItemsSource => _itemsSource;
 
         readonly List<V> instantiated = new List<V>();
 #pragma warning restore 0649
@@ -59,20 +61,20 @@ namespace Adrenak.UPF {
 
         void Instantiate(T t) {
             var instance = Instantiate(prefab, _container);
-            instance.BindingContext = t;
+            instance.Context = t;
 
             instance.name = InstanceNamer != null ?
                 InstanceNamer(instance) :
                 "#" + instance.transform.GetSiblingIndex();
 
             instantiated.Add(instance);
-            Init(instance.BindingContext);
+            Init(instance.Context);
         }
 
         void Destroy(T t) {
             foreach (var instance in instantiated) {
-                if (instance.BindingContext == t) {
-                    Deinit(instance.BindingContext);
+                if (instance.Context == t) {
+                    Deinit(instance.Context);
                     Destroy(instance.gameObject);
                 }
             }

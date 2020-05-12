@@ -1,9 +1,7 @@
 ﻿using System;
-using UnityWeld.Binding;
 
 namespace Adrenak.UPF {
     [Serializable]
-    [Binding]
     public abstract class Form : ViewModel {
         public event EventHandler OnSubmit;
         public event EventHandler OnCancel;

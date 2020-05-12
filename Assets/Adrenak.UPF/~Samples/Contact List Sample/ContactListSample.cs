@@ -12,7 +12,7 @@ namespace Adrenak.UPF.Examples{
         public ContactCellViewModel extraContact;
 
         void Start() {
-            listView.InstanceNamer = instance => instance.BindingContext.Name;
+            listView.InstanceNamer = instance => instance.Context.Name;
 
             // TODO: Make an extension method for this
             foreach(var contact in contacts)

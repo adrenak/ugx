@@ -1,6 +1,30 @@
-﻿using UnityWeld.Binding;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Adrenak.UPF.Examples {
-    [Binding]
-    public class SignUpFormView : FormView<SignUpForm> { }
+    public class SignUpFormView : FormView<SignUpForm> {
+        [SerializeField] InputField emailInput;
+        [SerializeField] InputField passwordInput;
+
+        protected override void InitializeFromContext() {
+            emailInput.text = Context.Email;
+            passwordInput.text = Context.Password;
+        }
+
+        protected override void OnPropertyChange(string propertyName) {
+            switch (propertyName) {
+                case nameof(Context.Email):
+                    emailInput.text = Context.Email;
+                    break;
+                case nameof(Context.Password):
+                    passwordInput.text = Context.Password;
+                    break;
+            }
+        }
+
+        protected override void BindViewToContext() {
+            emailInput.onValueChanged.AddListener(value => Context.Email = value);
+            passwordInput.onValueChanged.AddListener(value => Context.Password = value);
+        }
+    }
 }

@@ -1,21 +1,30 @@
 ﻿using System;
 using UnityEngine;
-using UnityWeld.Binding;
 
 namespace Adrenak.UPF {
     [Serializable]
-    [Binding]
-    public class View<T> : View where T : ViewModel {
+    public abstract class View<T> : View where T : ViewModel {
         [SerializeField] T _bindingContext;
-        [Binding]
-        public T BindingContext {
+        
+        public T Context {
             get => _bindingContext;
             set => Set(ref _bindingContext, value);
         }
+
+        protected abstract void InitializeFromContext();
+        protected abstract void OnPropertyChange(string propertyName);
+
+        void Awake() {
+            InitializeFromContext();
+            BindViewToContext();
+            Context.PropertyChanged += (sender, args) => OnPropertyChange(args.PropertyName);
+        }
+
+        protected abstract void BindViewToContext();
     }
 
     [Serializable]
-    [Binding]
+    
     public class View : BindableBehaviour {
         public event EventHandler Destroyed;
 

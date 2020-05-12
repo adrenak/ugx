@@ -300,7 +300,6 @@ GameObject:
   - component: {fileID: 525012723}
   - component: {fileID: 525012722}
   - component: {fileID: 525012721}
-  - component: {fileID: 525012720}
   m_Layer: 5
   m_Name: Sign Up Form
   m_TagString: Untagged
@@ -333,20 +332,6 @@ RectTransform:
   m_AnchoredPosition: {x: 1.5, y: 5}
   m_SizeDelta: {x: -5.100006, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &525012720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 525012718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49626dc5a75e18d47b9eedb772ba5906, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.SignUpFormView.BindingContext
-  viewModelTypeName: Adrenak.UPF.Examples.SignUpForm
 --- !u!114 &525012721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,6 +348,8 @@ MonoBehaviour:
     email: vatsal@xr.buzz
     password: somepassword
     agreeWithTnc: 0
+  emailInput: {fileID: 588506731}
+  passwordInput: {fileID: 1641846237}
 --- !u!114 &525012722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -535,9 +522,8 @@ GameObject:
   - component: {fileID: 588506733}
   - component: {fileID: 588506732}
   - component: {fileID: 588506731}
-  - component: {fileID: 588506730}
   m_Layer: 5
-  m_Name: Name
+  m_Name: Email
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -564,28 +550,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.99993896, y: 0.5}
   m_SizeDelta: {x: -571.9, y: 94.1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &588506730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 588506728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.SignUpForm.Email
-  viewEventName: UnityEngine.UI.InputField.onValueChanged
-  viewPropertyName: UnityEngine.UI.InputField.text
-  viewAdapterTypeName: 
-  viewAdapterOptions: {fileID: 0}
-  viewModelAdapterTypeName: 
-  viewModelAdapterOptions: {fileID: 0}
-  exceptionPropertyName: 
-  exceptionAdapterTypeName: 
-  exceptionAdapterOptions: {fileID: 0}
 --- !u!114 &588506731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,7 +1208,6 @@ GameObject:
   - component: {fileID: 1641846239}
   - component: {fileID: 1641846238}
   - component: {fileID: 1641846237}
-  - component: {fileID: 1641846236}
   m_Layer: 5
   m_Name: Password
   m_TagString: Untagged
@@ -1273,28 +1236,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.99993896, y: -0.099975586}
   m_SizeDelta: {x: -571.9, y: 93.2}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1641846236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1641846234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.SignUpForm.Password
-  viewEventName: UnityEngine.UI.InputField.onValueChanged
-  viewPropertyName: UnityEngine.UI.InputField.text
-  viewAdapterTypeName: 
-  viewAdapterOptions: {fileID: 0}
-  viewModelAdapterTypeName: 
-  viewModelAdapterOptions: {fileID: 0}
-  exceptionPropertyName: 
-  exceptionAdapterTypeName: 
-  exceptionAdapterOptions: {fileID: 0}
 --- !u!114 &1641846237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1697,7 +1638,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1764522754}
   - component: {fileID: 1764522756}
-  - component: {fileID: 1764522755}
   m_Layer: 5
   m_Name: Toggle
   m_TagString: Untagged
@@ -1726,28 +1666,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.045043945, y: 3}
   m_SizeDelta: {x: -1123.8301, y: 39.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1764522755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1764522753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.SignUpForm.AgreeWithTNC
-  viewEventName: UnityEngine.UI.Toggle.onValueChanged
-  viewPropertyName: UnityEngine.UI.Toggle.isOn
-  viewAdapterTypeName: 
-  viewAdapterOptions: {fileID: 0}
-  viewModelAdapterTypeName: 
-  viewModelAdapterOptions: {fileID: 0}
-  exceptionPropertyName: 
-  exceptionAdapterTypeName: 
-  exceptionAdapterOptions: {fileID: 0}
 --- !u!114 &1764522756
 MonoBehaviour:
   m_ObjectHideFlags: 0
