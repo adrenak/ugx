@@ -9,15 +9,15 @@ namespace Adrenak.UPF {
         
         public NavigationStack Stack => stack;
 
-        [SerializeField] ContentPage rootPage;
+        [SerializeField] Page rootPage;
         
-        public ContentPage Root => rootPage;
+        public Page Root => rootPage;
 
         void Start() {
             PushAsync(rootPage);
         }
 
-        async public Task PushAsync(ContentPage page) {
+        async public Task PushAsync(Page page) {
             if(stack.Top != null)
                 stack.Top.OnDisappearing();
             page.OnAppearing();

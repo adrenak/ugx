@@ -2,19 +2,18 @@
 
 namespace Adrenak.UPF.Examples{
     public class MovieExample : MonoBehaviour {
-        public MovieMasterDetailPage page;
+        public MasterDetailPage page;
 
-        public Movie_Name_Rating[] models;
+        public Movie[] models;
 
         void Start() {
-            var listView = page.Master.Content;
+            var listView = page.Master.Content as MovieListView;
 
             foreach (var model in models)
                 listView.ItemsSource.Add(model);
 
-            listView.OnClick += (sender, args) => {
-                page.Detail.Content.Context = sender as Movie_Name_Rating;
-            };
+            listView.OnClick += (sender, args) => 
+                (page.Detail.Content as MovieView).Context = sender as Movie;
         }
     }
 }

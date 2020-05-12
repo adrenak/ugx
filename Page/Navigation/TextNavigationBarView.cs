@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
-    public class SimpleNavigationBarView : NavigationBarView {
+    public class TextNavigationBarView : NavigationBarView {
         [SerializeField] Text headerDisplay;
         public string Header {
             get => headerDisplay != null ? headerDisplay.text : string.Empty;

@@ -24,7 +24,7 @@ namespace Adrenak.UPF {
         }
     }
 
-    [Serializable]    
+    [Serializable]
     public class View : BindableBehaviour {
         public event EventHandler Destroyed;
 

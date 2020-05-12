@@ -3,13 +3,13 @@
 
 namespace Adrenak.UPF.Examples {
     
-    public class GreetPage : ContentPage {
+    public class GreetPage : Page {
         [SerializeField] MarketPage market;
 
         protected override void InitializePage() { }
 
         public void GoToMarket() {
-            Navigation.PushAsync(market);
+            Navigator.PushAsync(market);
         }
 
         public override void OnAppearing() {

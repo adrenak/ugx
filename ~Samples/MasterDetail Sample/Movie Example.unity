@@ -437,7 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 635494086}
   - component: {fileID: 635494088}
-  - component: {fileID: 635494089}
+  - component: {fileID: 635494087}
   m_Layer: 5
   m_Name: Detail
   m_TagString: Untagged
@@ -465,15 +465,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -763.5}
   m_SizeDelta: {x: 0, y: -1526.9}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &635494088
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 635494085}
-  m_CullTransparentMesh: 0
---- !u!114 &635494089
+--- !u!114 &635494087
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -482,12 +474,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 635494085}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47de284288ee11045a804f0bb9a34928, type: 3}
+  m_Script: {fileID: 11500000, guid: d6572ba2233e6554aaaf20278514befc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   title: 
-  navigation: {fileID: 0}
+  navigator: {fileID: 830565411}
   content: {fileID: 737317576}
+--- !u!222 &635494088
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635494085}
+  m_CullTransparentMesh: 0
 --- !u!1 &737317572
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 830565409}
   - component: {fileID: 830565410}
+  - component: {fileID: 830565411}
   m_Layer: 5
   m_Name: Movie Master Page
   m_TagString: Untagged
@@ -627,14 +628,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 830565408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29ccc4d27de83c041951f22e8e66395c, type: 3}
+  m_Script: {fileID: 11500000, guid: c9642e0479bb6c449993dc9360b76187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   title: 
-  navigation: {fileID: 0}
+  navigator: {fileID: 830565411}
   master: {fileID: 1291403206}
-  detail: {fileID: 635494089}
-  isDetailPresented: 0
+  detail: {fileID: 635494087}
+--- !u!114 &830565411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 830565408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07e0bd347c32879479a7e39ef752f996, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stack:
+    pages: []
+  rootPage: {fileID: 1291403206}
 --- !u!1 &860948200
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,11 +950,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1291403202}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c66c91e08f5eb714f87d1d06c600c823, type: 3}
+  m_Script: {fileID: 11500000, guid: d6572ba2233e6554aaaf20278514befc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   title: 
-  navigation: {fileID: 0}
+  navigator: {fileID: 830565411}
   content: {fileID: 1480472513}
 --- !u!1 &1480472510
 GameObject:

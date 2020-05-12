@@ -788,8 +788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Market
-  navigation: {fileID: 2055083189}
-  content: {fileID: 0}
+  navigator: {fileID: 2055083189}
   greet: {fileID: 2052296800}
 --- !u!1 &871592230
 GameObject:
@@ -1508,8 +1507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Greetings!
-  navigation: {fileID: 2055083189}
-  content: {fileID: 42008464}
+  navigator: {fileID: 2055083189}
   market: {fileID: 793091245}
 --- !u!1 &2055083187
 GameObject:

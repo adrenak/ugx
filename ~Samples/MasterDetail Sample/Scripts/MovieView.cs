@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Adrenak.UPF.Examples {
     [Serializable]  
-    public class Movie_Name_Rating_View : View<Movie_Name_Rating> {
+    public class MovieView : View<Movie> {
         [SerializeField] Text nameDisplay;
         [SerializeField] Text ratingDisplay;
 
