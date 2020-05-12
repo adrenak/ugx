@@ -4,7 +4,7 @@ namespace Adrenak.UPF.Examples{
     public class MovieExample : MonoBehaviour {
         public MovieMasterDetailPage page;
 
-        public MovieCell[] models;
+        public Movie_Name_Rating[] models;
 
         void Start() {
             var listView = page.Master.Content;
@@ -13,7 +13,7 @@ namespace Adrenak.UPF.Examples{
                 listView.ItemsSource.Add(model);
 
             listView.OnClick += (sender, args) => {
-                page.Detail.Content.Context = sender as MovieCell;
+                page.Detail.Content.Context = sender as Movie_Name_Rating;
             };
         }
     }
