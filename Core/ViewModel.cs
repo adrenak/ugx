@@ -1,7 +1,4 @@
-﻿
-
-namespace Adrenak.UPF {
-    [System.Serializable]
-    
+﻿namespace Adrenak.UPF {
+    [System.Serializable]    
     public class ViewModel : Bindable { }
 }
