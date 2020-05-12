@@ -160,10 +160,10 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -328,10 +328,10 @@ RectTransform:
   m_Father: {fileID: 163105257}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 346}
-  m_SizeDelta: {x: -278.1, y: -999.3}
+  m_AnchorMin: {x: 0.07039584, y: 0.020370372}
+  m_AnchorMax: {x: 0.92789567, y: 0.96770376}
+  m_AnchoredPosition: {x: 1.5, y: 5}
+  m_SizeDelta: {x: -5.100006, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &525012720
 MonoBehaviour:
@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewModelPropertyName: Adrenak.UPF.Examples.SignUpFormView.BindingContext
-  viewModelTypeName: Adrenak.UPF.Examples.SignUpFormViewModel
+  viewModelTypeName: Adrenak.UPF.Examples.SignUpForm
 --- !u!114 &525012721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bindingContext:
     email: vatsal@xr.buzz
-    password: DDR@tr@y
+    password: somepassword
     agreeWithTnc: 0
 --- !u!114 &525012722
 MonoBehaviour:
@@ -432,10 +432,10 @@ RectTransform:
   m_Father: {fileID: 525012719}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.042786, y: -226.40002}
-  m_SizeDelta: {x: 192.49, y: 71.94}
+  m_AnchorMin: {x: 0, y: 0.39400002}
+  m_AnchorMax: {x: 1, y: 0.39400002}
+  m_AnchoredPosition: {x: 0.042785645, y: 2.730011}
+  m_SizeDelta: {x: -1449.51, y: 48.08}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &584256405
 MonoBehaviour:
@@ -559,10 +559,10 @@ RectTransform:
   m_Father: {fileID: 525012719}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.17078848, y: 0.75748336}
-  m_AnchorMax: {x: 0.8268241, y: 0.832225}
-  m_AnchoredPosition: {x: 1.0000305, y: -3.5}
-  m_SizeDelta: {x: -7.9000244, y: 4.899994}
+  m_AnchorMin: {x: 0, y: 0.84000003}
+  m_AnchorMax: {x: 1, y: 0.84000003}
+  m_AnchoredPosition: {x: -0.99993896, y: 0.5}
+  m_SizeDelta: {x: -571.9, y: 94.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &588506730
 MonoBehaviour:
@@ -576,7 +576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.SignUpFormViewModel.Email
+  viewModelPropertyName: Adrenak.UPF.Examples.SignUpForm.Email
   viewEventName: UnityEngine.UI.InputField.onValueChanged
   viewPropertyName: UnityEngine.UI.InputField.text
   viewAdapterTypeName: 
@@ -1141,10 +1141,10 @@ RectTransform:
   m_Father: {fileID: 525012719}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.042786, y: -116}
-  m_SizeDelta: {x: 192.49, y: 71.94}
+  m_AnchorMin: {x: 0, y: 0.45227244}
+  m_AnchorMax: {x: 1, y: 0.45227244}
+  m_AnchoredPosition: {x: -0.45721436, y: 0.9299927}
+  m_SizeDelta: {x: -1450.51, y: 48.08}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1298256638
 MonoBehaviour:
@@ -1268,10 +1268,10 @@ RectTransform:
   m_Father: {fileID: 525012719}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.17078848, y: 0.5717751}
-  m_AnchorMax: {x: 0.8268241, y: 0.65423054}
-  m_AnchoredPosition: {x: 1.0000305, y: 4}
-  m_SizeDelta: {x: -7.9000244, y: -2.0999985}
+  m_AnchorMin: {x: 0, y: 0.69600004}
+  m_AnchorMax: {x: 1, y: 0.69600004}
+  m_AnchoredPosition: {x: -0.99993896, y: -0.099975586}
+  m_SizeDelta: {x: -571.9, y: 93.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1641846236
 MonoBehaviour:
@@ -1285,7 +1285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.SignUpFormViewModel.Password
+  viewModelPropertyName: Adrenak.UPF.Examples.SignUpForm.Password
   viewEventName: UnityEngine.UI.InputField.onValueChanged
   viewPropertyName: UnityEngine.UI.InputField.text
   viewAdapterTypeName: 
@@ -1334,8 +1334,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1641846238}
   m_TextComponent: {fileID: 817544570}
   m_Placeholder: {fileID: 888397239}
-  m_ContentType: 0
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
@@ -1424,7 +1424,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000008583069, y: 0.000039100647}
+  m_AnchoredPosition: {x: -0.0000076293945, y: 0.000038146973}
   m_SizeDelta: {x: -11.43, y: -11.43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1679464948
@@ -1721,10 +1721,10 @@ RectTransform:
   m_Father: {fileID: 525012719}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.045059, y: 11}
-  m_SizeDelta: {x: 518.17, y: 39.3}
+  m_AnchorMin: {x: 0, y: 0.52237344}
+  m_AnchorMax: {x: 1, y: 0.52237344}
+  m_AnchoredPosition: {x: 0.045043945, y: 3}
+  m_SizeDelta: {x: -1123.8301, y: 39.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1764522755
 MonoBehaviour:
@@ -1738,7 +1738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26990677ffff9664d853a81fcb765384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewModelPropertyName: Adrenak.UPF.Examples.SignUpFormViewModel.AgreeWithTNC
+  viewModelPropertyName: Adrenak.UPF.Examples.SignUpForm.AgreeWithTNC
   viewEventName: UnityEngine.UI.Toggle.onValueChanged
   viewPropertyName: UnityEngine.UI.Toggle.isOn
   viewAdapterTypeName: 
@@ -1941,10 +1941,10 @@ RectTransform:
   m_Father: {fileID: 525012719}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -8.8, y: -362.3}
-  m_SizeDelta: {x: 701.5, y: 118.3}
+  m_AnchorMin: {x: 0, y: 0.2916459}
+  m_AnchorMax: {x: 1, y: 0.2916459}
+  m_AnchoredPosition: {x: 0.54278564, y: -4.3999023}
+  m_SizeDelta: {x: -939.5, y: 117.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2140603495
 GameObject:

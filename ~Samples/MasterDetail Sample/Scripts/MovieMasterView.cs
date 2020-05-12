@@ -1,0 +1,22 @@
+﻿using System;
+using UnityWeld.Binding;
+
+namespace Adrenak.UPF.Examples {
+    [Serializable]
+    [Binding]
+    public class MovieMasterView : ListView<MovieCell, MovieListItemView> {
+        public event EventHandler OnClick;
+
+        protected override void Init(MovieCell cell) {
+            cell.OnClick += HandleOnClick;
+        }
+
+        protected override void Deinit(MovieCell cell) {
+            cell.OnClick -= HandleOnClick;
+        }
+
+        private void HandleOnClick(object sender, EventArgs e) {
+            OnClick?.Invoke(sender as MovieCell, EventArgs.Empty);
+        }
+    }
+}
