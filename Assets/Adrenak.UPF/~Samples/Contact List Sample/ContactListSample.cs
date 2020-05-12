@@ -18,8 +18,8 @@ namespace Adrenak.UPF.Examples{
             foreach(var contact in contacts)
                 listView.ItemsSource.Add(contact);
 
-            listView.OnClick += (sender, e) => 
-                message.text = (sender as ContactCellView).BindingContext.Name;
+            listView.OnClick += cell => 
+                message.text = cell.Name;
 
             listView.OnCall += contactCell => 
                 message.text = "Calling " + contactCell.Name;

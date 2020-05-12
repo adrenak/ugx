@@ -2,5 +2,5 @@
 
 namespace Adrenak.UPF.Examples {
     [Binding]
-    public class SignUpFormView : FormView<SignUpForm> { }
+    public class MovieDetailView : View<MovieCell> { }
 }

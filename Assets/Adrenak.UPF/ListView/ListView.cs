@@ -8,15 +8,14 @@ using UnityEngine.UI;
 namespace Adrenak.UPF {
     [Serializable]
     [Binding]
-    public abstract class ListView<T, V> : View where T : ListItemViewModel where V : ListItemView<T> {
-        public event EventHandler OnClick;
+    public abstract class ListView<T, V> : View where T : ViewModel where V : View<T> {
         public event EventHandler OnPullToRefresh;
 
 #pragma warning disable 0649
         [Header("Pull Down Refresh")]
         [SerializeField] bool pullToRefresh;
         [SerializeField] float pullRefreshDistance;
-        [SerializeField] ListRefreshIndicator indicator;
+        [SerializeField] RefreshIndicator indicator;
 
         [Header("Unity UI Components")]
         [SerializeField] ScrollRect _scrollRect;
@@ -67,10 +66,6 @@ namespace Adrenak.UPF {
                 "#" + instance.transform.GetSiblingIndex();
 
             instantiated.Add(instance);
-
-            instance.BindingContext.OnClick += (sender, args) =>
-                OnClick?.Invoke(sender, args);
-
             Init(instance.BindingContext);
         }
 
@@ -83,8 +78,8 @@ namespace Adrenak.UPF {
             }
         }
 
-        abstract protected void Init(T cell);
-        abstract protected void Deinit(T cell);
+        virtual protected void Init(T cell) { }
+        virtual protected void Deinit(T cell) { }
 
         void Update() {
             TryPullRefresh();

@@ -11,21 +11,9 @@ namespace Adrenak.UPF {
             set => Set(ref title, value);
         }
 
-        [SerializeField] Sprite icon;
-        [Binding]
-        public Sprite Icon {
-            get => icon;
-            set => Set(ref icon, value);
-        }
-
-        [Space(10)]
         [SerializeField] Navigator navigation;
         [Binding]
         public Navigator Navigation => navigation;
-
-        [SerializeField] NavigationBar navigationBar;
-        [Binding]
-        public NavigationBar NavigationBar => navigationBar;
 
         void Start() {
             InitializePage();
@@ -45,7 +33,7 @@ namespace Adrenak.UPF {
             Debug.Log(content);
         }
 
-        protected abstract void InitializePage();
+        protected virtual void InitializePage() { }
         public virtual void OnAppearing() { }
         public virtual void OnDisappearing() { }
         public virtual void OnBackButtonPress() { }
