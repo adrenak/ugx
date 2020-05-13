@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 
 using UnityEngine.UI;
 using System.Collections.ObjectModel;
+using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]
@@ -39,11 +40,8 @@ namespace Adrenak.UPF {
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
-        // NOTE: This COULD be moved to a ListViewModel too but I'm not doing that right now -adrenak
-        [SerializeField]
-        ObservableCollection<ViewModelType> _itemsSource
+        public ObservableCollection<ViewModelType> ItemsSource { get; } 
             = new ObservableCollection<ViewModelType>();
-        public ObservableCollection<ViewModelType> ItemsSource => _itemsSource;
 
         readonly List<ViewType> instantiated = new List<ViewType>();
 
@@ -61,6 +59,10 @@ namespace Adrenak.UPF {
                         foreach (var removed in args.OldItems)
                             Destroy(removed as ViewModelType);
                         break;
+                    case NotifyCollectionChangedAction.Reset:
+                        foreach (var instance in instantiated)
+                            Destroy(instance.Context);
+                        break;
                 }
             };
         }
@@ -73,8 +75,13 @@ namespace Adrenak.UPF {
                 InstanceNamer(instance) :
                 "#" + instance.transform.GetSiblingIndex();
 
-            instance.OnViewSelected += (sender, args) =>
-                OnItemSelected?.Invoke(this, new ItemSelectedEventArgs(instance.Context));
+            void OnSelected(object sender, EventArgs r){
+                OnItemSelected?.Invoke(this, new ItemSelectedEventArgs(instance.Context));                
+            }
+
+            instance.OnViewSelected += OnSelected;
+            instance.OnViewDestroyed += (sender, e) =>
+                instance.OnViewSelected -= OnSelected;
 
             instantiated.Add(instance);
             Init(instance.Context);

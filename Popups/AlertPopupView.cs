@@ -36,7 +36,7 @@ namespace Adrenak.UPF {
         [SerializeField] Text ackDisplay;
 #pragma warning restore 0649
 
-        protected override void InitializeFromContext() {
+        protected override void OnSetContext() {
             headerDisplay.text = Context.Header;
             bodyDisplay.text = Context.Body;
             ackDisplay.text = Context.Ack;

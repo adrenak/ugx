@@ -9,7 +9,7 @@ namespace Adrenak.UPF.Implementations {
 
         protected override void BindViewToContext() { }
 
-        protected override void InitializeFromContext() {
+        protected override void OnSetContext() {
             labelDisplay.text = Context.Label;
         }
 
