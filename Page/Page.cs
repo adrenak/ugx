@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Adrenak.UPF {
-    public class Page : BindableBehaviour {
+    public class Page : View {
 #pragma warning disable 0649
         [SerializeField] string title;        
         public string Title {
