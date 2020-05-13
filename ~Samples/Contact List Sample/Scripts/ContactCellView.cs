@@ -3,8 +3,10 @@ using UnityEngine.UI;
 
 namespace Adrenak.UPF.Examples {  
     public class ContactCellView : View<ContactCellViewModel> {
+#pragma warning disable 0649
         [SerializeField] Text nameDisplay;
         [SerializeField] Text statusDisplay;
+#pragma warning restore 0649
 
         public void Call() {
             Context.Call();

@@ -1,17 +1,15 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 
-
 namespace Adrenak.UPF {
-    
     public class Navigator : BindableBehaviour {
+#pragma warning disable 0649
         [SerializeField] NavigationStack stack;
-        
         public NavigationStack Stack => stack;
 
         [SerializeField] Page rootPage;
-        
         public Page Root => rootPage;
+#pragma warning restore 0649        
 
         void Start() {
             PushAsync(rootPage);

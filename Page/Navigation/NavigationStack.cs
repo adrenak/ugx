@@ -1,16 +1,14 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
-
-namespace Adrenak.UPF {
-    
-    [System.Serializable]
+namespace Adrenak.UPF {  
+    [Serializable]
     public class NavigationStack : Bindable {
-        [SerializeField] List<Page> pages;
-        
+#pragma warning disable 0649
+        [SerializeField] List<Page> pages;        
         public List<Page> Pages => pages;
+#pragma warning restore 0649
 
         public Page Top {
             get {

@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 
-
 namespace Adrenak.UPF.Examples {
-    
     public class GreetPage : Page {
+#pragma warning disable 0649
         [SerializeField] MarketPage market;
+#pragma warning restore 0649
 
         protected override void InitializePage() { }
 
-        public void GoToMarket() {
-            Navigator.PushAsync(market);
+        async public void GoToMarket() {
+            await Navigator.PushAsync(market);
         }
 
         public override void OnAppearing() {

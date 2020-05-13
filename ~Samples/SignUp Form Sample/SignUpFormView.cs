@@ -3,8 +3,10 @@ using UnityEngine.UI;
 
 namespace Adrenak.UPF.Examples {
     public class SignUpFormView : FormView<SignUpForm> {
+#pragma warning disable 0649
         [SerializeField] InputField emailInput;
         [SerializeField] InputField passwordInput;
+#pragma warning restore 0649
 
         protected override void InitializeFromContext() {
             emailInput.text = Context.Email;
