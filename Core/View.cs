@@ -25,8 +25,21 @@ namespace Adrenak.UPF {
     }
 
     [Serializable]
+    [DisallowMultipleComponent]
     public class View : BindableBehaviour {
         public event EventHandler Destroyed;
+
+        public View GetSubView(string gameObjectName) {
+            for(int i = 0; i < transform.childCount; i++){
+                var child = transform.GetChild(i);
+                if(child.gameObject.name.Equals(gameObjectName)){
+                    var view = child.GetComponent<View>();
+                    if (view != null)
+                        return view;
+                }
+            }
+            return null;
+        }
 
         void OnDestroy() {
             Destroyed?.Invoke(this, EventArgs.Empty);
