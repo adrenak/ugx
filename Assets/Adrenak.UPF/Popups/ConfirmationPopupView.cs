@@ -48,7 +48,7 @@ namespace Adrenak.UPF {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        protected override void InitializeFromContext() {
+        protected override void OnSetContext() {
             headerDisplay.text = Context.Header;
             bodyDisplay.text = Context.Body;
             positiveDisplay.text = Context.Positive;

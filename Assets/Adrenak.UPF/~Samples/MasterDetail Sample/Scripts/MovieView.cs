@@ -8,7 +8,7 @@ namespace Adrenak.UPF.Examples{
 
         protected override void BindViewToContext() { }
 
-        protected override void InitializeFromContext() {
+        protected override void OnSetContext() {
             nameDisplay.text = Context.Name;
             ratingDisplay.text = Context.Rating.ToString("0.00");
         }

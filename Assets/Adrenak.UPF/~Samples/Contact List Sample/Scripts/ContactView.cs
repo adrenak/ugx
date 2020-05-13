@@ -16,7 +16,7 @@ namespace Adrenak.UPF.Examples {
             Context.Delete();
         }
 
-        protected override void InitializeFromContext() {
+        protected override void OnSetContext() {
             nameDisplay.text = Context.Name;
             statusDisplay.text = Context.Status;
         }

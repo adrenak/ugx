@@ -9,17 +9,17 @@ namespace Adrenak.UPF {
             get => _bindingContext;
             set {
                 Set(ref _bindingContext, value);
-                InitializeFromContext();
+                OnSetContext();
             }
         }
 
-        void Awake() {
-            InitializeFromContext();
+        void Start() {
+            OnSetContext();
             BindViewToContext();
             Context.PropertyChanged += (sender, args) => OnPropertyChange(args.PropertyName);
         }
 
-        protected abstract void InitializeFromContext();
+        protected abstract void OnSetContext();
         protected abstract void OnPropertyChange(string propertyName);
         protected abstract void BindViewToContext();
     }
@@ -31,9 +31,9 @@ namespace Adrenak.UPF {
         public event EventHandler OnViewDestroyed;
 
         public View GetSubView(string subViewName) {
-            for(int i = 0; i < transform.childCount; i++){
+            for (int i = 0; i < transform.childCount; i++) {
                 var child = transform.GetChild(i);
-                if(child.gameObject.name.Equals(subViewName)){
+                if (child.gameObject.name.Equals(subViewName)) {
                     var view = child.GetComponent<View>();
                     if (view != null)
                         return view;
