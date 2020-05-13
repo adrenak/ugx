@@ -6,15 +6,15 @@ namespace Adrenak.UPF.Examples {
         [SerializeField] GreetPage greet;
 #pragma warning restore 0649
 
-        async public void GoToGreet(){
-            await Navigator.PushAsync(greet);
+        public void GoToGreet(){
+            Navigator.PushAsync(greet);
         }
 
-        public override void OnAppearing() {
+        override protected void OnAppear() {
             Debug.Log("MarketPage appearing");
         }
 
-        public override void OnDisappearing() {
+        override protected void OnDisappear() {
             Debug.Log("MarketPage disappaearing");
         }
     }

@@ -5,11 +5,13 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     public class TabbedPage : Page {
+        [SerializeField] Page current;
         [SerializeField] List<Page> children;
         public List<Page> Children => children;
 
-        async public Task OpenByIndex(int index) {
-            await Navigator.PushAsync(Children[index]);
+        public void OpenByIndex(int index) {
+            current = Children[index];
+            Navigator.PushAsync(current);
         }
 
         [ContextMenu("Auto Populate Pages")]

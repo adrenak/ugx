@@ -1,10 +1,13 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Diagnostics;
 
 namespace Adrenak.UPF {
     public class TabPanel : View {
 #pragma warning disable 0649
+        [SerializeField] int defaultIndex;
+
         [SerializeField] TabbedPage page;
         public TabbedPage Page => page;
 
@@ -14,9 +17,11 @@ namespace Adrenak.UPF {
 
         void Start() {
             foreach (var tab in tabs) {
-                tab.OnClick += async (sender, args) =>
-                    await Page.OpenByIndex(tab.Index);
+                tab.OnClick += (sender, args) =>
+                    Page.OpenByIndex(tab.Index);
             }
+
+            Page.OpenByIndex(defaultIndex);
         }
 
         [ContextMenu("Auto Populate Pages")]
