@@ -321,7 +321,6 @@ MonoBehaviour:
   indicator: {fileID: 2071892483}
   _scrollRect: {fileID: 572651177}
   _layoutGroup: {fileID: 1654330136}
-  _bgImage: {fileID: 1918717097}
   prefab: {fileID: 8969726198010893687, guid: 4d1fd26349e66d1419da104dcc1e98ee, type: 3}
   _container: {fileID: 1654330134}
 --- !u!114 &572651177
@@ -1324,7 +1323,6 @@ MonoBehaviour:
   indicator: {fileID: 0}
   _scrollRect: {fileID: 1980417502}
   _layoutGroup: {fileID: 1684324413}
-  _bgImage: {fileID: 1868477458}
   prefab: {fileID: 1232809371394129142, guid: 11ff587b795060841a94d7b61c8b085c, type: 3}
   _container: {fileID: 1684324412}
 --- !u!114 &1980417502
@@ -1439,7 +1437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   message: {fileID: 244185220}
-  listView: {fileID: 572651174}
+  listView: {fileID: 1980417500}
   contacts:
   - _name: Tom
     _status: Just hanging... off of a plane.

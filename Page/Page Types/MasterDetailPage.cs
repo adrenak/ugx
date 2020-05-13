@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     public abstract class MasterDetailPage<TMasterPage, TDetailPage> : MasterDetailPage where TMasterPage : Page where TDetailPage : Page {
@@ -13,16 +14,23 @@ namespace Adrenak.UPF {
         [SerializeField] protected ContentPage detail;
         public ContentPage Detail => detail;
 
-        bool isDetailPageOpen;
+        [SerializeField] bool isDetailPageOpenOnStart;
+        [ReadOnly] [SerializeField] bool isDetailPageOpen;
         public bool IsDetailPageOpen {
             get => isDetailPageOpen;
             set {
+                if (value == IsDetailPageOpen) return;
+
                 isDetailPageOpen = value;
                 if (value)
                     Navigator.PushAsync(Detail);
                 else
                     Navigator.PopAsync();
             }
+        }
+
+        void Start() {
+            IsDetailPageOpen = isDetailPageOpenOnStart;
         }
     }
 }

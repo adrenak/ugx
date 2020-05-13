@@ -350,6 +350,7 @@ MonoBehaviour:
     agreeWithTnc: 0
   emailInput: {fileID: 588506731}
   passwordInput: {fileID: 1641846237}
+  tncToggle: {fileID: 1764522756}
 --- !u!114 &525012722
 MonoBehaviour:
   m_ObjectHideFlags: 0

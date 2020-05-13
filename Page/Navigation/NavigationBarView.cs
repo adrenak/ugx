@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
+    // TODO: Add a text to display page title 
     public abstract class NavigationBarView : View {
 #pragma warning disable 0649
         [SerializeField] Button backButton;

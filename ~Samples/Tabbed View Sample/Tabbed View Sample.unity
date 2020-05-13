@@ -1662,8 +1662,8 @@ GameObject:
   - component: {fileID: 1300033275}
   - component: {fileID: 1300033277}
   - component: {fileID: 1300033276}
-  - component: {fileID: 1300033278}
   - component: {fileID: 1300033279}
+  - component: {fileID: 1300033278}
   m_Layer: 5
   m_Name: 3
   m_TagString: Untagged
@@ -1767,7 +1767,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   title: 
-  navigator: {fileID: 564718428}
+  navigator: {fileID: 0}
 --- !u!114 &1300033279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1811,8 +1811,8 @@ GameObject:
   - component: {fileID: 1302798277}
   - component: {fileID: 1302798279}
   - component: {fileID: 1302798278}
-  - component: {fileID: 1302798280}
   - component: {fileID: 1302798281}
+  - component: {fileID: 1302798280}
   m_Layer: 5
   m_Name: 2
   m_TagString: Untagged
@@ -1916,7 +1916,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   title: 
-  navigator: {fileID: 564718428}
+  navigator: {fileID: 0}
 --- !u!114 &1302798281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2686,8 +2686,8 @@ GameObject:
   - component: {fileID: 2033555602}
   - component: {fileID: 2033555604}
   - component: {fileID: 2033555603}
-  - component: {fileID: 2033555605}
   - component: {fileID: 2033555606}
+  - component: {fileID: 2033555605}
   m_Layer: 5
   m_Name: 1
   m_TagString: Untagged
@@ -2791,7 +2791,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   title: 
-  navigator: {fileID: 564718428}
+  navigator: {fileID: 0}
 --- !u!114 &2033555606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2811,7 +2811,7 @@ MonoBehaviour:
     width: 1080
     height: 1920
   inPosition: {x: 0, y: 0, z: 0}
-  awayPosition: {x: 0, y: 0, z: 0}
+  awayPosition: {x: -1335, y: 0, z: 0}
   defaultPositionForEnter: 2
   defaultPositionForExit: 3
   defaultPositionTween:

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Adrenak.UPF.Examples {
     [Serializable]    
-    public class SignUpForm : Form {
+    public class SignUpFormVM : FormViewModel {
         [SerializeField] string email;
         
         public string Email {
@@ -18,8 +18,7 @@ namespace Adrenak.UPF.Examples {
             set => Set(ref password, value);
         }
 
-        [SerializeField] bool agreeWithTnc;
-        
+        [SerializeField] bool agreeWithTnc;        
         public bool AgreeWithTNC{
             get => agreeWithTnc;
             set => Set(ref agreeWithTnc, value);

@@ -9,9 +9,16 @@ using System.Collections.ObjectModel;
 
 namespace Adrenak.UPF {
     [Serializable]
-    
-    public abstract class ListView<T, V> : View where T : ViewModel where V : View<T> {
-        public event EventHandler OnPullToRefresh;
+    public abstract class ListView<ViewModelType, ViewType> : View where ViewModelType : ViewModel where ViewType : View<ViewModelType> {
+        public class ItemSelectedEventArgs : EventArgs {
+            public ViewModel Item { get; private set; }
+            public ItemSelectedEventArgs(ViewModel item) {
+                Item = item;
+            }
+        }
+
+        public event EventHandler<ItemSelectedEventArgs> OnItemSelected;
+        public event EventHandler OnPulledToRefresh;
 
 #pragma warning disable 0649
         [Header("Pull Down Refresh")]
@@ -26,40 +33,39 @@ namespace Adrenak.UPF {
         [SerializeField] HorizontalOrVerticalLayoutGroup _layoutGroup;
         public HorizontalOrVerticalLayoutGroup LayoutGroup => _layoutGroup;
 
-        [SerializeField] Image _bgImage;
-        public Image BGImage => _bgImage;
-
         [Header("Instantiation")]
-        [SerializeField] V prefab;
+        [SerializeField] ViewType prefab;
 
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
         // NOTE: This COULD be moved to a ListViewModel too but I'm not doing that right now -adrenak
-        [SerializeField] ObservableCollection<T> _itemsSource = new ObservableCollection<T>();
-        public ObservableCollection<T> ItemsSource => _itemsSource;
+        [SerializeField]
+        ObservableCollection<ViewModelType> _itemsSource
+            = new ObservableCollection<ViewModelType>();
+        public ObservableCollection<ViewModelType> ItemsSource => _itemsSource;
 
-        readonly List<V> instantiated = new List<V>();
+        readonly List<ViewType> instantiated = new List<ViewType>();
+
+        public Func<ViewType, string> InstanceNamer;
 #pragma warning restore 0649
-
-        public Func<V, string> InstanceNamer;
 
         void Awake() {
             ItemsSource.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
-                            Instantiate(newItem as T);
+                            Instantiate(newItem as ViewModelType);
                         break;
                     case NotifyCollectionChangedAction.Remove:
                         foreach (var removed in args.OldItems)
-                            Destroy(removed as T);
+                            Destroy(removed as ViewModelType);
                         break;
                 }
             };
         }
 
-        void Instantiate(T t) {
+        void Instantiate(ViewModelType t) {
             var instance = Instantiate(prefab, _container);
             instance.Context = t;
 
@@ -67,11 +73,14 @@ namespace Adrenak.UPF {
                 InstanceNamer(instance) :
                 "#" + instance.transform.GetSiblingIndex();
 
+            instance.OnViewSelected += (sender, args) =>
+                OnItemSelected?.Invoke(this, new ItemSelectedEventArgs(instance.Context));
+
             instantiated.Add(instance);
             Init(instance.Context);
         }
 
-        void Destroy(T t) {
+        void Destroy(ViewModelType t) {
             foreach (var instance in instantiated) {
                 if (instance.Context == t) {
                     Deinit(instance.Context);
@@ -80,8 +89,8 @@ namespace Adrenak.UPF {
             }
         }
 
-        virtual protected void Init(T cell) { }
-        virtual protected void Deinit(T cell) { }
+        virtual protected void Init(ViewModelType cell) { }
+        virtual protected void Deinit(ViewModelType cell) { }
 
         void Update() {
             TryPullRefresh();
@@ -92,7 +101,7 @@ namespace Adrenak.UPF {
         // ================================================
         bool isRefreshing;
         bool markForRefresh;
-        
+
         void TryPullRefresh() {
             if (!pullToRefresh) return;
 
@@ -124,7 +133,7 @@ namespace Adrenak.UPF {
                 isRefreshing = true;
                 markForRefresh = false;
                 indicator.SetRefreshing(true);
-                OnPullToRefresh?.Invoke(this, EventArgs.Empty);
+                OnPulledToRefresh?.Invoke(this, EventArgs.Empty);
             }
         }
 
