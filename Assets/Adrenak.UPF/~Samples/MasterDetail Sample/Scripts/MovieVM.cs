@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace Adrenak.UPF.Examples {
     [Serializable]   
-    public class Movie : ViewModel {
-        public event EventHandler OnClick;
-
+    public class MovieVM : ViewModel {
         [SerializeField] string name;        
         public string Name {
             get => name;
@@ -16,10 +14,6 @@ namespace Adrenak.UPF.Examples {
         public float Rating {
             get => rating;
             set => Set(ref rating, value);
-        }
-
-        public void Click() {
-            OnClick?.Invoke(this, EventArgs.Empty);
         }
     }
 }

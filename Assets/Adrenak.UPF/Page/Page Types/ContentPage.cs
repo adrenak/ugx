@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
 namespace Adrenak.UPF {
-    public abstract class ContentPage<T> : ContentPage where T : View {
-        new public T Content => content as T;
+    public abstract class ContentPage<TViewModel> : ContentPage where TViewModel : View {
+        new public TViewModel Content => content as TViewModel;
     }
 
     public class ContentPage : Page {

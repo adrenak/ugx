@@ -13,36 +13,41 @@ namespace Adrenak.UPF {
             }
         }
 
-        protected abstract void InitializeFromContext();
-        protected abstract void OnPropertyChange(string propertyName);
-        protected abstract void BindViewToContext();
-
         void Awake() {
             InitializeFromContext();
             BindViewToContext();
             Context.PropertyChanged += (sender, args) => OnPropertyChange(args.PropertyName);
         }
+
+        protected abstract void InitializeFromContext();
+        protected abstract void OnPropertyChange(string propertyName);
+        protected abstract void BindViewToContext();
     }
 
     [Serializable]
     [DisallowMultipleComponent]
     public class View : BindableBehaviour {
-        public event EventHandler Destroyed;
+        public event EventHandler OnViewSelected;
+        public event EventHandler OnViewDestroyed;
 
-        public View GetSubView(string gameObjectName) {
+        public View GetSubView(string subViewName) {
             for(int i = 0; i < transform.childCount; i++){
                 var child = transform.GetChild(i);
-                if(child.gameObject.name.Equals(gameObjectName)){
+                if(child.gameObject.name.Equals(subViewName)){
                     var view = child.GetComponent<View>();
                     if (view != null)
                         return view;
                 }
             }
-            return null;
+            throw new Exception($"No GameObject named {subViewName} with View component was found under {gameObject.name}");
+        }
+
+        public void Select() {
+            OnViewSelected?.Invoke(this, EventArgs.Empty);
         }
 
         void OnDestroy() {
-            Destroyed?.Invoke(this, EventArgs.Empty);
+            OnViewDestroyed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -551,7 +551,7 @@ GameObject:
   - component: {fileID: 715425418}
   - component: {fileID: 715425419}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Movie View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -707,6 +707,8 @@ MonoBehaviour:
   navigator: {fileID: 830565411}
   master: {fileID: 1291403206}
   detail: {fileID: 635494087}
+  isDetailPageOpenOnStart: 0
+  isDetailPageOpen: 0
 --- !u!114 &830565411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1215,8 +1217,7 @@ MonoBehaviour:
   indicator: {fileID: 0}
   _scrollRect: {fileID: 1480472512}
   _layoutGroup: {fileID: 380837899}
-  _bgImage: {fileID: 528015137}
-  prefab: {fileID: 5881127927956782213, guid: 4d1e5ba1f9f44884f878a51ef0a44f85, type: 3}
+  prefab: {fileID: 6657747220264643595, guid: 4d1e5ba1f9f44884f878a51ef0a44f85, type: 3}
   _container: {fileID: 380837897}
 --- !u!1 &1521714967
 GameObject:

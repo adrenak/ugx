@@ -2,7 +2,7 @@
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class Form : ViewModel {
+    public abstract class FormViewModel : ViewModel {
         public event EventHandler OnSubmit;
         public event EventHandler OnCancel;
 

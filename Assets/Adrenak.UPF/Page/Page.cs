@@ -23,9 +23,6 @@ namespace Adrenak.UPF {
             OnInitializePage();
         }
 
-        public virtual void OnBackButtonPress() { }
-        protected virtual void OnInitializePage() { }
-
         protected virtual void OnAppear() { }
         public void Appear() {
             OnAppear();
@@ -37,5 +34,8 @@ namespace Adrenak.UPF {
             OnDisappear();
             onDisappear?.Invoke();
         }
+
+        public virtual void OnBackButtonPress() { }
+        protected virtual void OnInitializePage() { }
     }
 }

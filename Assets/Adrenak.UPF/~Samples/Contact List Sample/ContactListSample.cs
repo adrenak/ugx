@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using Adrenak.UPF.Examples;
 using UnityEngine.UI;
 
 namespace Adrenak.UPF.Examples{
     public class ContactListSample : MonoBehaviour {    
         public Text message;
         public ContactListView listView;
-        public List<ContactCellViewModel> contacts;
-        public ContactCellViewModel extraContact;
+        public List<ContactVM> contacts;
+        public ContactVM extraContact;
 
         void Start() {
             listView.InstanceNamer = instance => instance.Context.Name;
@@ -18,8 +17,8 @@ namespace Adrenak.UPF.Examples{
             foreach(var contact in contacts)
                 listView.ItemsSource.Add(contact);
 
-            listView.OnClick += cell => 
-                message.text = cell.Name;
+            listView.OnItemSelected += (source, e) =>
+                message.text = (e.Item as ContactVM).Name;
 
             listView.OnCall += contactCell => 
                 message.text = "Calling " + contactCell.Name;
@@ -29,7 +28,7 @@ namespace Adrenak.UPF.Examples{
                 listView.ItemsSource.Remove(contactCell);
             };
 
-            listView.OnPullToRefresh += async (sender, args) => {
+            listView.OnPulledToRefresh += async (sender, args) => {
                 await Task.Delay(200);
                 listView.ItemsSource.Add(extraContact);
                 listView.StopRefresh();
