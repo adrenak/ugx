@@ -5,8 +5,10 @@ using UnityEngine.UI;
 namespace Adrenak.UPF.Examples {
     [Serializable]  
     public class MovieView : View<Movie> {
+#pragma warning disable 0649
         [SerializeField] Text nameDisplay;
         [SerializeField] Text ratingDisplay;
+#pragma warning restore 0649
 
         protected override void InitializeFromContext() {
             nameDisplay.text = Context.Name;

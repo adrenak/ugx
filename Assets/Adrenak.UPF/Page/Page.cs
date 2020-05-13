@@ -2,6 +2,7 @@
 
 namespace Adrenak.UPF {
     public class Page : BindableBehaviour {
+#pragma warning disable 0649
         [SerializeField] string title;        
         public string Title {
             get => title;
@@ -10,6 +11,7 @@ namespace Adrenak.UPF {
 
         [SerializeField] Navigator navigator;        
         public Navigator Navigator => navigator;
+#pragma warning restore 0649
 
         void Start() {
             InitializePage();
