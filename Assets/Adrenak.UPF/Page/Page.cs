@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Adrenak.UPF {
+    [Serializable]
     public class Page : View {
 #pragma warning disable 0649
         [SerializeField] UnityEvent onAppear;

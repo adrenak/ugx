@@ -30,13 +30,18 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.pixelplacement.surge.tween": "1.0.2",
+    "com.dbrizov.naughtyattributes": "2.0.4",
+    "com.adrenak.unex": "2.2.0"
   },
   "scopedRegistries": [
     {
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
+        "com.adrenak.unex",
+        "com.dbrizov.naughtyattributes",
         "com.openupm"
       ]
     },
@@ -45,6 +50,7 @@
       "url": "https://registry.npmjs.org",
       "scopes": [
         "com.adrenak.rsg.unityweld",
+        "com.pixelplacement.surge.tween",
         "org.npmjs"
       ]
     }
