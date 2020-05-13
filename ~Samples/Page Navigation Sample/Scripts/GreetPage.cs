@@ -6,17 +6,17 @@ namespace Adrenak.UPF.Examples {
         [SerializeField] MarketPage market;
 #pragma warning restore 0649
 
-        protected override void InitializePage() { }
+        protected override void OnInitializePage() { }
 
-        async public void GoToMarket() {
-            await Navigator.PushAsync(market);
+        public void GoToMarket() {
+            Navigator.PushAsync(market);
         }
 
-        public override void OnAppearing() {
+        override protected void OnAppear() {
             Debug.Log("GreetPage appearing");
         }
 
-        public override void OnDisappearing() {
+        override protected void OnDisappear() {
             Debug.Log("GreetPage disappaearing");
         }
     }

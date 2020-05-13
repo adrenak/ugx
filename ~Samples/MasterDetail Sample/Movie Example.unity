@@ -436,7 +436,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 635494086}
-  - component: {fileID: 635494088}
   - component: {fileID: 635494087}
   m_Layer: 5
   m_Name: Detail
@@ -477,17 +476,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6572ba2233e6554aaaf20278514befc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
   title: 
   navigator: {fileID: 830565411}
   content: {fileID: 737317576}
---- !u!222 &635494088
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 635494085}
-  m_CullTransparentMesh: 0
 --- !u!1 &737317572
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +628,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9642e0479bb6c449993dc9360b76187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
   title: 
   navigator: {fileID: 830565411}
   master: {fileID: 1291403206}
@@ -876,8 +879,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1291403203}
-  - component: {fileID: 1291403205}
-  - component: {fileID: 1291403204}
   - component: {fileID: 1291403206}
   m_Layer: 5
   m_Name: Master
@@ -906,41 +907,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 491.84998}
   m_SizeDelta: {x: 0, y: -983.7}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1291403204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1291403202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
---- !u!222 &1291403205
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1291403202}
-  m_CullTransparentMesh: 0
 --- !u!114 &1291403206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -953,6 +919,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6572ba2233e6554aaaf20278514befc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
   title: 
   navigator: {fileID: 830565411}
   content: {fileID: 1480472513}

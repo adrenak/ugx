@@ -12,8 +12,8 @@ namespace Adrenak.UPF {
             backButton.onClick.AddListener(Back);
         }
 
-        async public void Back() {
-            await navigator.PopAsync();
+        public void Back() {
+            navigator.PopAsync();
         }
     }
 }

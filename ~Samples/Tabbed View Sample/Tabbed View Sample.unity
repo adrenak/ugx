@@ -279,8 +279,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4955ed9b6f9c05041902a7e1547e74bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
   title: 
   navigator: {fileID: 564718428}
+  current: {fileID: 0}
   children:
   - {fileID: 2033555605}
   - {fileID: 1302798280}
@@ -356,7 +363,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stack:
     pages: []
-  rootPage: {fileID: 2033555605}
+  rootPage: {fileID: 0}
 --- !u!1 &615916055
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,6 +769,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d354dac25d92894394e602213adb587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
   title: 
   navigator: {fileID: 564718428}
 --- !u!1 &1302798276
@@ -849,6 +862,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d354dac25d92894394e602213adb587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
   title: 
   navigator: {fileID: 564718428}
 --- !u!1 &1352121578
@@ -1180,6 +1199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8089dd4ef75e5904db689a5bdf254242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultIndex: 0
   page: {fileID: 564718424}
   tabs:
   - {fileID: 1154291347}
@@ -1305,5 +1325,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d354dac25d92894394e602213adb587, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onAppear:
+    m_PersistentCalls:
+      m_Calls: []
+  onDisappear:
+    m_PersistentCalls:
+      m_Calls: []
   title: 
   navigator: {fileID: 564718428}
