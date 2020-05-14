@@ -16,15 +16,16 @@ namespace Adrenak.UPF {
         void Start() {
             InitializeView();
             ListenToView();
+            OnStart();
         }
 
+        protected virtual void OnStart() { }
         protected abstract void InitializeView();
         protected abstract void ListenToView();
         protected abstract void OnModelPropertyChanged(string propertyName);
     }
 
     [Serializable]
-    [DisallowMultipleComponent]
     public class View : BindableBehaviour {
         public event EventHandler OnViewSelected;
         public event EventHandler OnViewDestroyed;

@@ -10,10 +10,10 @@ using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class ListView<ViewModelType, ViewType> : View where ViewModelType : Model where ViewType : View<ViewModelType> {
+    public abstract class ListView<TViewModel, TViewType> : View where TViewModel : Model where TViewType : View<TViewModel> {
         public class ItemSelectedEventArgs : EventArgs {
-            public ViewModelType Item { get; private set; }
-            public ItemSelectedEventArgs(ViewModelType item) {
+            public TViewModel Item { get; private set; }
+            public ItemSelectedEventArgs(TViewModel item) {
                 Item = item;
             }
         }
@@ -35,17 +35,17 @@ namespace Adrenak.UPF {
         public HorizontalOrVerticalLayoutGroup LayoutGroup => _layoutGroup;
 
         [Header("Instantiation")]
-        [SerializeField] ViewType prefab;
+        [SerializeField] TViewType prefab;
 
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
-        public ObservableCollection<ViewModelType> ItemsSource { get; } 
-            = new ObservableCollection<ViewModelType>();
+        public ObservableCollection<TViewModel> ItemsSource { get; } 
+            = new ObservableCollection<TViewModel>();
 
-        readonly List<ViewType> instantiated = new List<ViewType>();
+        readonly List<TViewType> instantiated = new List<TViewType>();
 
-        public Func<ViewType, string> InstanceNamer;
+        public Func<TViewType, string> InstanceNamer;
 #pragma warning restore 0649
 
         void Awake() {
@@ -53,11 +53,11 @@ namespace Adrenak.UPF {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
-                            Instantiate(newItem as ViewModelType);
+                            Instantiate(newItem as TViewModel);
                         break;
                     case NotifyCollectionChangedAction.Remove:
                         foreach (var removed in args.OldItems)
-                            Destroy(removed as ViewModelType);
+                            Destroy(removed as TViewModel);
                         break;
                     case NotifyCollectionChangedAction.Reset:
                         foreach (var instance in instantiated)
@@ -67,7 +67,7 @@ namespace Adrenak.UPF {
             };
         }
 
-        void Instantiate(ViewModelType t) {
+        void Instantiate(TViewModel t) {
             var instance = Instantiate(prefab, _container);
             instance.Model = t;
 
@@ -87,7 +87,7 @@ namespace Adrenak.UPF {
             Init(instance.Model);
         }
 
-        void Destroy(ViewModelType t) {
+        void Destroy(TViewModel t) {
             foreach (var instance in instantiated) {
                 if (instance.Model == t) {
                     Deinit(instance.Model);
@@ -96,8 +96,8 @@ namespace Adrenak.UPF {
             }
         }
 
-        virtual protected void Init(ViewModelType cell) { }
-        virtual protected void Deinit(ViewModelType cell) { }
+        virtual protected void Init(TViewModel cell) { }
+        virtual protected void Deinit(TViewModel cell) { }
 
         void Update() {
             TryPullRefresh();
