@@ -15,13 +15,13 @@ namespace Adrenak.UPF {
         public List<Page> Children => children;
 #pragma warning restore 0649
 
-        void Start() {
+        protected override void OnInitializePage() {
             OpenByIndex(startPageIndex);
         }
 
         public void OpenByIndex(int index) {
             current = Children[index];
-            Navigator.PushAsync(current);
+            Navigator.Push(current);
         }
 
         [Button("Auto Populate Pages")]

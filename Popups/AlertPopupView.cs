@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
-    public class AlertPopup : ViewModel {
+    public class AlertPopup : Model {
         public event EventHandler OnDismiss;
 
         [SerializeField] string header;
@@ -36,17 +36,17 @@ namespace Adrenak.UPF {
         [SerializeField] Text ackDisplay;
 #pragma warning restore 0649
 
-        protected override void OnSetContext() {
-            headerDisplay.text = Context.Header;
-            bodyDisplay.text = Context.Body;
-            ackDisplay.text = Context.Ack;
+        protected override void InitializeView() {
+            headerDisplay.text = Model.Header;
+            bodyDisplay.text = Model.Body;
+            ackDisplay.text = Model.Ack;
         }
 
         public void Dismiss() {
-            Context.Dismiss();
+            Model.Dismiss();
         }
 
-        protected override void BindViewToContext() { }
-        protected override void OnPropertyChange(string propertyName) { }
+        protected override void ListenToView() { }
+        protected override void OnModelPropertyChanged(string propertyName) { }
     }
 }

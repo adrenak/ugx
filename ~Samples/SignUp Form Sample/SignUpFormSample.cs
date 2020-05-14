@@ -7,15 +7,15 @@ namespace Adrenak.UPF.Examples {
         public Text message;
 
         void Start() {
-            form.Context.OnSubmit += (sender, args) => {
-                if (!form.Context.AgreeWithTNC)
-                    message.text = "Please read to T&C";
+            form.Model.OnSubmit += (sender, args) => {
+                if (form.Model.IsValid())
+                    message.text = $"Send a sign up request for credentials {form.Model.Email} + {form.Model.Password}";
                 else
-                    message.text = $"Send a sign up request for credentials {form.Context.Email} + {form.Context.Password}";
+                    message.text = "Password should be at least 8 characters. Email should be valid. Terms and conditions should be accepted";
             };
 
-            form.Context.OnCancel += (sender, args) =>
-                message.text = "User cancelled sign up. Maybe first ask if they're sure?";
+            form.Model.OnCancel += (sender, args) =>
+                message.text = "Cancelling, are you sure?";
         }
     }
 }

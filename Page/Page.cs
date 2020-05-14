@@ -23,19 +23,19 @@ namespace Adrenak.UPF {
             OnInitializePage();
         }
 
-        protected virtual void OnAppear() { }
-        public void Appear() {
+        public void AppearPage() {
             OnAppear();
             onAppear?.Invoke();
         }
 
-        protected virtual void OnDisappear() { }
-        public void Disappear() {
+        public void DisappearPage() {
             OnDisappear();
             onDisappear?.Invoke();
         }
 
-        public virtual void OnBackButtonPress() { }
         protected virtual void OnInitializePage() { }
+        protected virtual void OnBackButtonPress() { }
+        protected virtual void OnAppear() { }
+        protected virtual void OnDisappear() { }
     }
 }

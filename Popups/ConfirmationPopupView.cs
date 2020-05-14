@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
-    public class ConfirmationPopup : ViewModel{
+    public class ConfirmationPopup : Model{
         public event EventHandler OnConfirm;
         public event EventHandler OnDeny;
 
@@ -48,22 +48,22 @@ namespace Adrenak.UPF {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        protected override void OnSetContext() {
-            headerDisplay.text = Context.Header;
-            bodyDisplay.text = Context.Body;
-            positiveDisplay.text = Context.Positive;
-            negativeDisplay.text = Context.Negative;
+        protected override void InitializeView() {
+            headerDisplay.text = Model.Header;
+            bodyDisplay.text = Model.Body;
+            positiveDisplay.text = Model.Positive;
+            negativeDisplay.text = Model.Negative;
         }
 
         public void Confirm() {
-            Context.Confirm();
+            Model.Confirm();
         }
 
         public void Deny() {
-            Context.Deny();
+            Model.Deny();
         }
 
-        protected override void BindViewToContext() { }
-        protected override void OnPropertyChange(string propertyName) { }
+        protected override void ListenToView() { }
+        protected override void OnModelPropertyChanged(string propertyName) { }
     }
 }

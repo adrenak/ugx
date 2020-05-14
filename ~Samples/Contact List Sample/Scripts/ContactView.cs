@@ -2,36 +2,36 @@
 using UnityEngine.UI;
 
 namespace Adrenak.UPF.Examples {  
-    public class ContactView : View<ContactVM> {
+    public class ContactView : View<ContactModel> {
 #pragma warning disable 0649
         [SerializeField] Text nameDisplay;
         [SerializeField] Text statusDisplay;
 #pragma warning restore 0649
 
         public void Call() {
-            Context.Call();
+            Model.Call();
         }
 
         public void Delete() {
-            Context.Delete();
+            Model.Delete();
         }
 
-        protected override void OnSetContext() {
-            nameDisplay.text = Context.Name;
-            statusDisplay.text = Context.Status;
+        protected override void InitializeView() {
+            nameDisplay.text = Model.Name;
+            statusDisplay.text = Model.Status;
         }
 
-        protected override void BindViewToContext() {
+        protected override void ListenToView() {
             // This isn't a 2 way binding
         }
 
-        protected override void OnPropertyChange(string propertyName) {
+        protected override void OnModelPropertyChanged(string propertyName) {
             switch(propertyName){
-                case nameof(Context.Name):
-                    nameDisplay.text = Context.Name;
+                case nameof(Model.Name):
+                    nameDisplay.text = Model.Name;
                     break;
-                case nameof(Context.Status):
-                    statusDisplay.text = Context.Status;
+                case nameof(Model.Status):
+                    statusDisplay.text = Model.Status;
                     break;
             }
         }

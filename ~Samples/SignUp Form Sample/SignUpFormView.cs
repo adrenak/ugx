@@ -2,37 +2,37 @@
 using UnityEngine.UI;
 
 namespace Adrenak.UPF.Examples {
-    public class SignUpFormView : FormView<SignUpFormVM> {
+    public class SignUpFormView : FormView<SignUpFormModel> {
 #pragma warning disable 0649
         [SerializeField] InputField emailInput;
         [SerializeField] InputField passwordInput;
         [SerializeField] Toggle tncToggle;
 #pragma warning restore 0649
 
-        protected override void OnSetContext() {
-            emailInput.text = Context.Email;
-            passwordInput.text = Context.Password;
-            tncToggle.isOn = Context.AgreeWithTNC;
+        protected override void InitializeView() {
+            emailInput.text = Model.Email;
+            passwordInput.text = Model.Password;
+            tncToggle.isOn = Model.AgreeWithTNC;
         }
 
-        protected override void OnPropertyChange(string propertyName) {
+        protected override void OnModelPropertyChanged(string propertyName) {
             switch (propertyName) {
-                case nameof(Context.Email):
-                    emailInput.text = Context.Email;
+                case nameof(Model.Email):
+                    emailInput.text = Model.Email;
                     break;
-                case nameof(Context.Password):
-                    passwordInput.text = Context.Password;
+                case nameof(Model.Password):
+                    passwordInput.text = Model.Password;
                     break;
-                case nameof(Context.AgreeWithTNC):
-                    tncToggle.isOn = Context.AgreeWithTNC;
+                case nameof(Model.AgreeWithTNC):
+                    tncToggle.isOn = Model.AgreeWithTNC;
                     break;
             }
         }
 
-        protected override void BindViewToContext() {
-            emailInput.onValueChanged.AddListener(value => Context.Email = value);
-            passwordInput.onValueChanged.AddListener(value => Context.Password = value);
-            tncToggle.onValueChanged.AddListener(value => Context.AgreeWithTNC = value);
+        protected override void ListenToView() {
+            emailInput.onValueChanged.AddListener(value => Model.Email = value);
+            passwordInput.onValueChanged.AddListener(value => Model.Password = value);
+            tncToggle.onValueChanged.AddListener(value => Model.AgreeWithTNC = value);
         }
     }
 }

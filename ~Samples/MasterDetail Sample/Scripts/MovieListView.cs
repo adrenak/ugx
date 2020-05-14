@@ -2,5 +2,5 @@
 
 namespace Adrenak.UPF.Examples {
     [Serializable]    
-    public class MovieListView : ListView<MovieVM, MovieView> { }
+    public class MovieListView : ListView<MovieModel, MovieView> { }
 }

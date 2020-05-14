@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Adrenak.UPF{
     [Serializable]
-    public class OptionPopupVM : ViewModel {
+    public class OptionPopupVM : Model {
         public event EventHandler<string> OnOptionSelected;
 
         [SerializeField] string label;
