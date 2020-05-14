@@ -7,18 +7,18 @@ namespace Adrenak.UPF.Examples{
     public class ContactListSample : MonoBehaviour {    
         public Text message;
         public ContactListView listView;
-        public List<ContactVM> contacts;
-        public ContactVM extraContact;
+        public List<ContactModel> contacts;
+        public ContactModel extraContact;
 
         void Start() {
-            listView.InstanceNamer = instance => instance.Context.Name;
+            listView.InstanceNamer = instance => instance.Model.Name;
 
             // TODO: Make an extension method for this
             foreach(var contact in contacts)
                 listView.ItemsSource.Add(contact);
 
             listView.OnItemSelected += (source, e) =>
-                message.text = (e.Item as ContactVM).Name;
+                message.text = (e.Item as ContactModel).Name;
 
             listView.OnCall += contactCell => 
                 message.text = "Calling " + contactCell.Name;

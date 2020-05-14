@@ -12,21 +12,21 @@ namespace Adrenak.UPF {
 
         void Start() {
             listView.OnItemSelected += (sender, e) =>
-                Context.Select((e.Item as LabelVM).Label);
+                Model.Select((e.Item as LabelModel).Label);
         }
 
-        protected override void OnSetContext() {
-            labelDisplay.text = Context.Label;
+        protected override void InitializeView() {
+            labelDisplay.text = Model.Label;
 
             listView.ItemsSource.Clear();
             listView.ItemsSource.AddFrom(
-                Context.Options
-                .Select(x => new LabelVM { Label = x })
+                Model.Options
+                .Select(x => new LabelModel { Label = x })
                 .ToList()
             );
         }
 
-        protected override void BindViewToContext() { }
-        protected override void OnPropertyChange(string propertyName) { }
+        protected override void ListenToView() { }
+        protected override void OnModelPropertyChanged(string propertyName) { }
     }
 }

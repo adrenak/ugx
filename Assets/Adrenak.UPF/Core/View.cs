@@ -3,25 +3,24 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class View<T> : View where T : ViewModel {
-        [SerializeField] T _bindingContext;
-        public T Context {
-            get => _bindingContext;
+    public abstract class View<T> : View where T : Model {
+        [SerializeField] T _model;
+        public T Model {
+            get => _model;
             set {
-                Set(ref _bindingContext, value);
-                OnSetContext();
+                _model = value ?? throw new ArgumentNullException(nameof(Model));
+                InitializeView();
             }
         }
 
         void Start() {
-            OnSetContext();
-            BindViewToContext();
-            Context.PropertyChanged += (sender, args) => OnPropertyChange(args.PropertyName);
+            InitializeView();
+            ListenToView();
         }
 
-        protected abstract void OnSetContext();
-        protected abstract void OnPropertyChange(string propertyName);
-        protected abstract void BindViewToContext();
+        protected abstract void InitializeView();
+        protected abstract void ListenToView();
+        protected abstract void OnModelPropertyChanged(string propertyName);
     }
 
     [Serializable]

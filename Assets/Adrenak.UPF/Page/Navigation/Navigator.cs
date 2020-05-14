@@ -14,22 +14,16 @@ namespace Adrenak.UPF {
 #pragma warning restore 0649        
 
         void Start() {
-            if(rootPage)
-                PushAsync(rootPage);
+            if (rootPage && useRootPage)
+                Push(rootPage);
         }
 
-        public void PushAsync(Page page) {
-            if(stack.Top != null)
-                stack.Top.Disappear();
-            page.Appear();
+        public void Push(Page page) {
             stack.Push(page);
         }
 
-        public void PopAsync() {
-            if(stack.Count > 1){
-                stack.Pop().Disappear();
-                stack.Top.Appear();                
-            }
+        public void Pop() {
+            stack.Pop();
         }
     }
 }

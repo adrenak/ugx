@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 
-namespace Adrenak.UPF {  
+namespace Adrenak.UPF {
     [Serializable]
     public class NavigationStack : Bindable {
 #pragma warning disable 0649
-        [SerializeField] List<Page> pages;        
+        [SerializeField] List<Page> pages;
         public List<Page> Pages => pages;
 #pragma warning restore 0649
 
@@ -22,13 +22,21 @@ namespace Adrenak.UPF {
         public int Count => pages.Count;
 
         public void Push(Page page) {
+            if (Top != null)
+                Top.DisappearPage();
+            page.AppearPage();
             pages.Add(page);
         }
 
         public Page Pop() {
-            var top = Top;
-            pages.RemoveAt(pages.Count - 1);
-            return top;
+            if (Count > 1) {
+                var top = Top;
+                top.DisappearPage();
+                pages.RemoveAt(pages.Count - 1);
+                Top.AppearPage();
+                return top;
+            }
+            return null;
         }
     }
 }

@@ -316,9 +316,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ef321354202eb4da0d46472c96f640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullToRefresh: 1
+  pullToRefresh: 0
   pullRefreshDistance: 250
-  indicator: {fileID: 2071892483}
+  indicator: {fileID: 0}
   _scrollRect: {fileID: 572651177}
   _layoutGroup: {fileID: 1654330136}
   prefab: {fileID: 8969726198010893687, guid: 4d1fd26349e66d1419da104dcc1e98ee, type: 3}
@@ -1405,8 +1405,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64d1deef8ee9efa45b34e4a1a7020314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message: {fileID: 472572225}
-  spinner: {fileID: 1413189868}
 --- !u!1 &2125086533
 GameObject:
   m_ObjectHideFlags: 0

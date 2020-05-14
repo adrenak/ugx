@@ -4,7 +4,7 @@ namespace Adrenak.UPF.Examples{
     public class MovieExample : MonoBehaviour {
         public MasterDetailPage page;
 
-        public MovieVM[] models;
+        public MovieModel[] models;
 
         void Start() {
             page.IsDetailPageOpen = false;
@@ -16,7 +16,7 @@ namespace Adrenak.UPF.Examples{
 
             listView.OnItemSelected += (sender, args) => {
                 page.IsDetailPageOpen = true;
-                (page.Detail.Content.GetSubView("Movie View") as MovieView).Context = args.Item as MovieVM;
+                (page.Detail.Content.GetSubView("Movie View") as MovieView).Model = args.Item;
             };
         }
 

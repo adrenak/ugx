@@ -8,14 +8,15 @@ namespace Adrenak.UPF {
     }
 
     public class MasterDetailPage : Page {
+#pragma warning disable 0649
         [SerializeField] protected ContentPage master;
-        public ContentPage Master => master;
-
         [SerializeField] protected ContentPage detail;
-        public ContentPage Detail => detail;
-
         [SerializeField] bool isDetailPageOpenOnStart;
         [ReadOnly] [SerializeField] bool isDetailPageOpen;
+#pragma warning restore 0649
+
+        public ContentPage Master => master;
+        public ContentPage Detail => detail;
         public bool IsDetailPageOpen {
             get => isDetailPageOpen;
             set {
@@ -23,9 +24,9 @@ namespace Adrenak.UPF {
 
                 isDetailPageOpen = value;
                 if (value)
-                    Navigator.PushAsync(Detail);
+                    Navigator.Push(Detail);
                 else
-                    Navigator.PopAsync();
+                    Navigator.Pop();
             }
         }
 
