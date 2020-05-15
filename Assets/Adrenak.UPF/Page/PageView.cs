@@ -1,4 +1,5 @@
 ﻿using Adrenak.UPF.Examples.Unigram;
+using NaughtyAttributes;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,22 +22,27 @@ namespace Adrenak.UPF {
 #pragma warning disable 0649
         [SerializeField] UnityEvent onAppear;
         [SerializeField] UnityEvent onDisappear;
-#pragma warning restore 0649
+
+        [ReadOnly] [SerializeField] bool isOpen;
+        public bool IsOpen => isOpen;
 
         [SerializeField] protected View content;
         public View Content => content;
+#pragma warning restore 0649
 
         void Start() {
             OnStart();
         }
 
-        public void AppearPage() {
-            OnAppear();
+        public void OpenPage() {
+            isOpen = true;
+            OnPageOpen();
             onAppear?.Invoke();
         }
 
-        public void DisappearPage() {
-            OnDisappear();
+        public void ClosePage() {
+            isOpen = false;
+            OnPageClose();
             onDisappear?.Invoke();
         }
 
@@ -45,7 +51,7 @@ namespace Adrenak.UPF {
         protected virtual void OnPageModelPropertyChanged(string propertyName) { }
         
         protected virtual void OnBackButtonPress() { }
-        protected virtual void OnAppear() { }
-        protected virtual void OnDisappear() { }
+        protected virtual void OnPageOpen() { }
+        protected virtual void OnPageClose() { }
     }
 }

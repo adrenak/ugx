@@ -505,6 +505,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  isOpen: 0
   content: {fileID: 737317574}
 --- !u!114 &635494088
 MonoBehaviour:
@@ -654,7 +655,6 @@ GameObject:
   m_Component:
   - component: {fileID: 830565409}
   - component: {fileID: 830565410}
-  - component: {fileID: 830565411}
   m_Layer: 5
   m_Name: Pair Flow
   m_TagString: Untagged
@@ -695,25 +695,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   first: {fileID: 1291403205}
   second: {fileID: 635494087}
-  navigator: {fileID: 830565411}
   showSecondOnStart: 0
   isShowingSecond: 0
---- !u!114 &830565411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 830565408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07e0bd347c32879479a7e39ef752f996, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useRootPage: 0
-  rootPage: {fileID: 0}
-  stack:
-    pages: []
 --- !u!1 &860948200
 GameObject:
   m_ObjectHideFlags: 0
@@ -1120,6 +1103,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  isOpen: 0
   content: {fileID: 1480472513}
 --- !u!1 &1480472510
 GameObject:

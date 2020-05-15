@@ -1076,7 +1076,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   current: {fileID: 0}
   startPageIndex: 0
-  navigator: {fileID: 564718428}
   children:
   - {fileID: 2033555605}
   - {fileID: 1302798280}
@@ -1115,7 +1114,9 @@ MonoBehaviour:
   useRootPage: 0
   rootPage: {fileID: 0}
   stack:
-    pages: []
+    current: {fileID: 0}
+    currentIndex: -1
+    history: []
 --- !u!1 &615916055
 GameObject:
   m_ObjectHideFlags: 0
@@ -1723,7 +1724,7 @@ GameObject:
   - component: {fileID: 1154291345}
   - component: {fileID: 1154291348}
   m_Layer: 5
-  m_Name: 1
+  m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1949,7 +1950,7 @@ GameObject:
   - component: {fileID: 1300033278}
   - component: {fileID: 1300033279}
   m_Layer: 5
-  m_Name: 3
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2064,7 +2065,7 @@ GameObject:
   - component: {fileID: 1302798280}
   - component: {fileID: 1302798281}
   m_Layer: 5
-  m_Name: 2
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2213,7 +2214,7 @@ GameObject:
   - component: {fileID: 1352121580}
   - component: {fileID: 1352121583}
   m_Layer: 5
-  m_Name: 2
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2668,7 +2669,7 @@ GameObject:
   - component: {fileID: 1780453455}
   - component: {fileID: 1780453458}
   m_Layer: 5
-  m_Name: 3
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3015,7 +3016,7 @@ GameObject:
   - component: {fileID: 2033555605}
   - component: {fileID: 2033555606}
   m_Layer: 5
-  m_Name: 1
+  m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

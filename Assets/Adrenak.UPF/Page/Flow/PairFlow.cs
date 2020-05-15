@@ -7,8 +7,6 @@ namespace Adrenak.UPF {
         [SerializeField] protected PageView first;
         [SerializeField] protected PageView second;
 
-        [SerializeField] Navigator navigator;
-
         [SerializeField] bool showSecondOnStart;
         [ReadOnly] [SerializeField] bool isShowingSecond;
 #pragma warning restore 0649
@@ -18,22 +16,30 @@ namespace Adrenak.UPF {
         public bool IsShowingSecond {
             get => isShowingSecond;
             set {
-                if (value == IsShowingSecond) return;
-
                 isShowingSecond = value;
-                if (value)
-                    navigator.Push(Second);
-                else
-                    navigator.Pop();
+                if (value) {
+                    Appear(second);
+                    Disappear(first);
+                }
+                else {
+                    Appear(first);
+                    Disappear(second);
+                }
             }
         }
 
         void Start() {
-            isShowingSecond = showSecondOnStart;
-            if (IsShowingSecond)
-                navigator.Push(second);
-            else
-                navigator.Push(first);
+            IsShowingSecond = showSecondOnStart;
+        }
+
+        void Appear(PageView view) {
+            if (view.IsOpen) return;
+            view.OpenPage();
+        }
+
+        void Disappear(PageView view) {
+            if (!view.IsOpen) return;
+            view.ClosePage();
         }
     }
 }
