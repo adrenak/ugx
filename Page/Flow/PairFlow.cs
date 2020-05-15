@@ -2,21 +2,24 @@
 using NaughtyAttributes;
 
 namespace Adrenak.UPF {
-    public abstract class MasterDetailPage<TMasterPage, TDetailPage> : MasterDetailPage where TMasterPage : Page where TDetailPage : Page {
+    public abstract class PairFlow<TMasterPage, TDetailPage> : PairFlow where TMasterPage : PageView where TDetailPage : PageView {
         new public TMasterPage Master => master as TMasterPage;
         new public TDetailPage Detail => detail as TDetailPage;
     }
 
-    public class MasterDetailPage : Page {
+    public class PairFlow : MonoBehaviour {
 #pragma warning disable 0649
-        [SerializeField] protected ContentPage master;
-        [SerializeField] protected ContentPage detail;
+        [SerializeField] protected PageView master;
+        [SerializeField] protected PageView detail;
+
+        [SerializeField] Navigator navigator;
+        
         [SerializeField] bool isDetailPageOpenOnStart;
         [ReadOnly] [SerializeField] bool isDetailPageOpen;
 #pragma warning restore 0649
 
-        public ContentPage Master => master;
-        public ContentPage Detail => detail;
+        public PageView Master => master;
+        public PageView Detail => detail;
         public bool IsDetailPageOpen {
             get => isDetailPageOpen;
             set {
@@ -24,9 +27,9 @@ namespace Adrenak.UPF {
 
                 isDetailPageOpen = value;
                 if (value)
-                    Navigator.Push(Detail);
+                    navigator.Push(Detail);
                 else
-                    Navigator.Pop();
+                    navigator.Pop();
             }
         }
 

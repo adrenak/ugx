@@ -36,7 +36,7 @@ namespace Adrenak.UPF {
         [SerializeField] Text ackDisplay;
 #pragma warning restore 0649
 
-        protected override void InitializeView() {
+        protected override void OnViewInitialize() {
             headerDisplay.text = Model.Header;
             bodyDisplay.text = Model.Body;
             ackDisplay.text = Model.Ack;
@@ -46,7 +46,7 @@ namespace Adrenak.UPF {
             Model.Dismiss();
         }
 
-        protected override void ListenToView() { }
-        protected override void OnModelPropertyChanged(string propertyName) { }
+        protected override void OnObserveViewEvents() { }
+        protected override void OnViewModelPropertyChanged(string propertyName) { }
     }
 }

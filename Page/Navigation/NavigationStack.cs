@@ -7,11 +7,11 @@ namespace Adrenak.UPF {
     [Serializable]
     public class NavigationStack : Bindable {
 #pragma warning disable 0649
-        [SerializeField] List<Page> pages;
-        public List<Page> Pages => pages;
+        [SerializeField] List<PageView> pages;
+        public List<PageView> Pages => pages;
 #pragma warning restore 0649
 
-        public Page Top {
+        public PageView Top {
             get {
                 if (pages.Count > 0)
                     return pages[pages.Count - 1];
@@ -21,14 +21,14 @@ namespace Adrenak.UPF {
 
         public int Count => pages.Count;
 
-        public void Push(Page page) {
+        public void Push(PageView page) {
             if (Top != null)
                 Top.DisappearPage();
             page.AppearPage();
             pages.Add(page);
         }
 
-        public Page Pop() {
+        public PageView Pop() {
             if (Count > 1) {
                 var top = Top;
                 top.DisappearPage();

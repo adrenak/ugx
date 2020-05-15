@@ -9,13 +9,13 @@ namespace Adrenak.UPF.Examples {
         [SerializeField] Toggle tncToggle;
 #pragma warning restore 0649
 
-        protected override void InitializeView() {
+        protected override void OnViewInitialize() {
             emailInput.text = Model.Email;
             passwordInput.text = Model.Password;
             tncToggle.isOn = Model.AgreeWithTNC;
         }
 
-        protected override void OnModelPropertyChanged(string propertyName) {
+        protected override void OnViewModelPropertyChanged(string propertyName) {
             switch (propertyName) {
                 case nameof(Model.Email):
                     emailInput.text = Model.Email;
@@ -29,7 +29,7 @@ namespace Adrenak.UPF.Examples {
             }
         }
 
-        protected override void ListenToView() {
+        protected override void OnObserveViewEvents() {
             emailInput.onValueChanged.AddListener(value => Model.Email = value);
             passwordInput.onValueChanged.AddListener(value => Model.Password = value);
             tncToggle.onValueChanged.AddListener(value => Model.AgreeWithTNC = value);

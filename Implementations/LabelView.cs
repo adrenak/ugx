@@ -7,13 +7,13 @@ namespace Adrenak.UPF.Implementations {
         [SerializeField] Text labelDisplay;
     #pragma warning restore 0649
 
-        protected override void ListenToView() { }
+        protected override void OnObserveViewEvents() { }
 
-        protected override void InitializeView() {
+        protected override void OnViewInitialize() {
             labelDisplay.text = Model.Label;
         }
 
-        protected override void OnModelPropertyChanged(string propertyName) {
+        protected override void OnViewModelPropertyChanged(string propertyName) {
             labelDisplay.text = Model.Label;  // we have only one property
         }
     }

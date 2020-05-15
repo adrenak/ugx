@@ -1,3 +1,3 @@
 ﻿namespace Adrenak.UPF.Implementations {
-    public class LabelListView : ListView<LabelModel, LabelView> { }
+    public class LabelListView : LayoutView<LabelModel, LabelView> { }
 }

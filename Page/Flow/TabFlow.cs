@@ -4,29 +4,31 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 
 namespace Adrenak.UPF {
-    public class TabbedPage : Page {
+    public class TabFlow : MonoBehaviour {
 #pragma warning disable 0649
         [Header("Tabbed Page")]
-        [ReadOnly] [SerializeField] Page current;
+        [ReadOnly] [SerializeField] PageView current;
 
         [SerializeField] int startPageIndex;
 
-        [ReorderableList] [SerializeField] List<Page> children;
-        public List<Page> Children => children;
+        [SerializeField] Navigator navigator;
+        
+        [ReorderableList] [SerializeField] List<PageView> children;
+        public List<PageView> Children => children;
 #pragma warning restore 0649
 
-        protected override void OnInitializePage() {
+        void Start() {
             OpenByIndex(startPageIndex);
         }
 
         public void OpenByIndex(int index) {
             current = Children[index];
-            Navigator.Push(current);
+            navigator.Push(current);
         }
 
         [Button("Auto Populate Pages")]
         public void AutoPopulate() {
-            children = GetComponentsInChildren<Page>().ToList()
+            children = GetComponentsInChildren<PageView>().ToList()
                 .Where(x => x != this)
                 .ToList();
         }

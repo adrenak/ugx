@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Adrenak.UPF.Examples {    
-    public class ContactListView : ListView<ContactModel, ContactView> {
+    public class ContactListView : LayoutView<ContactModel, ContactView> {
         public event Action<ContactModel> OnCall;
         public event Action<ContactModel> OnDelete;
 

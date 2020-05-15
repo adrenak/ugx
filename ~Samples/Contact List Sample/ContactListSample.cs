@@ -15,7 +15,7 @@ namespace Adrenak.UPF.Examples{
 
             // TODO: Make an extension method for this
             foreach(var contact in contacts)
-                listView.ItemsSource.Add(contact);
+                listView.Items.Add(contact);
 
             listView.OnItemSelected += (source, e) =>
                 message.text = (e.Item as ContactModel).Name;
@@ -25,18 +25,18 @@ namespace Adrenak.UPF.Examples{
 
             listView.OnDelete += contactCell => {
                 message.text = "Deleting " + contactCell.Name;
-                listView.ItemsSource.Remove(contactCell);
+                listView.Items.Remove(contactCell);
             };
 
             listView.OnPulledToRefresh += async (sender, args) => {
                 await Task.Delay(200);
-                listView.ItemsSource.Add(extraContact);
+                listView.Items.Add(extraContact);
                 listView.StopRefresh();
             };
         }
 
         public void AddExtra(){
-            listView.ItemsSource.Add(extraContact);
+            listView.Items.Add(extraContact);
         }
     }
 }
