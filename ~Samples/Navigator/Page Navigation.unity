@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -782,9 +782,9 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.386375}
-  m_AnchoredPosition: {x: 2291, y: 589.06}
-  m_SizeDelta: {x: 0, y: 1178.2}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 2291, y: 0.05999756}
+  m_SizeDelta: {x: 0, y: 0.19995117}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &793091245
 MonoBehaviour:
@@ -802,7 +802,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 793091246}
-        m_MethodName: MoveInAndForget
+        m_MethodName: MoveIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -816,7 +816,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 793091246}
-        m_MethodName: MoveOutAndForget
+        m_MethodName: MoveOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -846,6 +846,8 @@ MonoBehaviour:
     y: -960
     width: 1080
     height: 1920
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 0}
   inPosition: {x: 0, y: 0.019989014, z: 0}
   awayPosition: {x: 2259, y: 0.019989014, z: 0}
   defaultPositionForEnter: 2
@@ -860,6 +862,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
+  prevParent: {fileID: 176245750}
 --- !u!1 &871592230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,10 +1298,10 @@ RectTransform:
   m_Father: {fileID: 176245750}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.58737504}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1821, y: -563.86}
-  m_SizeDelta: {x: 0, y: 1127.8}
+  m_AnchoredPosition: {x: -1821, y: 0.14001465}
+  m_SizeDelta: {x: 0, y: -0.19995117}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2052296800
 MonoBehaviour:
@@ -1316,7 +1319,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2052296801}
-        m_MethodName: MoveInAndForget
+        m_MethodName: MoveIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1330,7 +1333,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2052296801}
-        m_MethodName: MoveOutAndForget
+        m_MethodName: MoveOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1360,6 +1363,8 @@ MonoBehaviour:
     y: -960
     width: 1080
     height: 1920
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 2052296799}
   inPosition: {x: 0, y: -0.019958496, z: 0}
   awayPosition: {x: -1821, y: 0.020080566, z: 0}
   defaultPositionForEnter: 2
@@ -1374,6 +1379,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
+  prevParent: {fileID: 176245750}
 --- !u!1 &2055083187
 GameObject:
   m_ObjectHideFlags: 0

@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -481,7 +481,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 635494088}
-        m_MethodName: MoveInAndForget
+        m_MethodName: MoveIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -495,7 +495,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 635494088}
-        m_MethodName: MoveOutAndForget
+        m_MethodName: MoveOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -525,6 +525,8 @@ MonoBehaviour:
     y: -960
     width: 1080
     height: 1920
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 0}
   inPosition: {x: 0, y: 0.00012207031, z: 0}
   awayPosition: {x: 1807, y: 0.00012207031, z: 0}
   defaultPositionForEnter: 2
@@ -539,6 +541,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
+  prevParent: {fileID: 1142530660}
 --- !u!1 &715425417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1049,6 +1052,8 @@ MonoBehaviour:
     y: -960
     width: 1080
     height: 1920
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 0}
   inPosition: {x: 0, y: 0.000061035156, z: 0}
   awayPosition: {x: -1319, y: -0.00012207031, z: 0}
   defaultPositionForEnter: 2
@@ -1063,6 +1068,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
+  prevParent: {fileID: 1142530660}
 --- !u!114 &1291403205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,7 +1085,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1291403204}
-        m_MethodName: MoveInAndForget
+        m_MethodName: MoveIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1093,7 +1099,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1291403204}
-        m_MethodName: MoveOutAndForget
+        m_MethodName: MoveOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
