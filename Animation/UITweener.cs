@@ -39,17 +39,7 @@ namespace Adrenak.UPF {
 
         [Button("Goto In Position")]
         public void GotoInPosition() {
-            RTLocalPosition = inPosition;
-        }
-
-        public Vector3 RTLocalPosition {
-            get => RT.localPosition;
-            set => RT.localPosition = value;
-        }
-
-        public float CGAlpha {
-            get => CG.alpha;
-            set => CG.alpha = value;
+            RT.localPosition = inPosition;
         }
 
         // OPACITY TWEENING
@@ -65,7 +55,7 @@ namespace Adrenak.UPF {
         }
 
         public void FadeIn(Action onComplete) {
-            CGAlpha = 0;
+            CG.alpha = 0;
             TweenOpacity(1, defaultOpacityTween, "FadeIn", onComplete);
         }
 
@@ -80,7 +70,7 @@ namespace Adrenak.UPF {
         }
 
         public void FadeOut(Action onComplete) {
-            CGAlpha = 1;
+            CG.alpha = 1;
             TweenOpacity(0, defaultOpacityTween, "FadeOut", onComplete);
         }
 
@@ -116,7 +106,7 @@ namespace Adrenak.UPF {
         }
 
         public void MoveIn(Action onComplete = null) {
-            RTLocalPosition = DefaultEnterCordinates;
+            RT.localPosition = DefaultEnterCordinates;
             TweenPosition(inPosition, defaultPositionTween, "MoveIn", onComplete);
         }
 
@@ -131,9 +121,9 @@ namespace Adrenak.UPF {
         }
 
         public void MoveOut(Action onComplete) {
-            RTLocalPosition = InPosition;
+            RT.localPosition = InPosition;
             TweenPosition(DefaultExitCordinates, defaultPositionTween, "MoveOut", () => {
-                RTLocalPosition = AwayPosition;
+                RT.localPosition = AwayPosition;
                 onComplete?.Invoke();
             });
         }
