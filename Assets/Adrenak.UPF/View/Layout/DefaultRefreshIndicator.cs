@@ -33,7 +33,14 @@ namespace Adrenak.UPF {
                 message.color.g,
                 message.color.b,
                 value
-            );            
+            );
+
+            spinner.color = new Color (
+                spinner.color.r,
+                spinner.color.g,
+                spinner.color.b,
+                value
+            );
         }
     }
 }
