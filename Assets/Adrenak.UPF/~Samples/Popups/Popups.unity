@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -379,6 +379,8 @@ MonoBehaviour:
     y: -960
     width: 1080
     height: 1920
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 0}
   inPosition: {x: 0, y: 0, z: 0}
   awayPosition: {x: 0, y: 0, z: 0}
   defaultPositionForEnter: 2
@@ -393,6 +395,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
+  prevParent: {fileID: 1637624167}
 --- !u!1 &591488451
 GameObject:
   m_ObjectHideFlags: 0

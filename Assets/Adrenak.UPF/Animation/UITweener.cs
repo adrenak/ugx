@@ -7,149 +7,96 @@ using Adrenak.Unex;
 using NaughtyAttributes;
 
 namespace Adrenak.UPF {
-    [ExecuteAlways]
+    [ExecuteInEditMode]
     public class UITweener : MonoBehaviour {
-        public event Action<object> OnBeginPositionTweening;
-        public event Action<object> OnEndPositionTweening;
-        public event Action<object> OnBeginOpacityTweening;
-        public event Action<object> OnEndOpacityTweening;
-
-        // MEMBERS
+#pragma warning disable 0649
         [ReadOnly] [SerializeField] Rect parentRect;
-
+        [ReadOnly] [SerializeField] CanvasGroup canvasGroup;
+        [ReadOnly] [SerializeField] RectTransform rectTransform;
         [ReadOnly] [SerializeField] Vector3 inPosition;
-        public Vector3 InPosition { get => inPosition; }
-
         [ReadOnly] [SerializeField] Vector3 awayPosition;
-        public Vector3 AwayPosition { get => awayPosition; }
+
+        public Vector3 InPosition => inPosition;
+        public Vector3 AwayPosition => awayPosition;
+        public RectTransform RT {
+            get {
+                if (rectTransform == null)
+                    rectTransform = GetComponent<RectTransform>();
+                return rectTransform;
+            }
+        }
+        public CanvasGroup CG {
+            get {
+                if (canvasGroup == null)
+                    canvasGroup = GetComponent<CanvasGroup>();
+                if (canvasGroup == null)
+                    canvasGroup = gameObject.GetComponent<CanvasGroup>();
+                return canvasGroup;
+            }
+        }
 
         [BoxGroup("Default Position Tween")] public Position defaultPositionForEnter = Position.Left;
         [BoxGroup("Default Position Tween")] public Position defaultPositionForExit = Position.Right;
-        [BoxGroup("Default Position Tween")] public PositionTween defaultPositionTween = null;
-        [BoxGroup("Default Opacity Tween")] public OpacityTween defaultOpacityTween = null;
+        [BoxGroup("Default Position Tween")] public PositionTween defaultPositionTween;
+        [BoxGroup("Default Opacity Tween")] public OpacityTween defaultOpacityTween;
+#pragma warning restore 0649
 
-        ITweener tweener = new SurgeTweener();
-        Transform prevParent;
-        Rect screenRect;
+        readonly ITweener tweener = new SurgeTweener();
 
         [Button("Capture In Position")]
-        public void CaptureInPosition() {
-            inPosition = GetComponent<RectTransform>().localPosition;
-        }
+        public void CaptureInPosition() => inPosition = RT.localPosition;
+
+        [Button("Capture Away Position")]
+        public void CaptureAwayPosition() => awayPosition = RT.localPosition;        
 
         [Button("Goto In Position")]
-        public void GotoInPosition() {
-            RT.localPosition = inPosition;
-        }
+        public void GotoInPosition() => RT.localPosition = inPosition;
 
+        [Button("Goto Away Position")]
+        public void GotoAwayPosition() => RT.localPosition = awayPosition;
+
+        // ================================================
+        #region TWEENING
+        // ================================================
         // OPACITY TWEENING
-        // Quick
-        public void FadeInAndForget() {
-            FadeIn();
-        }
-
-        public Task FadeIn() {
-            var source = new TaskCompletionSource<bool>();
-            FadeIn(() => source.SetResult(true));
-            return source.Task;
-        }
-
-        public void FadeIn(Action onComplete) {
+        async public void FadeIn() {
             CG.alpha = 0;
-            TweenOpacity(1, defaultOpacityTween, "FadeIn", onComplete);
-        }
-
-        public void FadeOutAndForget() {
-            FadeOut();
-        }
-
-        public Task FadeOut() {
-            var source = new TaskCompletionSource<bool>();
-            FadeOut(() => source.SetResult(true));
-            return source.Task;
-        }
-
-        public void FadeOut(Action onComplete) {
+            await TweenOpacity(1, defaultOpacityTween);
             CG.alpha = 1;
-            TweenOpacity(0, defaultOpacityTween, "FadeOut", onComplete);
         }
 
-        // Custom
-        public Task TweenOpacity(float endValue, OpacityTween tween, object args = null) {
-            var source = new TaskCompletionSource<bool>();
-            TweenOpacity(endValue, tween, args, () => source.SetResult(true));
-            return source.Task;
+        async public void FadeOut() {
+            CG.alpha = 1;
+            await TweenOpacity(0, defaultOpacityTween);
+            CG.alpha = 0;
         }
 
-        public void TweenOpacity(float endValue, OpacityTween tween, object args, Action onComplete = null) {
-            OnBeginOpacityTweening?.Invoke(args);
-            TweenOpacity(endValue, tween, () => {
-                OnEndOpacityTweening?.Invoke(args);
-                onComplete?.Invoke();
-            });
-        }
-
-        public void TweenOpacity(float endValue, OpacityTween tween, Action onComplete = null) {
-            tweener.TweenOpacity(CG, endValue, tween, onComplete);
-        }
+        async public Task TweenOpacity(float endValue, OpacityTween tween)
+            => await tweener.TweenOpacity(CG, endValue, tween);
 
         // POSITION TWEENING
-        // Quick
-        public void MoveInAndForget() {
-            MoveIn();
-        }
-
-        public Task MoveIn() {
-            var source = new TaskCompletionSource<bool>();
-            MoveIn(() => source.SetResult(true));
-            return source.Task;
-        }
-
-        public void MoveIn(Action onComplete = null) {
+        async public void MoveIn() {
             RT.localPosition = DefaultEnterCordinates;
-            TweenPosition(inPosition, defaultPositionTween, "MoveIn", onComplete);
-        }
-
-        public void MoveOutAndForget() {
-            MoveOut();
-        }
-
-        public Task MoveOut() {
-            var source = new TaskCompletionSource<bool>();
-            MoveOut(() => source.SetResult(true));
-            return source.Task;
-        }
-
-        public void MoveOut(Action onComplete) {
+            await TweenPosition(inPosition, defaultPositionTween);
             RT.localPosition = InPosition;
-            TweenPosition(DefaultExitCordinates, defaultPositionTween, "MoveOut", () => {
-                RT.localPosition = AwayPosition;
-                onComplete?.Invoke();
-            });
         }
 
-        // Custom
-        public Task TweenPosition(Vector3 endValue, PositionTween tween, object args = null) {
-            var source = new TaskCompletionSource<bool>();
-            TweenPosition(endValue, tween, args, () => source.SetResult(true));
-            return source.Task;
+        async public void MoveOut() {
+            RT.localPosition = InPosition;
+            await TweenPosition(DefaultExitCordinates, defaultPositionTween);
+            RT.localPosition = AwayPosition;
         }
 
-        public void TweenPosition(Vector3 endValue, PositionTween tween, object args, Action onComplete = null) {
-            OnBeginPositionTweening?.Invoke(args);
-            TweenPosition(endValue, tween, () => {
-                OnEndPositionTweening?.Invoke(args);
-                onComplete?.Invoke();
-            });
-        }
+        async public Task TweenPosition(Vector3 endValue, PositionTween tween)
+            => await tweener.TweenPosition(RT, endValue, tween);
 
-        public void TweenPosition(Vector3 endValue, PositionTween tween, Action onComplete = null) {
-            tweener.TweenPosition(RT, endValue, tween, onComplete);
-        }
+        #endregion
 
-        // UNITY INVOCATION
+        // ================================================
+        #region UNITY LIFECYCLE
+        // ================================================
+        Rect screenRect;
         void Awake() {
-            awayPosition = RT.localPosition;
             screenRect = new Rect(0, 0, ScreenX.Width, ScreenX.Height);
         }
 
@@ -157,6 +104,7 @@ namespace Adrenak.UPF {
             UpdateParentRect();
         }
 
+        [SerializeField] Transform prevParent;
         void UpdateParentRect() {
             if ((transform.parent == null ||
                 transform.parent.GetComponent<RectTransform>() == null) &&
@@ -171,15 +119,14 @@ namespace Adrenak.UPF {
                 parentRect = prevParent.GetComponent<RectTransform>().rect;
                 return;
             }
-
             else if (transform.parent != prevParent) {
                 prevParent = transform.parent;
                 parentRect = prevParent.GetComponent<RectTransform>().rect;
                 return;
             }
         }
+        #endregion
 
-        // POSITION VECTOR3 ACCESSORS
         public Vector3 GetPositionVector3(Position position) {
             switch (position) {
                 case Position.Left: return LeftExitCordinates;
@@ -196,33 +143,16 @@ namespace Adrenak.UPF {
         public Vector3 DefaultEnterCordinates
             => GetPositionVector3(defaultPositionForEnter);
 
-        public Vector3 RightExitCordinates 
+        public Vector3 RightExitCordinates
             => new Vector3(RT.GetRightExit(), inPosition.y, RT.localPosition.z);
 
-        public Vector3 TopExitCordinates 
+        public Vector3 TopExitCordinates
             => new Vector3(inPosition.x, RT.GetTopExit(), RT.localPosition.z);
 
-        public Vector3 LeftExitCordinates 
+        public Vector3 LeftExitCordinates
             => new Vector3(RT.GetLeftExit(), inPosition.y, RT.localPosition.z);
 
-        public Vector3 BottomExitCordinates 
+        public Vector3 BottomExitCordinates
             => new Vector3(inPosition.x, RT.GetBottomExit(), RT.localPosition.z);
-
-        // COMPONENT CACHING
-        CanvasGroup cg;
-        public CanvasGroup CG {
-            get {
-                if (cg == null)
-                    cg = GetComponent<CanvasGroup>();
-                if (cg == null)
-                    cg = gameObject.AddComponent<CanvasGroup>();
-                return cg;
-            }
-        }
-
-        RectTransform rt;
-        public RectTransform RT {
-            get { return rt = rt ?? GetComponent<RectTransform>(); }
-        }
     }
 }

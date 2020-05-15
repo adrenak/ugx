@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -2399,7 +2399,9 @@ MonoBehaviour:
   useRootPage: 0
   rootPage: {fileID: 0}
   stack:
-    pages: []
+    current: {fileID: 0}
+    currentIndex: -1
+    history: []
 --- !u!114 &921696355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2414,7 +2416,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   current: {fileID: 0}
   startPageIndex: 1
-  navigator: {fileID: 921696354}
   children:
   - {fileID: 1608365926}
   - {fileID: 1851758086}
@@ -2961,7 +2962,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1608365927}
-        m_MethodName: MoveInAndForget
+        m_MethodName: MoveIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2975,7 +2976,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1608365927}
-        m_MethodName: MoveOutAndForget
+        m_MethodName: MoveOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2985,6 +2986,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  isOpen: 0
   content: {fileID: 0}
   model:
     title: 
@@ -3009,6 +3011,8 @@ MonoBehaviour:
     y: -960
     width: 1080
     height: 1920
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 0}
   inPosition: {x: 0, y: 0, z: 0}
   awayPosition: {x: -1648, y: 0, z: 0}
   defaultPositionForEnter: 2
@@ -3023,6 +3027,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
+  prevParent: {fileID: 1992213059}
 --- !u!1 &1615200427
 GameObject:
   m_ObjectHideFlags: 0
@@ -3329,7 +3334,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1553, y: 0}
+  m_AnchoredPosition: {x: 1849, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1851758086
@@ -3348,7 +3353,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1851758088}
-        m_MethodName: MoveInAndForget
+        m_MethodName: MoveIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3362,7 +3367,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1851758088}
-        m_MethodName: MoveOutAndForget
+        m_MethodName: MoveOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3372,6 +3377,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  isOpen: 0
   content: {fileID: 0}
   model:
     title: 
@@ -3406,8 +3412,10 @@ MonoBehaviour:
     y: -960
     width: 1080
     height: 1920
+  canvasGroup: {fileID: 0}
+  rectTransform: {fileID: 1851758085}
   inPosition: {x: 0, y: 0, z: 0}
-  awayPosition: {x: 1553, y: 0, z: 0}
+  awayPosition: {x: 1849, y: 0, z: 0}
   defaultPositionForEnter: 2
   defaultPositionForExit: 3
   defaultPositionTween:
@@ -3420,6 +3428,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
+  prevParent: {fileID: 787478747}
 --- !u!1 &1854311665
 GameObject:
   m_ObjectHideFlags: 0
