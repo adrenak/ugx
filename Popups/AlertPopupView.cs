@@ -24,12 +24,12 @@ namespace Adrenak.UPF {
             set => Set(ref ack, value);
         }
 
-        public void Dismiss() {
+        public void Acknowledge() {
             OnDismiss?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    public class AlertPopupView : View<AlertPopup> {
+    public class AlertPopupView : PopupView<AlertPopup> {
 #pragma warning disable 0649
         [SerializeField] Text headerDisplay;
         [SerializeField] Text bodyDisplay;
@@ -40,13 +40,17 @@ namespace Adrenak.UPF {
             headerDisplay.text = Model.Header;
             bodyDisplay.text = Model.Body;
             ackDisplay.text = Model.Ack;
+            onPopupOpen?.Invoke();
         }
 
-        public void Dismiss() {
-            Model.Dismiss();
+        public void Acknowledge() {
+            Model.Acknowledge();
+            onPopupClose?.Invoke();
         }
 
         protected override void OnObserveViewEvents() { }
-        protected override void OnViewModelPropertyChanged(string propertyName) { }
+        protected override void OnViewModelPropertyChanged(string propertyName) {
+            OnViewInitialize();
+        }
     }
 }
