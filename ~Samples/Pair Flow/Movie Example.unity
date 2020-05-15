@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 635494087}
   - component: {fileID: 635494088}
   m_Layer: 5
-  m_Name: Detail
+  m_Name: Movie Details
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -452,12 +452,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635494085}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 737317573}
-  m_Father: {fileID: 830565409}
+  m_Father: {fileID: 1142530660}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -474,7 +474,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 635494085}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6572ba2233e6554aaaf20278514befc, type: 3}
+  m_Script: {fileID: 11500000, guid: 54bc8e68b3352554b974105e64a14bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onAppear:
@@ -505,8 +505,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  title: 
-  navigator: {fileID: 830565411}
   content: {fileID: 737317574}
 --- !u!114 &635494088
 MonoBehaviour:
@@ -658,7 +656,7 @@ GameObject:
   - component: {fileID: 830565410}
   - component: {fileID: 830565411}
   m_Layer: 5
-  m_Name: Movie Master Page
+  m_Name: Pair Flow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -674,11 +672,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1291403203}
-  - {fileID: 635494086}
+  m_Children: []
   m_Father: {fileID: 1142530660}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -697,18 +693,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9642e0479bb6c449993dc9360b76187, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onAppear:
-    m_PersistentCalls:
-      m_Calls: []
-  onDisappear:
-    m_PersistentCalls:
-      m_Calls: []
-  title: 
+  first: {fileID: 1291403205}
+  second: {fileID: 635494087}
   navigator: {fileID: 830565411}
-  master: {fileID: 1291403206}
-  detail: {fileID: 635494087}
-  isDetailPageOpenOnStart: 0
-  isDetailPageOpen: 0
+  showSecondOnStart: 0
+  isShowingSecond: 0
 --- !u!114 &830565411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -722,7 +711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useRootPage: 0
-  rootPage: {fileID: 1291403206}
+  rootPage: {fileID: 0}
   stack:
     pages: []
 --- !u!1 &860948200
@@ -736,7 +725,7 @@ GameObject:
   - component: {fileID: 860948202}
   - component: {fileID: 860948201}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Sample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -864,6 +853,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 1291403203}
+  - {fileID: 635494086}
   - {fileID: 830565409}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -1028,10 +1019,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1291403203}
-  - component: {fileID: 1291403206}
   - component: {fileID: 1291403204}
+  - component: {fileID: 1291403205}
   m_Layer: 5
-  m_Name: Master
+  m_Name: Movie List
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1044,12 +1035,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1291403202}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1480472511}
-  m_Father: {fileID: 830565409}
+  m_Father: {fileID: 1142530660}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1089,7 +1080,7 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
---- !u!114 &1291403206
+--- !u!114 &1291403205
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1098,7 +1089,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1291403202}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6572ba2233e6554aaaf20278514befc, type: 3}
+  m_Script: {fileID: 11500000, guid: 54bc8e68b3352554b974105e64a14bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onAppear:
@@ -1129,8 +1120,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  title: 
-  navigator: {fileID: 830565411}
   content: {fileID: 1480472513}
 --- !u!1 &1480472510
 GameObject:

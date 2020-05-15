@@ -7,22 +7,21 @@ namespace Adrenak.UPF.Examples{
         public MovieModel[] models;
 
         void Start() {
-            page.IsDetailPageOpen = false;
+            page.IsShowingSecond = false;
 
-            var listView = page.Master.Content as MovieListView;
+            var listView = page.First.Content as MovieListView;
 
-            foreach (var model in models)
-                listView.Items.Add(model);
+            listView.Items = models;
 
             listView.OnItemSelected += (sender, args) => {
-                page.IsDetailPageOpen = true;
-                (page.Detail.Content.GetSubView("Movie View") as MovieView).Model = args.Item;
+                page.IsShowingSecond = true;
+                (page.Second.Content.GetSubView("Movie View") as MovieView).Model = args.Item;
             };
         }
 
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Escape))
-                page.IsDetailPageOpen = false;
+                page.IsShowingSecond = false;
         }
     }
 }

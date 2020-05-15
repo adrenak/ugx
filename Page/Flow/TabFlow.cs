@@ -12,7 +12,7 @@ namespace Adrenak.UPF {
         [SerializeField] int startPageIndex;
 
         [SerializeField] Navigator navigator;
-        
+
         [ReorderableList] [SerializeField] List<PageView> children;
         public List<PageView> Children => children;
 #pragma warning restore 0649

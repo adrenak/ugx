@@ -316,9 +316,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ef321354202eb4da0d46472c96f640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullToRefresh: 0
+  pullToRefresh: 1
   pullRefreshDistance: 250
-  indicator: {fileID: 0}
+  indicator: {fileID: 2071892483}
   _scrollRect: {fileID: 572651177}
   _layoutGroup: {fileID: 1654330136}
   prefab: {fileID: 8969726198010893687, guid: 4d1fd26349e66d1419da104dcc1e98ee, type: 3}
@@ -1402,9 +1402,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2071892481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d1deef8ee9efa45b34e4a1a7020314, type: 3}
+  m_Script: {fileID: 11500000, guid: c430ac434a1b11f44b9bfbad4f5c1e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  message: {fileID: 472572225}
+  spinner: {fileID: 1413189868}
 --- !u!1 &2125086533
 GameObject:
   m_ObjectHideFlags: 0
@@ -1435,7 +1437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   message: {fileID: 244185220}
-  listView: {fileID: 1980417500}
+  listView: {fileID: 572651174}
   contacts:
   - _name: Tom
     _status: Just hanging... off of a plane.

@@ -2,39 +2,38 @@
 using NaughtyAttributes;
 
 namespace Adrenak.UPF {
-    public abstract class PairFlow<TMasterPage, TDetailPage> : PairFlow where TMasterPage : PageView where TDetailPage : PageView {
-        new public TMasterPage Master => master as TMasterPage;
-        new public TDetailPage Detail => detail as TDetailPage;
-    }
-
     public class PairFlow : MonoBehaviour {
 #pragma warning disable 0649
-        [SerializeField] protected PageView master;
-        [SerializeField] protected PageView detail;
+        [SerializeField] protected PageView first;
+        [SerializeField] protected PageView second;
 
         [SerializeField] Navigator navigator;
-        
-        [SerializeField] bool isDetailPageOpenOnStart;
-        [ReadOnly] [SerializeField] bool isDetailPageOpen;
+
+        [SerializeField] bool showSecondOnStart;
+        [ReadOnly] [SerializeField] bool isShowingSecond;
 #pragma warning restore 0649
 
-        public PageView Master => master;
-        public PageView Detail => detail;
-        public bool IsDetailPageOpen {
-            get => isDetailPageOpen;
+        public PageView First => first;
+        public PageView Second => second;
+        public bool IsShowingSecond {
+            get => isShowingSecond;
             set {
-                if (value == IsDetailPageOpen) return;
+                if (value == IsShowingSecond) return;
 
-                isDetailPageOpen = value;
+                isShowingSecond = value;
                 if (value)
-                    navigator.Push(Detail);
+                    navigator.Push(Second);
                 else
                     navigator.Pop();
             }
         }
 
         void Start() {
-            IsDetailPageOpen = isDetailPageOpenOnStart;
+            isShowingSecond = showSecondOnStart;
+            if (IsShowingSecond)
+                navigator.Push(second);
+            else
+                navigator.Push(first);
         }
     }
 }
