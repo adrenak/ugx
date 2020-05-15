@@ -4,7 +4,6 @@ using UnityEngine.UI;
 namespace Adrenak.UPF.Examples.Unigram {
     public class ProfileSummaryView : View<ProfileSummaryModel> {
 #pragma warning disable 0649
-        [SerializeField] Text headerUsernameDisplay;
         [SerializeField] Text summaryUsernameDisplay;
         [SerializeField] Text displayNameDisplay;
         [SerializeField] Image displayPictureDisplay;
@@ -16,7 +15,7 @@ namespace Adrenak.UPF.Examples.Unigram {
 #pragma warning restore 0649
 
         protected override void OnViewInitialize() {
-            summaryUsernameDisplay.text = headerUsernameDisplay.text = Model.Username;
+            summaryUsernameDisplay.text = Model.Username;
             displayNameDisplay.text = Model.DisplayName;
             displayPictureDisplay.sprite = Model.DisplayPicture;
             bioDisplay.text = Model.Bio;
@@ -35,6 +34,8 @@ namespace Adrenak.UPF.Examples.Unigram {
         }
 
         protected override void OnObserveViewEvents() { }
-        protected override void OnViewModelPropertyChanged(string propertyName) { }
+        protected override void OnViewModelPropertyChanged(string propertyName) {
+            OnViewInitialize();
+        }
     }
 }
