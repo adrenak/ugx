@@ -2,7 +2,7 @@
 
 namespace Adrenak.UPF.Examples.Unigram {
     [System.Serializable]
-    public class NotificationModel : Model {
+    public class ActivityModel : Model {
         [SerializeField] Sprite userDP;
         public Sprite UserDP {
             get => userDP;

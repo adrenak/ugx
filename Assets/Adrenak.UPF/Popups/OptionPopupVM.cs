@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Adrenak.UPF{
+namespace Adrenak.UPF {
     [Serializable]
     public class OptionPopupVM : Model {
         public event EventHandler<string> OnOptionSelected;

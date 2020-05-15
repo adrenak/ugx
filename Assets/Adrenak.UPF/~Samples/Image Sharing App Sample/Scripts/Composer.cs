@@ -1,19 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using NaughtyAttributes;
+﻿using UnityEngine;
 
 namespace Adrenak.UPF.Examples.Unigram{
     public class Composer : MonoBehaviour {
-        public NotificationListView activityListView;
-        [ReorderableList] public List<NotificationModel> activityModels;
+        public ActivityPageView activityPage;
+        public ActivityPageModel activityModel;
 
-        public ProfileView profileView;
-        public ProfileModel profileModel;
+        public ProfilePageView profilePage;
+        public ProfilePageModel profileModel;
 
         public void Start() {
-            activityListView.ItemsSource.AddFrom(activityModels);
-            profileView.Model = profileModel;
+            activityPage.Model = activityModel;
+            profilePage.Model = profileModel;
+
+            profilePage.Model.ProfileSummary.OnOpenWebsite += (sender, e)
+                => Application.OpenURL(profileModel.ProfileSummary.Website);
         }
     }
 }

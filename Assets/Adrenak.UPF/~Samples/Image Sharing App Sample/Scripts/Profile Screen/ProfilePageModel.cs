@@ -5,7 +5,7 @@ using NaughtyAttributes;
 
 namespace Adrenak.UPF.Examples.Unigram {
     [Serializable]
-    public class ProfileModel : Model {
+    public class ProfilePageModel : PageModel {
         [SerializeField] ProfileSummaryModel profileSummary;
         public ProfileSummaryModel ProfileSummary {
             get => profileSummary;

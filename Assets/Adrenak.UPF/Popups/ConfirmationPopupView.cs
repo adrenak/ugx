@@ -48,7 +48,7 @@ namespace Adrenak.UPF {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        protected override void InitializeView() {
+        protected override void OnViewInitialize() {
             headerDisplay.text = Model.Header;
             bodyDisplay.text = Model.Body;
             positiveDisplay.text = Model.Positive;
@@ -63,7 +63,7 @@ namespace Adrenak.UPF {
             Model.Deny();
         }
 
-        protected override void ListenToView() { }
-        protected override void OnModelPropertyChanged(string propertyName) { }
+        protected override void OnObserveViewEvents() { }
+        protected override void OnViewModelPropertyChanged(string propertyName) { }
     }
 }

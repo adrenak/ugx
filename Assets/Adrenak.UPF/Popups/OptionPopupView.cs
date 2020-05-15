@@ -15,18 +15,18 @@ namespace Adrenak.UPF {
                 Model.Select((e.Item as LabelModel).Label);
         }
 
-        protected override void InitializeView() {
+        protected override void OnViewInitialize() {
             labelDisplay.text = Model.Label;
 
-            listView.ItemsSource.Clear();
-            listView.ItemsSource.AddFrom(
+            listView.Items.Clear();
+            listView.Items.AddFrom(
                 Model.Options
                 .Select(x => new LabelModel { Label = x })
                 .ToList()
             );
         }
 
-        protected override void ListenToView() { }
-        protected override void OnModelPropertyChanged(string propertyName) { }
+        protected override void OnObserveViewEvents() { }
+        protected override void OnViewModelPropertyChanged(string propertyName) { }
     }
 }

@@ -8,12 +8,12 @@ namespace Adrenak.UPF.Examples{
         [SerializeField] Text ratingDisplay;
 #pragma warning restore 0649
 
-        protected override void InitializeView() {
+        protected override void OnViewInitialize() {
             nameDisplay.text = Model.Name;
             ratingDisplay.text = Model.Rating.ToString("0.00");
         }
 
-        protected override void ListenToView() { }
-        protected override void OnModelPropertyChanged(string propertyName) { }
+        protected override void OnObserveViewEvents() { }
+        protected override void OnViewModelPropertyChanged(string propertyName) { }
     }
 }

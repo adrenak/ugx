@@ -10,7 +10,7 @@ using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class ListView<TViewModel, TViewType> : View where TViewModel : Model where TViewType : View<TViewModel> {
+    public abstract class LayoutView<TViewModel, TViewType> : View where TViewModel : Model where TViewType : View<TViewModel> {
         public class ItemSelectedEventArgs : EventArgs {
             public TViewModel Item { get; private set; }
             public ItemSelectedEventArgs(TViewModel item) {
@@ -31,8 +31,8 @@ namespace Adrenak.UPF {
         [SerializeField] ScrollRect _scrollRect;
         public ScrollRect ScrollRect => _scrollRect;
 
-        [SerializeField] HorizontalOrVerticalLayoutGroup _layoutGroup;
-        public HorizontalOrVerticalLayoutGroup LayoutGroup => _layoutGroup;
+        [SerializeField] LayoutGroup _layoutGroup;
+        public LayoutGroup LayoutGroup => _layoutGroup;
 
         [Header("Instantiation")]
         [SerializeField] TViewType prefab;
@@ -40,8 +40,14 @@ namespace Adrenak.UPF {
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
-        public ObservableCollection<TViewModel> ItemsSource { get; } 
-            = new ObservableCollection<TViewModel>();
+        ObservableCollection<TViewModel> items = new ObservableCollection<TViewModel>();
+        public IList<TViewModel> Items {
+            get => items;
+            set {
+                items.Clear();
+                items.AddFrom(value);
+            }
+        }
 
         readonly List<TViewType> instantiated = new List<TViewType>();
 
@@ -49,7 +55,7 @@ namespace Adrenak.UPF {
 #pragma warning restore 0649
 
         void Awake() {
-            ItemsSource.CollectionChanged += (sender, args) => {
+            items.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
@@ -75,8 +81,8 @@ namespace Adrenak.UPF {
                 InstanceNamer(instance) :
                 "#" + instance.transform.GetSiblingIndex();
 
-            void OnSelected(object sender, EventArgs r){
-                OnItemSelected?.Invoke(this, new ItemSelectedEventArgs(instance.Model));                
+            void OnSelected(object sender, EventArgs r) {
+                OnItemSelected?.Invoke(this, new ItemSelectedEventArgs(instance.Model));
             }
 
             instance.OnViewSelected += OnSelected;

@@ -25,11 +25,11 @@ namespace Adrenak.UPF {
         protected bool CallPropertyChangeEvent { get; set; } = true;
 
         [NotifyPropertyChangedInvocator]
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void OnPropertyChanging([CallerMemberName] string propertyName = null) {
+        void OnPropertyChanging([CallerMemberName] string propertyName = null) {
             PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
         }
 
@@ -74,11 +74,11 @@ namespace Adrenak.UPF {
         protected bool CallPropertyChangeEvent { get; set; } = true;
 
         [NotifyPropertyChangedInvocator]
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void OnPropertyChanging([CallerMemberName] string propertyName = null) {
+        void OnPropertyChanging([CallerMemberName] string propertyName = null) {
             PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
         }
 

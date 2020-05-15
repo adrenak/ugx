@@ -121,10 +121,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 24541248}
-  - component: {fileID: 24541249}
   - component: {fileID: 24541250}
   m_Layer: 5
-  m_Name: Post Preview Container
+  m_Name: Post Preview Group
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,31 +143,11 @@ RectTransform:
   m_Father: {fileID: 448779230}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -855.49994}
-  m_SizeDelta: {x: 1080, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &24541249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24541247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: 100
-  m_FlexibleWidth: -1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
 --- !u!114 &24541250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +183,7 @@ GameObject:
   - component: {fileID: 61976801}
   - component: {fileID: 61976803}
   - component: {fileID: 61976802}
+  - component: {fileID: 61976804}
   m_Layer: 5
   m_Name: Website
   m_TagString: Untagged
@@ -270,6 +250,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 61976800}
   m_CullTransparentMesh: 0
+--- !u!114 &61976804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61976800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 61976802}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 165586733}
+        m_MethodName: OpenWebsite
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &115272765
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,8 +389,9 @@ GameObject:
   - component: {fileID: 165586731}
   - component: {fileID: 165586734}
   - component: {fileID: 165586732}
+  - component: {fileID: 165586733}
   m_Layer: 5
-  m_Name: Scroll View
+  m_Name: Scrollable Content
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -394,16 +426,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 165586730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8771a5a01ff53d84cb64c5ccbffdf2da, type: 3}
+  m_Script: {fileID: 11500000, guid: b6db2cacd6f4c324da82fcc5413fa78a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pullToRefresh: 0
   pullRefreshDistance: 0
   indicator: {fileID: 0}
   _scrollRect: {fileID: 165586734}
-  _layoutGroup: {fileID: 0}
+  _layoutGroup: {fileID: 24541250}
   prefab: {fileID: 3320765796330558437, guid: a3da47a8e867d964bab70d8101294515, type: 3}
   _container: {fileID: 24541248}
+--- !u!114 &165586733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165586730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d3aff9ace66d4e43a049ea1ae935567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _model:
+    username: 
+    displayName: 
+    displayPicture: {fileID: 0}
+    bio: 
+    website: 
+    postCount: 0
+    followerCount: 0
+    followingCount: 0
+  headerUsernameDisplay: {fileID: 829435962}
+  summaryUsernameDisplay: {fileID: 1759769873}
+  displayNameDisplay: {fileID: 1760788323}
+  displayPictureDisplay: {fileID: 2085080731}
+  bioDisplay: {fileID: 1690048553}
+  websiteDisplay: {fileID: 61976802}
+  postCountDisplay: {fileID: 115272767}
+  followerCountDisplay: {fileID: 168850268}
+  followingCountDisplay: {fileID: 915936185}
 --- !u!114 &165586734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -865,25 +927,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69b0afaa28dddd342afc79685d02772e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activityListView: {fileID: 446972322}
-  activityModels:
-  - userDP: {fileID: 21300000, guid: 34d443e940df54e4c90d422670cab5f8, type: 3}
-    username: xrbuzz
-    summary: 'Commented on your picture: "Awesome stuff"'
-    subjectDP: {fileID: 21300000, guid: 4dad8416fe22e8145b7255759ac729ad, type: 3}
-    timeAgo: 10 min ago
-  - userDP: {fileID: 21300000, guid: 39f884568c8a2ff409e30dea30772bf2, type: 3}
-    username: adrenak_
-    summary: Liked your video
-    subjectDP: {fileID: 21300000, guid: ef40f0a2d1b03894eb785601017c2d1f, type: 3}
-    timeAgo: 34 mins ago
-  - userDP: {fileID: 21300000, guid: 6c72474ecf8279b428aaab0cdb5b2575, type: 3}
-    username: rahul.mehta
-    summary: 'Commented on your picture: "That looks seriously awesome! Congrats"'
-    subjectDP: {fileID: 21300000, guid: 4dad8416fe22e8145b7255759ac729ad, type: 3}
-    timeAgo: 1 hr ago
-  profileView: {fileID: 787478748}
+  activityPage: {fileID: 1608365926}
+  activityModel:
+    title: Recent
+    notifications:
+    - userDP: {fileID: 21300000, guid: 39f884568c8a2ff409e30dea30772bf2, type: 3}
+      username: adrenak_
+      summary: Listed your post
+      subjectDP: {fileID: 21300000, guid: 9102244ebe273e8498d216ce88c519da, type: 3}
+      timeAgo: 4 mins ago
+    - userDP: {fileID: 21300000, guid: 6c72474ecf8279b428aaab0cdb5b2575, type: 3}
+      username: rahul.mehta0990
+      summary: 'Commented on your post: "Awesome!!"'
+      subjectDP: {fileID: 21300000, guid: 5ac59ee38edc82542a91f1e6c8f56b72, type: 3}
+      timeAgo: 45 mins ago
+    - userDP: {fileID: 21300000, guid: 34d443e940df54e4c90d422670cab5f8, type: 3}
+      username: randheer.aroraaa
+      summary: Liked your post
+      subjectDP: {fileID: 21300000, guid: 4dad8416fe22e8145b7255759ac729ad, type: 3}
+      timeAgo: 2 hrs  ago
+  profilePage: {fileID: 1851758086}
   profileModel:
+    title: xrbuzz
     profileSummary:
       username: xrbuzz
       displayName: XR.Buzz
@@ -990,7 +1055,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 446972319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11b8345de980e8542bde39de01398045, type: 3}
+  m_Script: {fileID: 11500000, guid: 260950debd9952c48aa1c617fd6cc37d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pullToRefresh: 0
@@ -1599,7 +1664,6 @@ GameObject:
   - component: {fileID: 787478746}
   - component: {fileID: 787478745}
   - component: {fileID: 787478744}
-  - component: {fileID: 787478748}
   m_Layer: 5
   m_Name: Profile Canvas
   m_TagString: Untagged
@@ -1687,31 +1751,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &787478748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 787478743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12fb5f49bdf0b34449a4a6b6178e7288, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _model:
-    profileSummary:
-      username: 
-      displayName: 
-      displayPicture: {fileID: 0}
-      bio: 
-      website: 
-      postCount: 0
-      followerCount: 0
-      followingCount: 0
-    postPreviews: []
-  summaryView: {fileID: 1851758086}
-  previewSetView: {fileID: 165586732}
 --- !u!1 &793749381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,19 +2341,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4955ed9b6f9c05041902a7e1547e74bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onAppear:
-    m_PersistentCalls:
-      m_Calls: []
-  onDisappear:
-    m_PersistentCalls:
-      m_Calls: []
-  title: 
-  navigator: {fileID: 921696354}
   current: {fileID: 0}
   startPageIndex: 1
+  navigator: {fileID: 921696354}
   children:
   - {fileID: 1608365926}
-  - {fileID: 1851758087}
+  - {fileID: 1851758086}
 --- !u!1 &990432438
 GameObject:
   m_ObjectHideFlags: 0
@@ -2811,10 +2843,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1608365925}
-  - component: {fileID: 1608365926}
   - component: {fileID: 1608365927}
+  - component: {fileID: 1608365926}
   m_Layer: 5
-  m_Name: Notification Page
+  m_Name: Activity Page
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2850,7 +2882,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1608365924}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d354dac25d92894394e602213adb587, type: 3}
+  m_Script: {fileID: 11500000, guid: 7246be7c5c607a042b44ca3cb3fd0b10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onAppear:
@@ -2881,8 +2913,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  title: 
-  navigator: {fileID: 0}
+  content: {fileID: 0}
+  model:
+    title: 
+    notifications: []
+  listView: {fileID: 446972322}
+  titleDisplay: {fileID: 479125091}
 --- !u!114 &1608365927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3193,9 +3229,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1851758085}
-  - component: {fileID: 1851758086}
-  - component: {fileID: 1851758087}
   - component: {fileID: 1851758088}
+  - component: {fileID: 1851758086}
   m_Layer: 5
   m_Name: Profile Page
   m_TagString: Untagged
@@ -3233,37 +3268,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1851758084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d3aff9ace66d4e43a049ea1ae935567, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _model:
-    username: 
-    displayName: 
-    displayPicture: {fileID: 0}
-    bio: 
-    website: 
-    postCount: 0
-    followerCount: 0
-    followingCount: 0
-  headerUsernameDisplay: {fileID: 829435962}
-  summaryUsernameDisplay: {fileID: 1759769873}
-  displayNameDisplay: {fileID: 1760788323}
-  displayPictureDisplay: {fileID: 2085080731}
-  bioDisplay: {fileID: 1690048553}
-  websiteDisplay: {fileID: 61976802}
-  postCountDisplay: {fileID: 115272767}
-  followerCountDisplay: {fileID: 168850268}
-  followingCountDisplay: {fileID: 915936185}
---- !u!114 &1851758087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1851758084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d354dac25d92894394e602213adb587, type: 3}
+  m_Script: {fileID: 11500000, guid: 12fb5f49bdf0b34449a4a6b6178e7288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   onAppear:
@@ -3294,8 +3299,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  title: 
-  navigator: {fileID: 0}
+  content: {fileID: 0}
+  model:
+    title: 
+    profileSummary:
+      username: 
+      displayName: 
+      displayPicture: {fileID: 0}
+      bio: 
+      website: 
+      postCount: 0
+      followerCount: 0
+      followingCount: 0
+    postPreviews: []
+  summaryView: {fileID: 165586733}
+  previewSetView: {fileID: 165586732}
+  titleDisplay: {fileID: 829435962}
 --- !u!114 &1851758088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3416,7 +3435,7 @@ GameObject:
   - component: {fileID: 1892487289}
   - component: {fileID: 1892487290}
   m_Layer: 5
-  m_Name: Profile Overview
+  m_Name: Profile Summary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3443,10 +3462,10 @@ RectTransform:
   m_Father: {fileID: 448779230}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -402.74997}
-  m_SizeDelta: {x: 1080, y: 805.49994}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1892487290
 MonoBehaviour:
