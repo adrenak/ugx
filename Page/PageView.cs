@@ -18,8 +18,10 @@ namespace Adrenak.UPF {
 
     [Serializable]
     public class PageView : BindableBehaviour {
+#pragma warning disable 0649
         [SerializeField] UnityEvent onAppear;
         [SerializeField] UnityEvent onDisappear;
+#pragma warning restore 0649
 
         [SerializeField] protected View content;
         public View Content => content;

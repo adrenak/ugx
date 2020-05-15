@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 24541248}
   - component: {fileID: 24541250}
   m_Layer: 5
-  m_Name: Post Preview Group
+  m_Name: Post Preview Layout View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -457,7 +457,6 @@ MonoBehaviour:
     postCount: 0
     followerCount: 0
     followingCount: 0
-  headerUsernameDisplay: {fileID: 829435962}
   summaryUsernameDisplay: {fileID: 1759769873}
   displayNameDisplay: {fileID: 1760788323}
   displayPictureDisplay: {fileID: 2085080731}
@@ -990,7 +989,7 @@ GameObject:
   - component: {fileID: 446972321}
   - component: {fileID: 446972322}
   m_Layer: 5
-  m_Name: ActivityNotificationListView
+  m_Name: Activity Layout View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1153,7 +1152,7 @@ GameObject:
   - component: {fileID: 479125092}
   - component: {fileID: 479125091}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1964,7 +1963,7 @@ GameObject:
   - component: {fileID: 829435963}
   - component: {fileID: 829435962}
   m_Layer: 5
-  m_Name: Username
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2846,7 +2845,7 @@ GameObject:
   - component: {fileID: 1608365927}
   - component: {fileID: 1608365926}
   m_Layer: 5
-  m_Name: Activity Page
+  m_Name: Activity Page View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2917,7 +2916,7 @@ MonoBehaviour:
   model:
     title: 
     notifications: []
-  listView: {fileID: 446972322}
+  layoutView: {fileID: 446972322}
   titleDisplay: {fileID: 479125091}
 --- !u!114 &1608365927
 MonoBehaviour:
@@ -3232,7 +3231,7 @@ GameObject:
   - component: {fileID: 1851758088}
   - component: {fileID: 1851758086}
   m_Layer: 5
-  m_Name: Profile Page
+  m_Name: Profile Page View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3435,7 +3434,7 @@ GameObject:
   - component: {fileID: 1892487289}
   - component: {fileID: 1892487290}
   m_Layer: 5
-  m_Name: Profile Summary
+  m_Name: Profile Summary View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3500,7 +3499,7 @@ GameObject:
   - component: {fileID: 1992213057}
   - component: {fileID: 1992213056}
   m_Layer: 5
-  m_Name: Notification Canvas
+  m_Name: Activity Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
