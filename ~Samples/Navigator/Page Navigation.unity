@@ -519,7 +519,6 @@ RectTransform:
   - {fileID: 2052296799}
   - {fileID: 793091244}
   - {fileID: 2055083188}
-  - {fileID: 2043867868587934780}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -778,12 +777,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1805755283}
+  - {fileID: 2043867868587934780}
   m_Father: {fileID: 176245750}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.386375}
-  m_AnchoredPosition: {x: 2259, y: 589.1}
+  m_AnchoredPosition: {x: 2291, y: 589.06}
   m_SizeDelta: {x: 0, y: 1178.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &793091245
@@ -826,6 +826,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  isOpen: 0
   content: {fileID: 1805755284}
 --- !u!114 &793091246
 MonoBehaviour:
@@ -1339,6 +1340,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  isOpen: 0
   content: {fileID: 0}
 --- !u!114 &2052296801
 MonoBehaviour:
@@ -1418,7 +1420,9 @@ MonoBehaviour:
   useRootPage: 1
   rootPage: {fileID: 2052296800}
   stack:
-    pages: []
+    current: {fileID: 0}
+    currentIndex: -1
+    history: []
 --- !u!1 &2122050621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,13 +1778,13 @@ RectTransform:
   - {fileID: 7973577924856564103}
   - {fileID: 2043867867038971227}
   - {fileID: 2043867867182211924}
-  m_Father: {fileID: 176245750}
-  m_RootOrder: 3
+  m_Father: {fileID: 793091244}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.90800005}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -3.0480957}
-  m_SizeDelta: {x: 0, y: -6.096344}
+  m_AnchoredPosition: {x: 0, y: -3.0863037}
+  m_SizeDelta: {x: 0, y: -6.100006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2043867868587934781
 GameObject:

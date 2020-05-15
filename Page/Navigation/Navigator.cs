@@ -9,7 +9,7 @@ namespace Adrenak.UPF {
         [ShowIf("useRootPage")] [SerializeField] PageView rootPage;
         public PageView Root => rootPage;
 
-        [SerializeField] NavigationStack stack;
+        [SerializeField] NavigationStack stack = new NavigationStack();
         public NavigationStack Stack => stack;
 #pragma warning restore 0649        
 
