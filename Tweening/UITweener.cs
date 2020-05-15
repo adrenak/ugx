@@ -7,33 +7,24 @@ using Adrenak.Unex;
 using NaughtyAttributes;
 
 namespace Adrenak.UPF {
-    [ExecuteInEditMode]
+    [ExecuteAlways]
     public class UITweener : MonoBehaviour {
 #pragma warning disable 0649
-        [ReadOnly] [SerializeField] Rect parentRect;
-        [ReadOnly] [SerializeField] CanvasGroup canvasGroup;
-        [ReadOnly] [SerializeField] RectTransform rectTransform;
-        [ReadOnly] [SerializeField] Vector3 inPosition;
-        [ReadOnly] [SerializeField] Vector3 awayPosition;
+#pragma warning disable 0414
+        [SerializeField] bool showReadonlyFields = true;
+#pragma warning restore 0414
+        [ShowIf(nameof(showReadonlyFields))] [ReadOnly] [SerializeField] Rect parentRect;
+        [ShowIf(nameof(showReadonlyFields))] [ReadOnly] [SerializeField] CanvasGroup canvasGroup;
+        [ShowIf(nameof(showReadonlyFields))] [ReadOnly] [SerializeField] RectTransform rectTransform;
+        [ShowIf(nameof(showReadonlyFields))] [ReadOnly] [SerializeField] Vector3 inPosition;
+        [ShowIf(nameof(showReadonlyFields))] [ReadOnly] [SerializeField] Vector3 awayPosition;
 
         public Vector3 InPosition => inPosition;
         public Vector3 AwayPosition => awayPosition;
-        public RectTransform RT {
-            get {
-                if (rectTransform == null)
-                    rectTransform = GetComponent<RectTransform>();
-                return rectTransform;
-            }
-        }
-        public CanvasGroup CG {
-            get {
-                if (canvasGroup == null)
-                    canvasGroup = GetComponent<CanvasGroup>();
-                if (canvasGroup == null)
-                    canvasGroup = gameObject.GetComponent<CanvasGroup>();
-                return canvasGroup;
-            }
-        }
+        public RectTransform RT =>
+            rectTransform = rectTransform != null ? rectTransform : GetComponent<RectTransform>();
+        public CanvasGroup CG =>
+            canvasGroup = canvasGroup != null ? canvasGroup : GetComponent<CanvasGroup>();
 
         [BoxGroup("Default Position Tween")] public Position defaultPositionForEnter = Position.Left;
         [BoxGroup("Default Position Tween")] public Position defaultPositionForExit = Position.Right;
@@ -59,13 +50,16 @@ namespace Adrenak.UPF {
         #region TWEENING
         // ================================================
         // OPACITY TWEENING
-        async public void FadeIn() {
+
+        async public void FadeInAndForget() => await FadeIn();
+        async public Task FadeIn() {
             CG.alpha = 0;
             await TweenOpacity(1, defaultOpacityTween);
             CG.alpha = 1;
         }
 
-        async public void FadeOut() {
+        async public void FadeOutAndForget() => await FadeOut();
+        async public Task FadeOut() {
             CG.alpha = 1;
             await TweenOpacity(0, defaultOpacityTween);
             CG.alpha = 0;
@@ -75,13 +69,15 @@ namespace Adrenak.UPF {
             => await tweener.TweenOpacity(CG, endValue, tween);
 
         // POSITION TWEENING
-        async public void MoveIn() {
+        async public void MoveInAndForget() => await MoveIn();
+        async public Task MoveIn() {
             RT.localPosition = DefaultEnterCordinates;
             await TweenPosition(inPosition, defaultPositionTween);
             RT.localPosition = InPosition;
         }
 
-        async public void MoveOut() {
+        async public void MoveOutAndForget() => await MoveOut();
+        async public Task MoveOut() {
             RT.localPosition = InPosition;
             await TweenPosition(DefaultExitCordinates, defaultPositionTween);
             RT.localPosition = AwayPosition;
@@ -104,7 +100,7 @@ namespace Adrenak.UPF {
             UpdateParentRect();
         }
 
-        [SerializeField] Transform prevParent;
+        public Transform prevParent;
         void UpdateParentRect() {
             if ((transform.parent == null ||
                 transform.parent.GetComponent<RectTransform>() == null) &&

@@ -1,56 +1,35 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
-    public class AlertPopup : Model {
-        public event EventHandler OnDismiss;
-
-        [SerializeField] string header;
-        public string Header {
-            get => header;
-            set => Set(ref header, value);
-        }
-
-        [SerializeField] string body;
-        public string Body {
-            get => body;
-            set => Set(ref body, value);
-        }
-
-        [SerializeField] string ack;
-        public string Ack {
-            get => ack;
-            set => Set(ref ack, value);
-        }
-
-        public void Acknowledge() {
-            OnDismiss?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
-    public class AlertPopupView : PopupView<AlertPopup> {
+    public class AlertPopupView : PopupView {
 #pragma warning disable 0649
         [SerializeField] Text headerDisplay;
         [SerializeField] Text bodyDisplay;
         [SerializeField] Text ackDisplay;
 #pragma warning restore 0649
 
-        protected override void OnViewInitialize() {
-            headerDisplay.text = Model.Header;
-            bodyDisplay.text = Model.Body;
-            ackDisplay.text = Model.Ack;
+        async public Task Show(string header, string body, string ack) {
             onPopupOpen?.Invoke();
-        }
 
-        public void Acknowledge() {
-            Model.Acknowledge();
+            headerDisplay.text = header;
+            bodyDisplay.text = body;
+            ackDisplay.text = ack;
+
+            bool responded = false;
+            OnAck = () => responded = true;
+            while (!responded)
+                await Task.Delay(100);
+
             onPopupClose?.Invoke();
         }
 
-        protected override void OnObserveViewEvents() { }
-        protected override void OnViewModelPropertyChanged(string propertyName) {
-            OnViewInitialize();
+
+        Action OnAck;
+        public void Acknowledge() {
+            OnAck?.Invoke();
         }
     }
 }
