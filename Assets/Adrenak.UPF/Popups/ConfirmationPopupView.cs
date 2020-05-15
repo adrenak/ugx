@@ -1,46 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
-    public class ConfirmationPopup : Model{
-        public event EventHandler OnConfirm;
-        public event EventHandler OnDeny;
-
-        [SerializeField] string header;
-        public string Header {
-            get => header;
-            set => Set(ref header, value);
-        }
-
-        [SerializeField] string body;
-        public string Body {
-            get => body;
-            set => Set(ref body, value);
-        }
-
-        [SerializeField] string positive;
-        public string Positive {
-            get => positive;
-            set => Set(ref positive, value);
-        }
-
-        [SerializeField] string negative;
-        public string Negative {
-            get => negative;
-            set => Set(ref negative, value);
-        }
-
-        public void Confirm() {
-            OnConfirm?.Invoke(this, EventArgs.Empty);
-        }
-
-        public void Deny(){
-            OnDeny?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
-    public class ConfirmationPopupView : View<ConfirmationPopup> {
+    public class ConfirmationPopupView : PopupView {
 #pragma warning disable 0649
         [SerializeField] Text headerDisplay;
         [SerializeField] Text bodyDisplay;
@@ -48,22 +12,33 @@ namespace Adrenak.UPF {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        protected override void OnViewInitialize() {
-            headerDisplay.text = Model.Header;
-            bodyDisplay.text = Model.Body;
-            positiveDisplay.text = Model.Positive;
-            negativeDisplay.text = Model.Negative;
+        async public Task<bool> Show(string header, string body, string positive, string negative) {
+            onPopupOpen?.Invoke();
+
+            headerDisplay.text = header;
+            bodyDisplay.text = body;
+            positiveDisplay.text = positive;
+            negativeDisplay.text = negative;
+
+            // Wait till be get a response
+            bool? response = null;
+            OnConfirm = () => response = true;
+            OnDeny = () => response = false;
+            while (response == null)
+                await Task.Delay(100);
+
+            onPopupClose?.Invoke();
+            return response.Value;
         }
 
+        Action OnConfirm;
         public void Confirm() {
-            Model.Confirm();
+            OnConfirm?.Invoke();
         }
 
+        Action OnDeny;
         public void Deny() {
-            Model.Deny();
+            OnDeny?.Invoke();
         }
-
-        protected override void OnObserveViewEvents() { }
-        protected override void OnViewModelPropertyChanged(string propertyName) { }
     }
 }

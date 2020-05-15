@@ -1,9 +1,13 @@
-﻿using UnityEngine.Events;
+﻿using System;
+using System.ComponentModel;
+using UnityEngine.Events;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace Adrenak.UPF {
-    public abstract class PopupView<T> : View<T> where T : Model {
-        [SerializeField] protected UnityEvent onPopupOpen;
-        [SerializeField] protected UnityEvent onPopupClose;
+    public class PopupView : BindableBehaviour {
+        [SerializeField] bool showEvents;
+        [ShowIf("showEvents")] public UnityEvent onPopupOpen;
+        [ShowIf("showEvents")] public UnityEvent onPopupClose;
     }
 }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -802,7 +802,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 793091246}
-        m_MethodName: MoveIn
+        m_MethodName: MoveInAndForget
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -816,7 +816,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 793091246}
-        m_MethodName: MoveOut
+        m_MethodName: MoveOutAndForget
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -840,6 +840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed53c5c5aa3fc6245b88581fe5aeb81d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showReadonlyFields: 1
   parentRect:
     serializedVersion: 2
     x: -540
@@ -862,7 +863,6 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
-  prevParent: {fileID: 176245750}
 --- !u!1 &871592230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1319,7 +1319,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2052296801}
-        m_MethodName: MoveIn
+        m_MethodName: MoveInAndForget
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1333,7 +1333,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2052296801}
-        m_MethodName: MoveOut
+        m_MethodName: MoveOutAndForget
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1357,6 +1357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed53c5c5aa3fc6245b88581fe5aeb81d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showReadonlyFields: 1
   parentRect:
     serializedVersion: 2
     x: -540
@@ -1379,7 +1380,6 @@ MonoBehaviour:
     delay: 0
     curve: 0
     loop: 0
-  prevParent: {fileID: 176245750}
 --- !u!1 &2055083187
 GameObject:
   m_ObjectHideFlags: 0
