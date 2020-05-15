@@ -54,7 +54,7 @@ namespace Adrenak.UPF {
 
         // OPACITY TWEENING
         // Quick
-        public void FadeInAndForget(){
+        public void FadeInAndForget() {
             FadeIn();
         }
 
@@ -69,7 +69,7 @@ namespace Adrenak.UPF {
             TweenOpacity(1, defaultOpacityTween, "FadeIn", onComplete);
         }
 
-        public void FadeOutAndForget(){
+        public void FadeOutAndForget() {
             FadeOut();
         }
 
@@ -105,7 +105,7 @@ namespace Adrenak.UPF {
 
         // POSITION TWEENING
         // Quick
-        public void MoveInAndForget(){
+        public void MoveInAndForget() {
             MoveIn();
         }
 
@@ -116,11 +116,11 @@ namespace Adrenak.UPF {
         }
 
         public void MoveIn(Action onComplete = null) {
-            RTLocalPosition = DefaultEnter;
+            RTLocalPosition = DefaultEnterCordinates;
             TweenPosition(inPosition, defaultPositionTween, "MoveIn", onComplete);
         }
 
-        public void MoveOutAndForget(){
+        public void MoveOutAndForget() {
             MoveOut();
         }
 
@@ -132,7 +132,7 @@ namespace Adrenak.UPF {
 
         public void MoveOut(Action onComplete) {
             RTLocalPosition = InPosition;
-            TweenPosition(DefaultExit, defaultPositionTween, "MoveOut", () => {
+            TweenPosition(DefaultExitCordinates, defaultPositionTween, "MoveOut", () => {
                 RTLocalPosition = AwayPosition;
                 onComplete?.Invoke();
             });
@@ -145,7 +145,7 @@ namespace Adrenak.UPF {
             return source.Task;
         }
 
-        public void TweenPosition(Vector3 endValue, PositionTween tween, object args, Action onComplete = null){
+        public void TweenPosition(Vector3 endValue, PositionTween tween, object args, Action onComplete = null) {
             OnBeginPositionTweening?.Invoke(args);
             TweenPosition(endValue, tween, () => {
                 OnEndPositionTweening?.Invoke(args);
@@ -192,58 +192,31 @@ namespace Adrenak.UPF {
         // POSITION VECTOR3 ACCESSORS
         public Vector3 GetPositionVector3(Position position) {
             switch (position) {
-                case Position.Left: return LeftExit;
-                case Position.Right: return RightExit;
-                case Position.Top: return TopExit;
-                case Position.Bottom: return BottomExit;
+                case Position.Left: return LeftExitCordinates;
+                case Position.Right: return RightExitCordinates;
+                case Position.Top: return TopExitCordinates;
+                case Position.Bottom: return BottomExitCordinates;
                 default: return Vector3.zero;
             }
         }
 
-        public Vector3 DefaultExit {
-            get => GetPositionVector3(defaultPositionForExit);
-        }
+        public Vector3 DefaultExitCordinates
+            => GetPositionVector3(defaultPositionForExit);
 
-        public Vector3 DefaultEnter {
-            get => GetPositionVector3(defaultPositionForEnter);
-        }
+        public Vector3 DefaultEnterCordinates
+            => GetPositionVector3(defaultPositionForEnter);
 
-        // Computed
-        public Vector3 RightExit {
-            get {
-                var x = (parentRect.width / 2) -
-                    (inPosition.x + RT.rect.width / 2) +
-                    RT.rect.width;
-                return new Vector3(x, inPosition.y, RT.localPosition.z);
-            }
-        }
+        public Vector3 RightExitCordinates 
+            => new Vector3(RT.GetRightExit(), inPosition.y, RT.localPosition.z);
 
-        public Vector3 TopExit {
-            get {
-                var y = (parentRect.height / 2) -
-                    inPosition.y +
-                    RT.rect.height;
-                return new Vector3(inPosition.x, y, RT.localPosition.z);
-            }
-        }
+        public Vector3 TopExitCordinates 
+            => new Vector3(inPosition.x, RT.GetTopExit(), RT.localPosition.z);
 
-        public Vector3 LeftExit {
-            get {
-                var x = -(parentRect.width / 2) +
-                    (inPosition.x + RT.rect.width / 2) -
-                    RT.rect.width;
-                return new Vector3(x, inPosition.y, RT.localPosition.z);
-            }
-        }
+        public Vector3 LeftExitCordinates 
+            => new Vector3(RT.GetLeftExit(), inPosition.y, RT.localPosition.z);
 
-        public Vector3 BottomExit {
-            get {
-                var y = -(parentRect.height / 2) +
-                    inPosition.y -
-                    RT.rect.height;
-                return new Vector3(inPosition.x, y, RT.localPosition.z);
-            }
-        }
+        public Vector3 BottomExitCordinates 
+            => new Vector3(inPosition.x, RT.GetBottomExit(), RT.localPosition.z);
 
         // COMPONENT CACHING
         CanvasGroup cg;
