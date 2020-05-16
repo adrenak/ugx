@@ -1,0 +1,37 @@
+{
+	"name": "com.adrenak.upf",
+	"version": "0.1.0",
+	"displayName": "Unity Presentation Framework",
+	"description": "Framework for Unity UI with out of the box features and boilerplate",
+	"unity": "2018.4",
+	"author": {
+		"name": "Vatsal Ambastha",
+		"email": "adrenak_@outlook.com",
+		"url": "www.vatsalambastha.com"
+	},
+	"dependencies": {
+		"com.pixelplacement.surge.tween": "1.0.2",
+		"com.dbrizov.naughtyattributes": "2.0.4",
+		"com.adrenak.unex": "2.2.0"
+	},
+	"scopedRegistries": [
+		{
+			"name": "package.openupm.com",
+			"url": "https://package.openupm.com",
+			"scopes": [
+				"com.adrenak.unex",
+				"com.dbrizov.naughtyattributes",
+				"com.openupm"
+			]
+		},
+		{
+			"name": "registry.npmjs.org",
+			"url": "https://registry.npmjs.org",
+			"scopes": [
+				"com.adrenak.rsg.unityweld",
+				"com.pixelplacement.surge.tween",
+				"org.npmjs"
+			]
+		}
+	]
+}
