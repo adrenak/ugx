@@ -9,18 +9,18 @@ namespace Adrenak.UPF {
             get => _model;
             set {
                 _model = value ?? throw new ArgumentNullException(nameof(Model));
-                OnViewInitialize();
+                OnSetViewModel();
             }
         }
 
         void Start() {
-            OnObserveViewEvents();
-            OnStart();
+            OnObserveView();
+            OnStartView();
         }
 
-        protected virtual void OnStart() { }
-        protected abstract void OnViewInitialize();
-        protected abstract void OnObserveViewEvents();
+        protected virtual void OnStartView() { }
+        protected abstract void OnSetViewModel();
+        protected abstract void OnObserveView();
         protected abstract void OnViewModelPropertyChanged(string propertyName);
     }
 

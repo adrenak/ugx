@@ -8,12 +8,12 @@ namespace Adrenak.UPF {
     public class TabFlow : MonoBehaviour {
 #pragma warning disable 0649
         [Header("Tabbed Page")]
-        [ReadOnly] [SerializeField] PageView current;
+        [ReadOnly] [SerializeField] Page current;
 
         [SerializeField] int startPageIndex;
 
-        [ReorderableList] [SerializeField] List<PageView> children;
-        public List<PageView> Children => children;
+        [ReorderableList] [SerializeField] List<Page> children;
+        public List<Page> Children => children;
 #pragma warning restore 0649
 
         void Start() {
@@ -31,7 +31,7 @@ namespace Adrenak.UPF {
 
         [Button("Auto Populate Pages")]
         public void AutoPopulate() {
-            children = GetComponentsInChildren<PageView>().ToList()
+            children = GetComponentsInChildren<Page>().ToList()
                 .Where(x => x != this)
                 .ToList();
         }

@@ -19,7 +19,7 @@ namespace Adrenak.UPF {
             ackDisplay.text = ack;
 
             bool responded = false;
-            OnAck = () => responded = true;
+            OnAcknowledge = () => responded = true;
             while (!responded)
                 await Task.Delay(100);
 
@@ -27,9 +27,9 @@ namespace Adrenak.UPF {
         }
 
 
-        Action OnAck;
+        Action OnAcknowledge;
         public void Acknowledge() {
-            OnAck?.Invoke();
+            OnAcknowledge?.Invoke();
         }
     }
 }

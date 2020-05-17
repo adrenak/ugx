@@ -28,7 +28,6 @@
 			"name": "registry.npmjs.org",
 			"url": "https://registry.npmjs.org",
 			"scopes": [
-				"com.adrenak.rsg.unityweld",
 				"com.pixelplacement.surge.tween",
 				"org.npmjs"
 			]

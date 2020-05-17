@@ -6,8 +6,8 @@ namespace Adrenak.UPF {
     public class Navigator : BindableBehaviour {
 #pragma warning disable 0649
         [SerializeField] bool useRootPage;
-        [ShowIf("useRootPage")] [SerializeField] PageView rootPage;
-        public PageView Root => rootPage;
+        [ShowIf("useRootPage")] [SerializeField] Page rootPage;
+        public Page Root => rootPage;
 
         [SerializeField] NavigationStack stack = new NavigationStack();
         public NavigationStack Stack => stack;
@@ -18,7 +18,7 @@ namespace Adrenak.UPF {
                 Push(rootPage);
         }
 
-        public void Push(PageView page) {
+        public void Push(Page page) {
             stack.Push(page);
         }
 
