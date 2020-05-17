@@ -4,15 +4,15 @@ using NaughtyAttributes;
 namespace Adrenak.UPF {
     public class PairFlow : MonoBehaviour {
 #pragma warning disable 0649
-        [SerializeField] protected PageView first;
-        [SerializeField] protected PageView second;
+        [SerializeField] protected Page first;
+        [SerializeField] protected Page second;
 
         [SerializeField] bool showSecondOnStart;
         [ReadOnly] [SerializeField] bool isShowingSecond;
 #pragma warning restore 0649
 
-        public PageView First => first;
-        public PageView Second => second;
+        public Page First => first;
+        public Page Second => second;
         public bool IsShowingSecond {
             get => isShowingSecond;
             set {
@@ -32,12 +32,12 @@ namespace Adrenak.UPF {
             IsShowingSecond = showSecondOnStart;
         }
 
-        void Appear(PageView view) {
+        void Appear(Page view) {
             if (view.IsOpen) return;
             view.OpenPage();
         }
 
-        void Disappear(PageView view) {
+        void Disappear(Page view) {
             if (!view.IsOpen) return;
             view.ClosePage();
         }

@@ -3,15 +3,15 @@
 namespace Adrenak.UPF {
     [Serializable]
     public abstract class FormModel : Model {
-        public event EventHandler OnSubmit;
-        public event EventHandler OnCancel;
+        public event EventHandler OnSubmitForm;
+        public event EventHandler OnCancelForm;
 
         public void Submit() {
-            OnSubmit?.Invoke(this, EventArgs.Empty);
+            OnSubmitForm?.Invoke(this, EventArgs.Empty);
         }
 
         public void Cancel() {
-            OnCancel?.Invoke(this, EventArgs.Empty);
+            OnCancelForm?.Invoke(this, EventArgs.Empty);
         }
     }
 }

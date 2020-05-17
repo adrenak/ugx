@@ -7,17 +7,17 @@ using System;
 namespace Adrenak.UPF {
     [Serializable]
     public class NavigationStack {
-        [ReadOnly] [SerializeField] PageView current = null;
-        public PageView Current => current;
+        [ReadOnly] [SerializeField] Page current = null;
+        public Page Current => current;
         [ReadOnly] [SerializeField] int currentIndex = -1;
 
-        [ReorderableList] [ReadOnly] [SerializeField] List<PageView> history = new List<PageView>();
-        public List<PageView> History => history;
+        [ReorderableList] [ReadOnly] [SerializeField] List<Page> history = new List<Page>();
+        public List<Page> History => history;
 
         bool IsMidHistory => currentIndex != history.Count - 1;
-        bool IsLast(PageView view) => history.Last() == view;
+        bool IsLast(Page view) => history.Last() == view;
 
-        public void Push(PageView view) {
+        public void Push(Page view) {
             if (history.Count == 0) {
                 history.Add(view);
                 SetAsCurrent(view);
@@ -65,7 +65,7 @@ namespace Adrenak.UPF {
             return ValidateMove();
         }
 
-        void SetAsCurrent(PageView view) {
+        void SetAsCurrent(Page view) {
             view.OpenPage();
             current?.ClosePage();
 

@@ -10,15 +10,15 @@ using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class LayoutView<TViewModel, TViewType> : View where TViewModel : Model where TViewType : View<TViewModel> {
+    public abstract class LayoutView<TModel, TView> : View where TModel : Model where TView : View<TModel> {
         public class ItemSelectedEventArgs : EventArgs {
-            public TViewModel Item { get; private set; }
-            public ItemSelectedEventArgs(TViewModel item) {
+            public TModel Item { get; private set; }
+            public ItemSelectedEventArgs(TModel item) {
                 Item = item;
             }
         }
 
-        public event EventHandler<ItemSelectedEventArgs> OnItemSelected;
+        public event EventHandler<ItemSelectedEventArgs> OnLayoutItemSelected;
         public event EventHandler OnPulledToRefresh;
 
 #pragma warning disable 0649
@@ -35,13 +35,13 @@ namespace Adrenak.UPF {
         public LayoutGroup LayoutGroup => _layoutGroup;
 
         [Header("Instantiation")]
-        [SerializeField] TViewType prefab;
+        [SerializeField] TView prefab;
 
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
-        ObservableCollection<TViewModel> items = new ObservableCollection<TViewModel>();
-        public IList<TViewModel> Items {
+        ObservableCollection<TModel> items = new ObservableCollection<TModel>();
+        public IList<TModel> Items {
             get => items;
             set {
                 items.Clear();
@@ -49,9 +49,9 @@ namespace Adrenak.UPF {
             }
         }
 
-        readonly List<TViewType> instantiated = new List<TViewType>();
+        readonly List<TView> instantiated = new List<TView>();
 
-        public Func<TViewType, string> InstanceNamer;
+        public Func<TView, string> InstanceNamer;
 #pragma warning restore 0649
 
         void Awake() {
@@ -59,11 +59,11 @@ namespace Adrenak.UPF {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
-                            Instantiate(newItem as TViewModel);
+                            Instantiate(newItem as TModel);
                         break;
                     case NotifyCollectionChangedAction.Remove:
                         foreach (var removed in args.OldItems)
-                            Destroy(removed as TViewModel);
+                            Destroy(removed as TModel);
                         break;
                     case NotifyCollectionChangedAction.Reset:
                         foreach (var instance in instantiated)
@@ -73,7 +73,7 @@ namespace Adrenak.UPF {
             };
         }
 
-        void Instantiate(TViewModel t) {
+        void Instantiate(TModel t) {
             var instance = Instantiate(prefab, _container);
             instance.Model = t;
 
@@ -82,7 +82,7 @@ namespace Adrenak.UPF {
                 "#" + instance.transform.GetSiblingIndex();
 
             void OnSelected(object sender, EventArgs r) {
-                OnItemSelected?.Invoke(this, new ItemSelectedEventArgs(instance.Model));
+                OnLayoutItemSelected?.Invoke(this, new ItemSelectedEventArgs(instance.Model));
             }
 
             instance.OnViewSelected += OnSelected;
@@ -93,7 +93,7 @@ namespace Adrenak.UPF {
             Init(instance.Model);
         }
 
-        void Destroy(TViewModel t) {
+        void Destroy(TModel t) {
             foreach (var instance in instantiated) {
                 if (instance.Model == t) {
                     Deinit(instance.Model);
@@ -102,8 +102,8 @@ namespace Adrenak.UPF {
             }
         }
 
-        virtual protected void Init(TViewModel cell) { }
-        virtual protected void Deinit(TViewModel cell) { }
+        virtual protected void Init(TModel cell) { }
+        virtual protected void Deinit(TModel cell) { }
 
         void Update() {
             TryPullRefresh();
