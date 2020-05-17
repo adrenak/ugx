@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/adrenak/upf/compare/v1.0.0...v1.0.1) (2020-05-17)
+
+
+### Bug Fixes
+
+* Some light refactoring ([79d6e5f](https://github.com/adrenak/upf/commit/79d6e5f9fbcd5cf7cb76f6c1aa31c3fd0c56e3a5))
+
 # 1.0.0 (2020-05-16)
 
 
