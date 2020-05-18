@@ -508,6 +508,7 @@ MonoBehaviour:
   _layoutGroup: {fileID: 24541250}
   prefab: {fileID: 3320765796330558437, guid: a3da47a8e867d964bab70d8101294515, type: 3}
   _container: {fileID: 24541248}
+  defaultItems: []
 --- !u!114 &165586733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,6 +1137,7 @@ MonoBehaviour:
   _layoutGroup: {fileID: 245309174}
   prefab: {fileID: 5932667675155645333, guid: 3df3724e8f6ea064497790ad788a06fd, type: 3}
   _container: {fileID: 245309173}
+  defaultItems: []
 --- !u!1 &448779229
 GameObject:
   m_ObjectHideFlags: 0

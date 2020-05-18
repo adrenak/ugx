@@ -40,6 +40,7 @@ namespace Adrenak.UPF {
         [SerializeField] Transform _container;
         public Transform Container => _container;
 
+        [ReorderableList] [SerializeField] List<TModel> defaultItems;
         ObservableCollection<TModel> items = new ObservableCollection<TModel>();
         public IList<TModel> Items {
             get => items;
@@ -71,6 +72,9 @@ namespace Adrenak.UPF {
                         break;
                 }
             };
+
+            if (defaultItems.Count > 0)
+                Items = defaultItems;
         }
 
         void Instantiate(TModel t) {
