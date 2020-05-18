@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/adrenak/upf/compare/v1.0.1...v1.0.2) (2020-05-18)
+
+
+### Bug Fixes
+
+* Move samples files to the right directory ([7e5c125](https://github.com/adrenak/upf/commit/7e5c12583e12f01e942d986dd51a5831e8dcc753))
+
 ## [1.0.1](https://github.com/adrenak/upf/compare/v1.0.0...v1.0.1) (2020-05-17)
 
 
