@@ -1,6 +1,6 @@
 {
 	"name": "com.adrenak.upf",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"displayName": "Unity Presentation Framework",
 	"description": "Framework for Unity UI with out of the box features and boilerplate",
 	"unity": "2018.4",
