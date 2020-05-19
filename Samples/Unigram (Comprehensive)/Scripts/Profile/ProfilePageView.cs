@@ -12,7 +12,7 @@ namespace Adrenak.UPF.Examples.Unigram{
         protected override void OnSetPageModel() {
             titleDisplay.text = Model.Title;
             summaryView.Model = Model.ProfileSummary;
-            previewSetView.Items.AddFrom(Model.PostPreviews);
+            previewSetView.Items.AddRange(Model.PostPreviews);
         }
 
         protected override void OnPageModelPropertyChanged(string propertyName) {

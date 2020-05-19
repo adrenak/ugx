@@ -46,7 +46,7 @@ namespace Adrenak.UPF {
             get => items;
             set {
                 items.Clear();
-                items.AddFrom(value);
+                items.AddRange(value);
             }
         }
 
