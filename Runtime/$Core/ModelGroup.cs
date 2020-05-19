@@ -10,25 +10,24 @@ using UnityEngine;
 
 public class ModelGroup<T> where T : Model {
     public ObservableCollection<T> Models { get; } = new ObservableCollection<T>();
-    public List<Action<T>> subscribers;
-    public List<Action<T>> unsubscribers;
+    public Action<T> sub;
+    public Action<T> unsub;
 
     private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
         if (e.NewItems != null)
             foreach (T item in e.NewItems)
-                foreach (var subscriber in subscribers)
-                    subscriber(item);
+                sub(item);
 
         if (e.OldItems != null)
             foreach (T item in e.OldItems)
-                foreach (var unsubscriber in unsubscribers)
-                    unsubscriber(item);
+                unsub(item);
     }
 
-    public ModelGroup(List<Action<T>> subscribers, List<Action<T>> unsubscribers) {
+    public ModelGroup(Action<T> subscriber, Action<T> unsubscriber) {
         Models.CollectionChanged += OnCollectionChanged;
-        this.subscribers = subscribers;
-        this.unsubscribers = unsubscribers;
+
+        sub = subscriber;
+        unsub = unsubscriber;        
     }
 
     //public void AddListener(Func<T, EventArgs>, EventHandler subscriber) {
