@@ -7,6 +7,7 @@ namespace Adrenak.UPF.Examples {
     public class GroupExample : MonoBehaviour {
         public bool listenToEvents;
         public List<ContactModel> models;
+        public ContactModel extra;
         public Transform container;
         public ContactView viewPrefab;
 
@@ -51,13 +52,16 @@ namespace Adrenak.UPF.Examples {
 
             yield return new WaitForSeconds(2);
             Debug.Log("Removed");
-            
+
             // We remove the model from the view group
             viewGroup.ModelGroup.Models.RemoveAt(1);
             
             // We invoke a method that fires an event in the model, but we won't get it
             // As the ViewGroup stop listening to the models that are removed from it.
             models[1].Call();
+
+            yield return new WaitForSeconds(2);
+            viewGroup.ModelGroup.Models.Add(extra);
         }
     }
 }
