@@ -31,6 +31,17 @@ namespace Adrenak.UPF.Examples {
                     }
                 );
                 viewGroup = new ViewGroup<ContactModel, ContactView>(container, viewPrefab, modelGroup);
+                
+                // Subscriber and Unsubscriber can also be changed during runtime and don't necessarily
+                // have to be provided in the constructor. Like this:
+                //viewGroup.ModelGroup.Subscriber = new Action<ContactModel>[]{
+                //    x => x.OnCall += onCall,
+                //    x => x.OnDelete += onDelete
+                //};
+                //viewGroup.ModelGroup.Unsubscriber = new Action<ContactModel>[]{
+                //    x => x.OnCall -= onCall,
+                //    x => x.OnDelete -= onDelete
+                //};
             }
             else {
                 // If we don't want to bother with events, we can simply pass the models and not have to

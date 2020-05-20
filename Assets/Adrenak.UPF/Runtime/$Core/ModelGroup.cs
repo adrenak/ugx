@@ -6,26 +6,26 @@ using System.Collections.Specialized;
 namespace Adrenak.UPF {
     public class ModelGroup<T> where T : Model {
         public ObservableCollection<T> Models { get; } = new ObservableCollection<T>();
-        Action<T>[] m_Subscriber;
-        Action<T>[] n_Unsubscriber;
+        public Action<T>[] Subscriber { get; set; }
+        public Action<T>[] Unsubscriber { get; set; }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            if (e.NewItems != null && m_Subscriber != null)
+            if (e.NewItems != null && Subscriber != null)
                 foreach (T item in e.NewItems)
-                    foreach (var subscriber in m_Subscriber)
+                    foreach (var subscriber in Subscriber)
                         subscriber(item);
 
-            if (e.OldItems != null && n_Unsubscriber != null)
+            if (e.OldItems != null && Unsubscriber != null)
                 foreach (T item in e.OldItems)
-                    foreach (var unsubscriber in n_Unsubscriber)
+                    foreach (var unsubscriber in Unsubscriber)
                         unsubscriber(item);
         }
 
         public ModelGroup(Action<T>[] subscriber, Action<T>[] unsubscriber) {
             Models.CollectionChanged += OnCollectionChanged;
 
-            m_Subscriber = subscriber;
-            n_Unsubscriber = unsubscriber;
+            Subscriber = subscriber;
+            Unsubscriber = unsubscriber;
         }
 
         public ModelGroup(IList<T> models) {
@@ -38,8 +38,8 @@ namespace Adrenak.UPF {
         public ModelGroup(IList<T> models, Action<T>[] subscriber, Action<T>[] unsubscriber) {
             Models.CollectionChanged += OnCollectionChanged;
 
-            m_Subscriber = subscriber;
-            n_Unsubscriber = unsubscriber;
+            Subscriber = subscriber;
+            Unsubscriber = unsubscriber;
             Models.Clear();
             Models.AddRange(models);
         }
