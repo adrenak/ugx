@@ -9,15 +9,18 @@ namespace Adrenak.UPF {
             get => _model;
             set {
                 _model = value ?? throw new ArgumentNullException(nameof(Model));
+                _model.PropertyChanged += (sender, e)
+                    => ObserveModel(e.PropertyName);
                 Refresh();
+                ObserveView();
             }
         }
 
-        void Start() {
-            ObserveView();
-            Init();
+        void Awake() {
+            InitializeView();
         }
 
+        protected virtual void InitializeView() { }
         protected abstract void Refresh();
         protected abstract void ObserveView();
         protected abstract void ObserveModel(string propertyName);
