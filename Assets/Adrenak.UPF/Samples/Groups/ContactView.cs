@@ -16,16 +16,16 @@ namespace Adrenak.UPF.Examples {
             Model.Delete();
         }
 
-        protected override void OnSetViewModel() {
+        protected override void OnSetModel() {
             nameDisplay.text = Model.Name;
             statusDisplay.text = Model.Status;
         }
 
-        protected override void OnObserveView() {
+        protected override void ObserveView() {
             // This isn't a 2 way binding
         }
 
-        protected override void OnViewModelPropertyChanged(string propertyName) {
+        protected override void ObserveModel(string propertyName) {
             switch(propertyName){
                 case nameof(Model.Name):
                     nameDisplay.text = Model.Name;
