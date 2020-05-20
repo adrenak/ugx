@@ -5,18 +5,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.ObjectModel;
 
 public class ModelGroupTest : MonoBehaviour {
     public List<ContactModel> models;
 
     // Start is called before the first frame update
     IEnumerator Start() {
-        /*
-         *  group = new ModelGroup<ContactModel>(
-         *      
-         *  );
-         */
-
         void onCall(object sender, EventArgs e) =>
             Debug.Log((sender as ContactModel).Name + " calling");
 

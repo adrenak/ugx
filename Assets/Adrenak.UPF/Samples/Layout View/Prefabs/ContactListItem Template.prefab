@@ -191,7 +191,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8969726198010893687}
+      - m_Target: {fileID: 714140514982881518}
         m_MethodName: Delete
         m_Mode: 1
         m_Arguments:
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8969726198010893687}
+      - m_Target: {fileID: 714140514982881518}
         m_MethodName: Call
         m_Mode: 1
         m_Arguments:
@@ -490,7 +490,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8969726198010893687}
+      - m_Target: {fileID: 0}
         m_MethodName: Select
         m_Mode: 1
         m_Arguments:
@@ -687,7 +687,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7896796016219416371}
   - component: {fileID: 7896796016219416333}
-  - component: {fileID: 8969726198010893687}
+  - component: {fileID: 714140514982881518}
   m_Layer: 5
   m_Name: ContactListItem Template
   m_TagString: Untagged
@@ -760,7 +760,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8969726198010893687}
+      - m_Target: {fileID: 714140514982881518}
         m_MethodName: Select
         m_Mode: 1
         m_Arguments:
@@ -771,7 +771,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8969726198010893687
+--- !u!114 &714140514982881518
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -780,7 +780,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7896796016219416368}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff1f0020a83a57c4687dee9e25ca8604, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c9a9d170d419804fbff62dc6b731f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _model:
