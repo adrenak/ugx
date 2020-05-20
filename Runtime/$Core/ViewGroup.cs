@@ -4,17 +4,20 @@ using System.Collections.Specialized;
 
 namespace Adrenak.UPF {
     public class ViewGroup<TModel, TView> where TModel : Model where TView : View<TModel> {
-        public TView ViewPrefab { get; private set; }
         public Transform Container { get; private set; }
-
+        public TView ViewTemplate { get; private set; }
         public ModelGroup<TModel> ModelGroup { get; private set; }
 
         readonly List<TView> instantiated = new List<TView>();
 
-        public ViewGroup(Transform container, TView viewPrefab, ModelGroup<TModel> _modelGroup) {
-            ViewPrefab = viewPrefab;
+        public ViewGroup(Transform container, TView viewTemplate, IList<TModel> models) {
+            new ViewGroup<TModel, TView>(container, viewTemplate, new ModelGroup<TModel>(models));
+        }
+
+        public ViewGroup(Transform container, TView viewTemplate, ModelGroup<TModel> modelGroup) {
+            ViewTemplate = viewTemplate;
             Container = container;
-            ModelGroup = _modelGroup;
+            ModelGroup = modelGroup;
 
             ModelGroup.Models.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
@@ -33,12 +36,12 @@ namespace Adrenak.UPF {
                 }
             };
 
-            foreach (var model in _modelGroup.Models)
+            foreach (var model in ModelGroup.Models)
                 Instantiate(model as TModel);
         }
 
         void Instantiate(TModel t) {
-            var instance = Object.Instantiate(ViewPrefab, Container);
+            var instance = Object.Instantiate(ViewTemplate, Container);
             instance.Model = t;
 
             instantiated.Add(instance);
