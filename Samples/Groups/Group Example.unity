@@ -1394,11 +1394,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79afc84bdc5bd8549b823e000924c3f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  listenToEvents: 0
   models:
   - _name: Vatsal
     _status: Busy
   - _name: Randheer
     _status: In Chennai!
+  extra:
+    _name: 
+    _status: 
   container: {fileID: 1654330134}
   viewPrefab: {fileID: 714140514982881518, guid: 412f916788df798438a454a5c65f4200,
     type: 3}
