@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/adrenak/upf/compare/v1.0.2...v1.1.0) (2020-05-20)
+
+
+### Features
+
+* Trigger CI after Model and View group completion ([ca36892](https://github.com/adrenak/upf/commit/ca3689293cd34313b0e9a958b22cc489978c3b89))
+
 ## [1.0.2](https://github.com/adrenak/upf/compare/v1.0.1...v1.0.2) (2020-05-18)
 
 
