@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/adrenak/upf/compare/v1.1.0...v1.2.0) (2020-05-20)
+
+
+### Features
+
+* Make some changes to View method names ([d42b82a](https://github.com/adrenak/upf/commit/d42b82accbd2d10601e6cc4ff72e12370522778e))
+
 # [1.1.0](https://github.com/adrenak/upf/compare/v1.0.2...v1.1.0) (2020-05-20)
 
 
