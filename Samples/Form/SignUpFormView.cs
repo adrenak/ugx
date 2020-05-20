@@ -9,7 +9,7 @@ namespace Adrenak.UPF.Examples {
         [SerializeField] Toggle tncToggle;
 #pragma warning restore 0649
 
-        protected override void OnSetModel() {
+        protected override void Refresh() {
             emailInput.text = Model.Email;
             passwordInput.text = Model.Password;
             tncToggle.isOn = Model.AgreeWithTNC;

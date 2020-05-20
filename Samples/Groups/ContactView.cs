@@ -16,7 +16,7 @@ namespace Adrenak.UPF.Examples {
             Model.Delete();
         }
 
-        protected override void OnSetModel() {
+        protected override void Refresh() {
             nameDisplay.text = Model.Name;
             statusDisplay.text = Model.Status;
         }

@@ -10,6 +10,28 @@ namespace Adrenak.UPF {
 
         readonly List<TView> instantiated = new List<TView>();
 
+        public ViewGroup(Transform container, TView viewTemplate) {
+            ViewTemplate = viewTemplate;
+            Container = container;
+            ModelGroup = new ModelGroup<TModel>();
+            ModelGroup.Models.CollectionChanged += (sender, args) => {
+                switch (args.Action) {
+                    case NotifyCollectionChangedAction.Add:
+                        foreach (var newItem in args.NewItems)
+                            Instantiate(newItem as TModel);
+                        break;
+                    case NotifyCollectionChangedAction.Remove:
+                        foreach (var removed in args.OldItems)
+                            Destroy(removed as TModel);
+                        break;
+                    case NotifyCollectionChangedAction.Reset:
+                        foreach (var instance in instantiated)
+                            Destroy(instance.Model);
+                        break;
+                }
+            };
+        }
+
         public ViewGroup(Transform container, TView viewTemplate, IList<TModel> models) {
             // For some reason I cannot call this here:
             //return new ViewGroup<TModel, TView>(container, viewTemplate, new ModelGroup<TModel>(models));
