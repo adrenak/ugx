@@ -11,7 +11,7 @@ namespace Adrenak.UPF.Examples.Unigram {
         [SerializeField] Text timeAgoDisplay;
 #pragma warning restore 0649
 
-        protected override void OnSetModel() {
+        protected override void Refresh() {
             userDPDisplay.sprite = Model.UserDP;
             usernameDisplay.text = Model.Username;
             summaryDisplay.text = Model.Summary;
@@ -22,7 +22,7 @@ namespace Adrenak.UPF.Examples.Unigram {
         protected override void ObserveView() { }
 
         protected override void ObserveModel(string propertyName) {
-            OnSetModel();
+            Refresh();
         }
     }
 }

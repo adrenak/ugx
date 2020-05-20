@@ -14,7 +14,7 @@ namespace Adrenak.UPF.Examples.Unigram {
         [SerializeField] Text followingCountDisplay;
 #pragma warning restore 0649
 
-        protected override void OnSetModel() {
+        protected override void Refresh() {
             summaryUsernameDisplay.text = Model.Username;
             displayNameDisplay.text = Model.DisplayName;
             displayPictureDisplay.sprite = Model.DisplayPicture;
@@ -35,7 +35,7 @@ namespace Adrenak.UPF.Examples.Unigram {
 
         protected override void ObserveView() { }
         protected override void ObserveModel(string propertyName) {
-            OnSetModel();
+            Refresh();
         }
     }
 }

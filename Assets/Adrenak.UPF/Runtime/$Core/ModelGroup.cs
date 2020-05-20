@@ -28,6 +28,10 @@ namespace Adrenak.UPF {
             Unsubscriber = unsubscriber;
         }
 
+        public ModelGroup() {
+            Models.CollectionChanged += OnCollectionChanged;
+        }
+
         public ModelGroup(IList<T> models) {
             Models.CollectionChanged += OnCollectionChanged;
 

@@ -9,7 +9,7 @@ namespace Adrenak.UPF.Implementations {
 
         protected override void ObserveView() { }
 
-        protected override void OnSetModel() {
+        protected override void Refresh() {
             labelDisplay.text = Model.Label;
         }
 
