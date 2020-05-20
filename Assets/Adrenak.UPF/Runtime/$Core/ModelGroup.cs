@@ -30,14 +30,16 @@ namespace Adrenak.UPF {
 
         public ModelGroup(IList<T> models) {
             Models.CollectionChanged += OnCollectionChanged;
+
             Models.Clear();
             Models.AddRange(models);
         }
 
         public ModelGroup(IList<T> models, Action<T>[] subscriber, Action<T>[] unsubscriber) {
+            Models.CollectionChanged += OnCollectionChanged;
+
             sub = subscriber;
             unsub = unsubscriber;
-            Models.CollectionChanged += OnCollectionChanged;
             Models.Clear();
             Models.AddRange(models);
         }

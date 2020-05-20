@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
 namespace Adrenak.UPF {
@@ -8,17 +7,16 @@ namespace Adrenak.UPF {
         public TView ViewPrefab { get; private set; }
         public Transform Container { get; private set; }
 
-        public ModelGroup<TModel> modelGroup;
+        public ModelGroup<TModel> ModelGroup { get; private set; }
 
-        public ObservableCollection<TModel> Models { get; } = new ObservableCollection<TModel>();
         readonly List<TView> instantiated = new List<TView>();
 
-        public ViewGroup(Transform container, TView viewPrefab, IList<TModel> models, ModelGroup<TModel> _modelGroup) {
+        public ViewGroup(Transform container, TView viewPrefab, ModelGroup<TModel> _modelGroup) {
             ViewPrefab = viewPrefab;
             Container = container;
-            modelGroup = _modelGroup;
+            ModelGroup = _modelGroup;
 
-            _modelGroup.Models.CollectionChanged += (sender, args) => {
+            ModelGroup.Models.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
@@ -37,15 +35,10 @@ namespace Adrenak.UPF {
 
             foreach (var model in _modelGroup.Models)
                 Instantiate(model as TModel);
-
-
-            // OLD
-            Models.Clear();
-            Models.AddRange(models);
         }
 
         void Instantiate(TModel t) {
-            var instance = MonoBehaviour.Instantiate(ViewPrefab, Container);
+            var instance = Object.Instantiate(ViewPrefab, Container);
             instance.Model = t;
 
             instantiated.Add(instance);
@@ -53,9 +46,8 @@ namespace Adrenak.UPF {
 
         void Destroy(TModel t) {
             foreach (var instance in instantiated) {
-                if (instance.Model == t) {
-                    MonoBehaviour.Destroy(instance.gameObject);
-                }
+                if (instance.Model == t)
+                    Object.Destroy(instance.gameObject);
             }
         }
     }
