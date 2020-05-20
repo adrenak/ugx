@@ -10,8 +10,6 @@ namespace Adrenak.UPF.Examples {
         public ContactView viewPrefab;
 
         IEnumerator Start() {
-            var viewGroup = new ViewGroup<ContactModel, ContactView>(container, viewPrefab, models);
-
             void onCall(object sender, EventArgs e) =>
                 Debug.Log((sender as ContactModel).Name + " calling");
 
@@ -29,10 +27,13 @@ namespace Adrenak.UPF.Examples {
                 }
             );
 
-            yield return new WaitForSeconds(1);
+            //var viewGroup = new ViewGroup<ContactModel, ContactView>(container, viewPrefab, models, modelGroup);
+            var viewGroup = new ViewGroup<ContactModel, ContactView>(container, viewPrefab, models, new ModelGroup<ContactModel>(models));
+
+            yield return new WaitForSeconds(2);
             Debug.Log("Removed");
-            viewGroup.Models.RemoveAt(1);
-            modelGroup.Models.RemoveAt(1);
+            viewGroup.modelGroup.Models.RemoveAt(1);
+            //modelGroup.Models.RemoveAt(1);
             models[1].Call();
         }
     }

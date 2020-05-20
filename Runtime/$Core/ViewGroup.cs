@@ -8,11 +8,17 @@ namespace Adrenak.UPF {
         public TView ViewPrefab { get; private set; }
         public Transform Container { get; private set; }
 
+        public ModelGroup<TModel> modelGroup;
+
         public ObservableCollection<TModel> Models { get; } = new ObservableCollection<TModel>();
         readonly List<TView> instantiated = new List<TView>();
 
-        public ViewGroup(Transform container, TView viewPrefab, IList<TModel> models) {
-            this.Models.CollectionChanged += (sender, args) => {
+        public ViewGroup(Transform container, TView viewPrefab, IList<TModel> models, ModelGroup<TModel> _modelGroup) {
+            ViewPrefab = viewPrefab;
+            Container = container;
+            modelGroup = _modelGroup;
+
+            _modelGroup.Models.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
@@ -29,9 +35,11 @@ namespace Adrenak.UPF {
                 }
             };
 
-            ViewPrefab = viewPrefab;
-            Container = container;
+            foreach (var model in _modelGroup.Models)
+                Instantiate(model as TModel);
 
+
+            // OLD
             Models.Clear();
             Models.AddRange(models);
         }
