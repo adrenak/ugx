@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/adrenak/upf/compare/v1.2.0...v2.0.0) (2020-05-20)
+
+
+### Features
+
+* More constructors in Model and View groups ([9c596b8](https://github.com/adrenak/upf/commit/9c596b8eb6461ae41719a0282fb6d63ac86f6c83))
+
+
+### BREAKING CHANGES
+
+* View.OnViewModelSet is not View.Refresh
+
 # [1.2.0](https://github.com/adrenak/upf/compare/v1.1.0...v1.2.0) (2020-05-20)
 
 
