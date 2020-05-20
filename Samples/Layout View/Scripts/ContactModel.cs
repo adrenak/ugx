@@ -5,7 +5,6 @@ namespace Adrenak.UPF.Examples {
     [Serializable]
     public class ContactModel : Model {
         public event EventHandler OnCall;
-        public ref EventHandler onCall => ref OnCall;
 
         public event EventHandler OnDelete;
 

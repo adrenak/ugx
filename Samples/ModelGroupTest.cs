@@ -17,20 +17,28 @@ public class ModelGroupTest : MonoBehaviour {
          *  );
          */
 
-        void onCall(object sender, EventArgs e) => 
+        void onCall(object sender, EventArgs e) =>
             Debug.Log((sender as ContactModel).Name + " calling");
 
-        var group = new ModelGroup<ContactModel>(
-            x => x.OnCall += onCall,
-            x => x.OnCall -= onCall
-        );
+        void onDelete(object sender, EventArgs e) =>
+            Debug.Log((sender as ContactModel).Name + " deleted");
 
-        group.Models.AddRange(models);
+        var group = new ModelGroup<ContactModel>(models,
+            new Action<ContactModel>[] {
+                x => x.OnCall += onCall,
+                x => x.OnDelete+= onDelete
+            },
+            new Action<ContactModel>[] {
+                x => x.OnCall -= onCall,
+                x => x.OnDelete -= onDelete
+            }
+        );
 
         //models.ForEach(x => x.OnCall += X_OnCall);
         yield return new WaitForSeconds(1);
         models[1].Call();
-        
+        models[1].Delete();
+
         var old = models[1];
         yield return new WaitForSeconds(1);
 
