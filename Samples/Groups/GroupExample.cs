@@ -28,11 +28,11 @@ namespace Adrenak.UPF.Examples {
             );
 
             //var viewGroup = new ViewGroup<ContactModel, ContactView>(container, viewPrefab, models, modelGroup);
-            var viewGroup = new ViewGroup<ContactModel, ContactView>(container, viewPrefab, models, new ModelGroup<ContactModel>(models));
+            var viewGroup = new ViewGroup<ContactModel, ContactView>(container, viewPrefab, new ModelGroup<ContactModel>(models));
 
             yield return new WaitForSeconds(2);
             Debug.Log("Removed");
-            viewGroup.modelGroup.Models.RemoveAt(1);
+            viewGroup.ModelGroup.Models.RemoveAt(1);
             //modelGroup.Models.RemoveAt(1);
             models[1].Call();
         }
