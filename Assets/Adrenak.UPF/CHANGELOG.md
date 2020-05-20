@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/adrenak/upf/compare/v2.0.0...v2.1.0) (2020-05-20)
+
+
+### Features
+
+* Improve View<T> overrable methods ([840aae8](https://github.com/adrenak/upf/commit/840aae80eda304108db8b29b5e9c351c771d3f73))
+
 # [2.0.0](https://github.com/adrenak/upf/compare/v1.2.0...v2.0.0) (2020-05-20)
 
 
