@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 
 namespace Adrenak.UPF {
     public class ModelGroup<T> where T : Model {
-        public ObservableCollection<T> Models { get; } = new ObservableCollection<T>();
+        public ObservableCollection<T> Models { get;  } = new ObservableCollection<T>();
         Action<T>[] sub;
         Action<T>[] unsub;
 
@@ -28,11 +28,12 @@ namespace Adrenak.UPF {
             unsub = unsubscriber;
         }
 
-        public ModelGroup(List<T> models, Action<T>[] subscriber, Action<T>[] unsubscriber) {
+        public ModelGroup(IList<T> models, Action<T>[] subscriber, Action<T>[] unsubscriber) {
             Models.CollectionChanged += OnCollectionChanged;
 
             sub = subscriber;
             unsub = unsubscriber;
+            Models.Clear();
             Models.AddRange(models);
         }
     }
