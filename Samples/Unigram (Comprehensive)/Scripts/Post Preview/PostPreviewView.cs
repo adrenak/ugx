@@ -5,14 +5,14 @@ namespace Adrenak.UPF.Examples.Unigram{
     public class PostPreviewView : View<PostPreviewModel> {
         [SerializeField] Image pictureDisplay = null;
 
-        protected override void OnSetViewModel() {
+        protected override void OnSetModel() {
             pictureDisplay.sprite = Model.Picture;
         }
 
-        protected override void OnViewModelPropertyChanged(string propertyName) {
-            OnSetViewModel();
+        protected override void ObserveModel(string propertyName) {
+            OnSetModel();
         }
  
-        protected override void OnObserveView() { }
+        protected override void ObserveView() { }
     }
 }

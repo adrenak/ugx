@@ -9,7 +9,7 @@ namespace Adrenak.UPF {
         public Action<T>[] Subscriber { get; set; }
         public Action<T>[] Unsubscriber { get; set; }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+        void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             if (e.NewItems != null && Subscriber != null)
                 foreach (T item in e.NewItems)
                     foreach (var subscriber in Subscriber)
