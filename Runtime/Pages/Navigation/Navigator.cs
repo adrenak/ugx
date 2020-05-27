@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using NaughtyAttributes;
 
 namespace Adrenak.UPF {

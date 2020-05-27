@@ -10,10 +10,10 @@ namespace Adrenak.UPF {
 
         readonly List<TView> instantiated = new List<TView>();
 
-        public ViewGroup(Transform container, TView viewTemplate) {
+        public ViewGroup(Transform container, TView viewTemplate, ModelGroup<TModel> modelGroup) {
             ViewTemplate = viewTemplate;
             Container = container;
-            ModelGroup = new ModelGroup<TModel>();
+            ModelGroup = modelGroup;
             ModelGroup.Models.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
@@ -30,6 +30,9 @@ namespace Adrenak.UPF {
                         break;
                 }
             };
+
+            foreach (var model in ModelGroup.Models)
+                Instantiate(model as TModel);
         }
 
         public ViewGroup(Transform container, TView viewTemplate, IList<TModel> models) {
@@ -61,10 +64,10 @@ namespace Adrenak.UPF {
                 Instantiate(model as TModel);
         }
 
-        public ViewGroup(Transform container, TView viewTemplate, ModelGroup<TModel> modelGroup) {
+        public ViewGroup(Transform container, TView viewTemplate) {
             ViewTemplate = viewTemplate;
             Container = container;
-            ModelGroup = modelGroup;
+            ModelGroup = new ModelGroup<TModel>();
             ModelGroup.Models.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
@@ -81,23 +84,18 @@ namespace Adrenak.UPF {
                         break;
                 }
             };
-
-            foreach (var model in ModelGroup.Models)
-                Instantiate(model as TModel);
         }
 
         void Instantiate(TModel t) {
             var instance = Object.Instantiate(ViewTemplate, Container);
-            instance.Model = t;
-
             instantiated.Add(instance);
+            instance.Model = t;
         }
 
         void Destroy(TModel t) {
-            foreach (var instance in instantiated) {
+            foreach (var instance in instantiated) 
                 if (instance.Model == t)
                     Object.Destroy(instance.gameObject);
-            }
         }
     }
 }

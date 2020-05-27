@@ -4,23 +4,28 @@ using UnityEngine;
 namespace Adrenak.UPF {
     [Serializable]
     public abstract class View<T> : View where T : Model {
+        [SerializeField] bool refreshOnStart;
+
         [SerializeField] T _model;
         public T Model {
             get => _model;
             set {
                 _model = value ?? throw new ArgumentNullException(nameof(Model));
-                _model.PropertyChanged += (sender, e)
-                    => ObserveModel(e.PropertyName);
                 Refresh();
-                ObserveView();
+                _model.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
             }
         }
 
         void Awake() {
             InitializeView();
+            _model.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
+
+            if(refreshOnStart)
+                Refresh();
+            ObserveView();
         }
 
-        protected virtual void InitializeView() { }
+        protected abstract void InitializeView();
         protected abstract void Refresh();
         protected abstract void ObserveView();
         protected abstract void ObserveModel(string propertyName);
@@ -28,7 +33,6 @@ namespace Adrenak.UPF {
 
     [Serializable]
     public class View : BindableBehaviour {
-        public event EventHandler OnViewSelected;
         public event EventHandler OnViewDestroyed;
 
         public View GetSubView(string subViewName) {
@@ -41,10 +45,6 @@ namespace Adrenak.UPF {
                 }
             }
             throw new Exception($"No GameObject named {subViewName} with View component was found under {gameObject.name}");
-        }
-
-        public void Select() {
-            OnViewSelected?.Invoke(this, EventArgs.Empty);
         }
 
         void OnDestroy() {

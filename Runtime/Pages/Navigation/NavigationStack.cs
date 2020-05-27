@@ -30,6 +30,8 @@ namespace Adrenak.UPF {
             if (IsLast(view)) {
                 if (IsMidHistory)
                     SetAsCurrent(history.Last());
+                else
+                    return;
             }
             else {
                 // If we're not repushing the last view and we're 
