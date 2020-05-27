@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/adrenak/upf/compare/v2.3.0...v2.4.0) (2020-05-27)
+
+
+### Features
+
+* Add container and template fields to ViewGroupBehaviour ([27aa099](https://github.com/adrenak/upf/commit/27aa099fe95c3439d2fc165be9d17e7cdf2d1c27))
+
 # [2.3.0](https://github.com/adrenak/upf/compare/v2.2.0...v2.3.0) (2020-05-27)
 
 
