@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Object = UnityEngine.Object;
 
 namespace Adrenak.UPF {
+    [Serializable]
     public class ViewGroup<TModel, TView> where TModel : Model where TView : View<TModel> {
         public Transform Container { get; private set; }
         public TView ViewTemplate { get; private set; }
