@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/adrenak/upf/compare/v2.1.0...v2.2.0) (2020-05-27)
+
+
+### Features
+
+* Add Thumb View and Model ([85d1a0a](https://github.com/adrenak/upf/commit/85d1a0a7d5ae171ecac0954c37c1ccf2a4bbb444))
+
 # [2.1.0](https://github.com/adrenak/upf/compare/v2.0.0...v2.1.0) (2020-05-20)
 
 
