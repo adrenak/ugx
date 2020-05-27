@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/adrenak/upf/compare/v2.2.0...v2.3.0) (2020-05-27)
+
+
+### Features
+
+* Create ViewGroupBehaviour component ([111c9c2](https://github.com/adrenak/upf/commit/111c9c2f7a5bc0413ce0a57c506ffb06c0d04369))
+
 # [2.2.0](https://github.com/adrenak/upf/compare/v2.1.0...v2.2.0) (2020-05-27)
 
 
