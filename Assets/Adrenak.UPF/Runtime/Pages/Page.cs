@@ -11,7 +11,7 @@ namespace Adrenak.UPF {
         public T Model {
             get => model;
             set {
-                model = value ?? throw new ArgumentNullException("Model");
+                model = value ?? throw new ArgumentNullException(nameof(Model));
                 OnSetPageModel();
             }
         }
