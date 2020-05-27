@@ -3,14 +3,16 @@ using System.Collections.Generic;
 
 namespace Adrenak.UPF {
     public class ViewGroupBehaviour<TModel, TView> : MonoBehaviour where TModel : Model where TView : View<TModel> {
-        [SerializeField] ViewGroup<TModel, TView> group;
-        public ViewGroup<TModel, TView> Group => group;
+        public ViewGroup<TModel, TView> InnerViewGroup { get; private set; }
 
+        [SerializeField] Transform container;
+        [SerializeField] TView template;
         [SerializeField] List<TModel> initialModels;
 
         void Start() {
-            group.ModelGroup.Models.Clear();
-            group.ModelGroup.Models.AddRange(initialModels);
+            InnerViewGroup = new ViewGroup<TModel, TView>(container, template);
+            InnerViewGroup.ModelGroup.Models.Clear();
+            InnerViewGroup.ModelGroup.Models.AddRange(initialModels);
         }
     }
 }
