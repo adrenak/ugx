@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Adrenak.UPF {
-    public class ViewGroupBehaviour<TModel, TView> : MonoBehaviour where TModel : Model where TView : View<TModel> {
+    public class ViewGroupObject<TModel, TView> : MonoBehaviour where TModel : ViewModel where TView : View<TModel> {
         public ViewGroup<TModel, TView> InnerViewGroup { get; private set; }
 
         [SerializeField] Transform container;

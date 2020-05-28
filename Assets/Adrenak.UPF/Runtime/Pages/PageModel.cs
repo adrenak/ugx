@@ -2,7 +2,7 @@
 
 namespace Adrenak.UPF.Examples.Unigram {
     [System.Serializable]
-    public class PageModel : Model {
+    public class PageModel : ViewModel {
         [SerializeField] string title = string.Empty;
         public string Title {
             get => title;

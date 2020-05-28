@@ -25,9 +25,6 @@ namespace Adrenak.UPF {
 
         [ReadOnly] [SerializeField] bool isOpen;
         public bool IsOpen => isOpen;
-
-        [SerializeField] protected View content;
-        public View Content => content;
 #pragma warning restore 0649
 
         void Start() {

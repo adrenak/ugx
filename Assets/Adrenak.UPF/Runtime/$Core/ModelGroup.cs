@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
 namespace Adrenak.UPF {
-    public class ModelGroup<T> where T : Model {
+    public class ModelGroup<T> where T : ViewModel {
         public ObservableCollection<T> Models { get; } = new ObservableCollection<T>();
         public Action<T>[] Subscriber { get; set; }
         public Action<T>[] Unsubscriber { get; set; }

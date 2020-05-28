@@ -3,5 +3,5 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class Model : Bindable { }
+    public abstract class ViewModel : Bindable { }
 }
