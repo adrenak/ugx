@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/adrenak/upf/compare/v2.4.0...v2.5.0) (2020-05-28)
+
+
+### Features
+
+* Content View removed from Page class ([a0328ab](https://github.com/adrenak/upf/commit/a0328ab6e8f6e161062bf2ea019ed3369ad476b8))
+
 # [2.4.0](https://github.com/adrenak/upf/compare/v2.3.0...v2.4.0) (2020-05-27)
 
 
