@@ -16,6 +16,7 @@ namespace Adrenak.UPF {
         public string ParameterName { get; private set; }
     }
 
+    [Serializable]
     public class Bindable : INotifyPropertyChanged, INotifyPropertyChanging {
         readonly ConcurrentDictionary<string, object> _properties = new ConcurrentDictionary<string, object>();
 

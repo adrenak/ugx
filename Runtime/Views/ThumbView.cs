@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
-    public class ThumbView : View<ThumbModel> {
+    public class ThumbView : View<ThumbViewModel> {
 #pragma warning disable 0649
         [SerializeField] Text text;
         [SerializeField] Image image;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public class ThumbModel : Model {
+    public class ThumbViewModel : ViewModel {
         public event EventHandler OnClick;
         public void Click() {
             OnClick?.Invoke(this, null);

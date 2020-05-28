@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public class ViewGroup<TModel, TView> where TModel : Model where TView : View<TModel> {
+    public class ViewGroup<TModel, TView> where TModel : ViewModel where TView : View<TModel> {
         public Transform Container { get; private set; }
         public TView ViewTemplate { get; private set; }
         public ModelGroup<TModel> ModelGroup { get; private set; }

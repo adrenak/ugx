@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class View<T> : View where T : Model {
+    public abstract class View<T> : View where T : ViewModel {
         [SerializeField] bool refreshOnStart;
 
         [SerializeField] T _model;
