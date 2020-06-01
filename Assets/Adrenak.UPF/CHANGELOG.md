@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/adrenak/upf/compare/v2.6.0...v2.6.1) (2020-06-01)
+
+
+### Bug Fixes
+
+* Handle null or whitespace source path in DynamicImage ([a287126](https://github.com/adrenak/upf/commit/a287126412b2e40672764359bfedbacce5aeaa0a))
+
 # [2.6.0](https://github.com/adrenak/upf/compare/v2.5.0...v2.6.0) (2020-06-01)
 
 
