@@ -23,6 +23,7 @@ namespace Adrenak.UPF {
         [SerializeField] UnityEvent onPageOpen;
         [SerializeField] UnityEvent onPageClose;
 
+        [SerializeField] protected Navigator navigator;
         [ReadOnly] [SerializeField] bool isOpen;
         public bool IsOpen => isOpen;
 #pragma warning restore 0649
