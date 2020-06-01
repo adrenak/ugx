@@ -3,21 +3,27 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Object = UnityEngine.Object;
+using System.Collections.ObjectModel;
 
 namespace Adrenak.UPF {
     [Serializable]
     public class ViewGroup<TModel, TView> where TModel : ViewModel where TView : View<TModel> {
         public Transform Container { get; private set; }
         public TView ViewTemplate { get; private set; }
-        public ModelGroup<TModel> ModelGroup { get; private set; }
+        
+        [Obsolete("Access the models directly via .ViewModels. Access to the view model group may be removed soon.")]
+        public ViewModelGroup<TModel> ViewModelGroup { get; private set; }        
+
+        public ObservableCollection<TModel> ViewModels => ViewModelGroup.ViewModels;
 
         readonly List<TView> instantiated = new List<TView>();
 
-        public ViewGroup(Transform container, TView viewTemplate, ModelGroup<TModel> modelGroup) {
+        [Obsolete]
+        public ViewGroup(Transform container, TView viewTemplate, ViewModelGroup<TModel> modelGroup) {
             ViewTemplate = viewTemplate;
             Container = container;
-            ModelGroup = modelGroup;
-            ModelGroup.Models.CollectionChanged += (sender, args) => {
+            ViewModelGroup = modelGroup;
+            ViewModelGroup.ViewModels.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
@@ -34,10 +40,11 @@ namespace Adrenak.UPF {
                 }
             };
 
-            foreach (var model in ModelGroup.Models)
+            foreach (var model in ViewModelGroup.ViewModels)
                 Instantiate(model as TModel);
         }
 
+        [Obsolete]
         public ViewGroup(Transform container, TView viewTemplate, IList<TModel> models) {
             // For some reason I cannot call this here:
             //return new ViewGroup<TModel, TView>(container, viewTemplate, new ModelGroup<TModel>(models));
@@ -45,8 +52,8 @@ namespace Adrenak.UPF {
             // Looks like I'm missing something.
             ViewTemplate = viewTemplate;
             Container = container;
-            ModelGroup = new ModelGroup<TModel>(models);
-            ModelGroup.Models.CollectionChanged += (sender, args) => {
+            ViewModelGroup = new ViewModelGroup<TModel>(models);
+            ViewModelGroup.ViewModels.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)
@@ -63,15 +70,15 @@ namespace Adrenak.UPF {
                 }
             };
 
-            foreach (var model in ModelGroup.Models)
+            foreach (var model in ViewModelGroup.ViewModels)
                 Instantiate(model as TModel);
         }
 
         public ViewGroup(Transform container, TView viewTemplate) {
             ViewTemplate = viewTemplate;
             Container = container;
-            ModelGroup = new ModelGroup<TModel>();
-            ModelGroup.Models.CollectionChanged += (sender, args) => {
+            ViewModelGroup = new ViewModelGroup<TModel>();
+            ViewModelGroup.ViewModels.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
                         foreach (var newItem in args.NewItems)

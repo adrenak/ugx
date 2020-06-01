@@ -11,8 +11,8 @@ namespace Adrenak.UPF {
 
         void Start() {
             InnerViewGroup = new ViewGroup<TModel, TView>(container, template);
-            InnerViewGroup.ModelGroup.Models.Clear();
-            InnerViewGroup.ModelGroup.Models.AddRange(initialModels);
+            InnerViewGroup.ViewModelGroup.ViewModels.Clear();
+            InnerViewGroup.ViewModelGroup.ViewModels.AddRange(initialModels);
         }
     }
 }
