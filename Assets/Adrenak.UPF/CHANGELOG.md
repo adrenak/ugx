@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/adrenak/upf/compare/v2.5.0...v2.6.0) (2020-06-01)
+
+
+### Features
+
+* Add DynamicImage ([3c7dba6](https://github.com/adrenak/upf/commit/3c7dba652807da615a687b3fc48c9754e615d066))
+
 # [2.5.0](https://github.com/adrenak/upf/compare/v2.4.0...v2.5.0) (2020-05-28)
 
 
