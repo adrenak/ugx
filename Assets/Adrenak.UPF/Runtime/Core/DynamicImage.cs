@@ -8,11 +8,12 @@ namespace Adrenak.UPF {
     [Serializable]
     public class DynamicImage : Image {
         public enum Source {
+            Asset,
             ResourcePath,
             RemotePath
         }
 
-        public enum Compression{
+        public enum Compression {
             None,
             HighQuality,
             LowQuality
@@ -20,7 +21,7 @@ namespace Adrenak.UPF {
 
         Compression _oldCompression = Compression.LowQuality;
         [SerializeField] Compression _compression = Compression.LowQuality;
-        public Compression compression{
+        public Compression compression {
             get => _compression;
             set {
                 _compression = value;
@@ -35,7 +36,7 @@ namespace Adrenak.UPF {
             get => _source;
             set {
                 _source = value;
-                if(NeedsRefresh())
+                if (NeedsRefresh())
                     Refresh();
             }
         }
@@ -53,19 +54,30 @@ namespace Adrenak.UPF {
 
         [ContextMenu("Refresh")]
         public void Refresh() {
-            if (_oldSource == source) {
-
-            }
             switch (source) {
+                case Source.Asset:
+                    break;
+
                 case Source.ResourcePath:
+                    if (string.IsNullOrWhiteSpace(path)) {
+                        Debug.LogWarning("Source path is null or whitespace");
+                        break;
+                    }
+
                     var resourceSprite = Resources.Load<Sprite>(path);
-                    if(resourceSprite == null){
+                    if (resourceSprite == null) {
                         Debug.LogError($"Not Resource found at {path}");
                         break;
                     }
                     SetSprite(resourceSprite);
                     break;
+
                 case Source.RemotePath:
+                    if (string.IsNullOrWhiteSpace(path)) {
+                        Debug.LogWarning("Source path is null or whitespace");
+                        break;
+                    }
+
                     try {
                         DownloadSprite(path,
                             result => SetSprite(result),
@@ -85,10 +97,10 @@ namespace Adrenak.UPF {
             if (_oldCompression != compression)
                 result = true;
 
-            if (_oldSource != source) 
+            if (_oldSource != source)
                 result = true;
 
-            if(!_oldPath.Equals(path))
+            if (!_oldPath.Equals(path))
                 result = true;
 
             _oldCompression = compression;
@@ -100,7 +112,7 @@ namespace Adrenak.UPF {
         void SetSprite(Sprite s) {
             if (sprite != null) {
                 var id = sprite.GetInstanceID();
-                if(id < 0){
+                if (id < 0) {
                     if (Application.isPlaying) {
                         Destroy(sprite.texture);
                         Destroy(sprite);
@@ -132,7 +144,7 @@ namespace Adrenak.UPF {
             var tex = new Texture2D(2, 2);
             tex.LoadImage(www.bytes);
             tex.Apply();
-            if(compression != Compression.None)
+            if (compression != Compression.None)
                 tex.Compress(compression == Compression.HighQuality);
 
             onSuccess?.Invoke(tex.ToSprite());
