@@ -3,6 +3,6 @@
 namespace Adrenak.UPF {
     [Serializable]
     public abstract class ViewModel : Bindable {
-        public object Identifier;
+        public string Identifier;
     }
 }

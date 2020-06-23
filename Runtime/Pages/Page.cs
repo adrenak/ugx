@@ -15,6 +15,9 @@ namespace Adrenak.UPF {
                 OnSetPageModel();
             }
         }
+
+        protected virtual void OnSetPageModel() { }
+        protected virtual void OnPageModelPropertyChanged(string propertyName) { }
     }
 
     [Serializable]
@@ -22,15 +25,12 @@ namespace Adrenak.UPF {
 #pragma warning disable 0649
         [SerializeField] UnityEvent onPageOpen;
         [SerializeField] UnityEvent onPageClose;
+        [SerializeField] UnityEvent onPressBack;
 
         [SerializeField] protected Navigator navigator;
         [ReadOnly] [SerializeField] bool isOpen;
         public bool IsOpen => isOpen;
 #pragma warning restore 0649
-
-        void Start() {
-            OnStartPage();
-        }
 
         public void OpenPage() {
             isOpen = true;
@@ -44,12 +44,15 @@ namespace Adrenak.UPF {
             onPageClose?.Invoke();
         }
 
-        protected virtual void OnStartPage() { }
-        protected virtual void OnSetPageModel() { }
-        protected virtual void OnPageModelPropertyChanged(string propertyName) { }
+        void Update() {
+            if (Input.GetKeyUp(KeyCode.Escape) && IsOpen) {
+                OnPressBack();
+                onPressBack.Invoke();
+            }
+        }
 
-        protected virtual void OnBackButtonPress() { }
         protected virtual void OnPageOpen() { }
         protected virtual void OnPageClose() { }
+        protected virtual void OnPressBack() { }
     }
 }

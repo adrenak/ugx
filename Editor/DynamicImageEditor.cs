@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEditor.UI;
 
-namespace Adrenak.UPF{
+namespace Adrenak.UPF {
     [CustomEditor(typeof(DynamicImage))]
     public class MyImageEditor : ImageEditor {
         public override void OnInspectorGUI() {
@@ -9,6 +9,7 @@ namespace Adrenak.UPF{
             image.compression = (DynamicImage.Compression)EditorGUILayout.EnumPopup("Texture Compression", image.compression);
             image.source = (DynamicImage.Source)EditorGUILayout.EnumPopup("Source Type", image.source);
             image.path = EditorGUILayout.TextField("Source Path", image.path);
+            image.loadOnStart = EditorGUILayout.Toggle("Auto Refresh", image.loadOnStart);
 
             base.OnInspectorGUI();
         }

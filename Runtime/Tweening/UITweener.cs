@@ -56,6 +56,8 @@ namespace Adrenak.UPF {
             CG.alpha = 0;
             await TweenOpacity(1, defaultOpacityTween);
             CG.alpha = 1;
+            CG.blocksRaycasts = true;
+            CG.interactable = true;
         }
 
         async public void FadeOutAndForget() => await FadeOut();
@@ -63,6 +65,8 @@ namespace Adrenak.UPF {
             CG.alpha = 1;
             await TweenOpacity(0, defaultOpacityTween);
             CG.alpha = 0;
+            CG.blocksRaycasts = false;
+            CG.interactable = false;
         }
 
         async public Task TweenOpacity(float endValue, OpacityTween tween)

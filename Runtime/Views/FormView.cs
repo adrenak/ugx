@@ -1,11 +1,11 @@
 ﻿namespace Adrenak.UPF {
     public abstract class FormView<T> : View<T> where T : FormModel {
         public void Submit() {
-            Model.Submit();
+            ViewModel.Submit();
         }
 
         public void Cancel() {
-            Model.Cancel();
+            ViewModel.Cancel();
         }
     }
 }
