@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/adrenak/upf/compare/v2.6.1...v2.7.0) (2020-06-23)
+
+
+### Features
+
+* Add in-memory caching to DynamicImage ([7a598d0](https://github.com/adrenak/upf/commit/7a598d0cfbc2479fcc5828d0b5e435bda2386e35))
+
 ## [2.6.1](https://github.com/adrenak/upf/compare/v2.6.0...v2.6.1) (2020-06-01)
 
 
