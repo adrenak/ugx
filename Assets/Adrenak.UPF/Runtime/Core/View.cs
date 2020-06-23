@@ -3,22 +3,24 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class View<T> : View where T : ViewModel {
-        [SerializeField] bool refreshOnStart;
+    public abstract class View<TViewModel> : View where TViewModel : ViewModel {
+        public event EventHandler<TViewModel> OnViewModelSet;
+        [SerializeField] bool refreshOnStart = true;
 
-        [SerializeField] T _model;
-        public T Model {
-            get => _model;
+        [SerializeField] TViewModel _vm;
+        public TViewModel ViewModel {
+            get => _vm;
             set {
-                _model = value ?? throw new ArgumentNullException(nameof(Model));
+                _vm = value ?? throw new ArgumentNullException(nameof(ViewModel));
                 Refresh();
-                _model.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
+                OnViewModelSet?.Invoke(this, _vm);
+                _vm.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
             }
         }
 
         void Awake() {
             InitializeView();
-            _model.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
+            _vm.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
 
             if(refreshOnStart)
                 Refresh();

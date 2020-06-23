@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Adrenak.UPF/Runtime/Sample/sample.unity
     guid: 37b0725c08fe07547913ad44d0067230
   m_configObjects: {}

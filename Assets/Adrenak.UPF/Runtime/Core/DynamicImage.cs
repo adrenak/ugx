@@ -1,12 +1,15 @@
-﻿using Adrenak.Unex;
-using System;
-using System.Collections;
+﻿using System;
+
 using UnityEngine;
 using UnityEngine.UI;
+
+using Adrenak.Unex;
 
 namespace Adrenak.UPF {
     [Serializable]
     public class DynamicImage : Image {
+        public static Cache<Texture2D> Cache { get; set; } = new DynamicImageInMemoryCache();
+
         public enum Source {
             Asset,
             ResourcePath,
@@ -19,41 +22,27 @@ namespace Adrenak.UPF {
             LowQuality
         }
 
-        Compression _oldCompression = Compression.LowQuality;
-        [SerializeField] Compression _compression = Compression.LowQuality;
-        public Compression compression {
-            get => _compression;
-            set {
-                _compression = value;
-                if (NeedsRefresh())
-                    Refresh();
-            }
-        }
+        public Source source = Source.RemotePath;
 
-        Source _oldSource = Source.RemotePath;
-        [SerializeField] Source _source = Source.RemotePath;
-        public Source source {
-            get => _source;
-            set {
-                _source = value;
-                if (NeedsRefresh())
-                    Refresh();
-            }
-        }
+        Compression oldCompression;
+        public Compression compression = Compression.LowQuality;
 
-        string _oldPath = string.Empty;
-        [SerializeField] string _path = string.Empty;
-        public string path {
-            get => _path;
-            set {
-                _path = value;
-                if (NeedsRefresh())
-                    Refresh();
-            }
+        string oldPath;
+        public string path = string.Empty;
+        
+        public bool loadOnStart = true;
+
+        protected override void Start() {
+            if(loadOnStart)
+                Refresh();
         }
 
         [ContextMenu("Refresh")]
         public void Refresh() {
+            if (!Application.isPlaying) return;
+
+            Cache.Free(new object[] { oldPath, oldCompression, this });
+
             switch (source) {
                 case Source.Asset:
                     break;
@@ -79,8 +68,9 @@ namespace Adrenak.UPF {
                     }
 
                     try {
-                        DownloadSprite(path,
-                            result => SetSprite(result),
+                        Cache.Get(
+                            new object[] { path, compression, this },
+                            result => SetSprite(result.ToSprite()),
                             error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
                         );
                     }
@@ -89,67 +79,19 @@ namespace Adrenak.UPF {
                     }
                     break;
             }
-        }
 
-        bool NeedsRefresh() {
-            bool result = false;
-
-            if (_oldCompression != compression)
-                result = true;
-
-            if (_oldSource != source)
-                result = true;
-
-            if (!_oldPath.Equals(path))
-                result = true;
-
-            _oldCompression = compression;
-            _oldSource = source;
-            _oldPath = path;
-            return result;
+            oldPath = path;
+            oldCompression = compression;
         }
 
         void SetSprite(Sprite s) {
-            if (sprite != null) {
-                var id = sprite.GetInstanceID();
-                if (id < 0) {
-                    if (Application.isPlaying) {
-                        Destroy(sprite.texture);
-                        Destroy(sprite);
-                    }
-                    else {
-                        DestroyImmediate(sprite.texture);
-                        DestroyImmediate(sprite);
-                    }
-                }
-            }
             sprite = s;
         }
 
-        public void DownloadSprite(string path, Action<Sprite> onSuccess, Action<Exception> onFailure) {
-            StartCoroutine(DownloadSpriteCo(path, onSuccess, onFailure));
-        }
+        protected override void OnDestroy() {
+            if (!Application.isPlaying) return;
 
-        IEnumerator DownloadSpriteCo(string path, Action<Sprite> onSuccess, Action<Exception> onFailure) {
-            var www = new WWW(path);
-            yield return www;
-            while (!www.isDone)
-                yield return null;
-
-            if (!string.IsNullOrWhiteSpace(www.error)) {
-                onFailure?.Invoke(new Exception(www.error));
-                yield break;
-            }
-
-            var tex = new Texture2D(2, 2);
-            tex.LoadImage(www.bytes);
-            tex.Apply();
-            if (compression != Compression.None)
-                tex.Compress(compression == Compression.HighQuality);
-
-            onSuccess?.Invoke(tex.ToSprite());
-
-            www.Dispose();
+            Cache.Free(new object[] { path, compression, this });
         }
     }
 }
