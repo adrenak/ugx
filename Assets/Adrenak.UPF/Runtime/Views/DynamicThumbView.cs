@@ -23,7 +23,7 @@ namespace Adrenak.UPF {
 
         protected override void Refresh() {
             text.text = ViewModel.Text;
-            image.source = DynamicImage.Source.RemotePath;
+            image.source = DynamicImage.Source.URL;
             image.path = ViewModel.ImageURL;
         }
 
