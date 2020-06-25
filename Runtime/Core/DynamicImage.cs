@@ -8,12 +8,27 @@ using Adrenak.Unex;
 namespace Adrenak.UPF {
     [Serializable]
     public class DynamicImage : Image {
-        public static Cache<Texture2D> Cache { get; set; } = new DynamicImageInMemoryCache();
+        // Ambient context dependency pattern
+        static Cache<Texture2D> cache;
+        public static Cache<Texture2D> Cache {
+            get {
+                if (cache == null)
+                    cache = new DynamicImageMemoryCache();
+                return cache;
+            }
+            set {
+                if (cache != null)
+                    throw new Exception("DynamicImage.Cache can only be set once and before any get calls");
+
+                if (value == null)
+                    throw new Exception("Can not set Cache to null!");
+                cache = value;
+            }
+        }
 
         public enum Source {
-            Asset,
-            ResourcePath,
-            RemotePath
+            Resource,
+            URL
         }
 
         public enum Compression {
@@ -22,18 +37,18 @@ namespace Adrenak.UPF {
             LowQuality
         }
 
-        public Source source = Source.RemotePath;
+        public Source source = Source.URL;
 
         Compression oldCompression;
         public Compression compression = Compression.LowQuality;
 
         string oldPath;
         public string path = string.Empty;
-        
+
         public bool loadOnStart = true;
 
         protected override void Start() {
-            if(loadOnStart)
+            if (loadOnStart)
                 Refresh();
         }
 
@@ -44,10 +59,7 @@ namespace Adrenak.UPF {
             Cache.Free(new object[] { oldPath, oldCompression, this });
 
             switch (source) {
-                case Source.Asset:
-                    break;
-
-                case Source.ResourcePath:
+                case Source.Resource:
                     if (string.IsNullOrWhiteSpace(path)) {
                         Debug.LogWarning("Source path is null or whitespace");
                         break;
@@ -61,7 +73,7 @@ namespace Adrenak.UPF {
                     SetSprite(resourceSprite);
                     break;
 
-                case Source.RemotePath:
+                case Source.URL:
                     if (string.IsNullOrWhiteSpace(path)) {
                         Debug.LogWarning("Source path is null or whitespace");
                         break;
