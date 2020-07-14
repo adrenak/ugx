@@ -1,3 +1,10 @@
+# [2.8.0](https://github.com/adrenak/upf/compare/v2.7.0...v2.8.0) (2020-07-14)
+
+
+### Features
+
+* Add extension methods to get rect bounds ([b0bb1dd](https://github.com/adrenak/upf/commit/b0bb1ddf3c7423074518145f6f004f1f2ef7d7b0))
+
 # [2.7.0](https://github.com/adrenak/upf/compare/v2.6.1...v2.7.0) (2020-06-23)
 
 
