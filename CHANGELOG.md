@@ -1,3 +1,10 @@
+# [2.9.0](https://github.com/adrenak/upf/compare/v2.8.0...v2.9.0) (2020-07-14)
+
+
+### Features
+
+* Add IsVisible method to RectTransform ([60ad1c4](https://github.com/adrenak/upf/commit/60ad1c47e623fb571385f0a21d65b36859fd72d6))
+
 # [2.8.0](https://github.com/adrenak/upf/compare/v2.7.0...v2.8.0) (2020-07-14)
 
 
