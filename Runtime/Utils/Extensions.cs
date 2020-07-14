@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Adrenak.Unex;
+using System.Collections.Generic;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
@@ -47,6 +48,36 @@ namespace Adrenak.UPF {
             var right = rt.GetRight();
             var bottom = rt.GetBottom();
             return new Vector2(right, bottom);
+        }
+
+        public static bool IsVisible(this RectTransform rt, out bool? extent) {
+            var screen = new Vector2(Screen.width, Screen.height);
+
+            bool IsPointInside(Vector2 point){
+                return (point.x > 0 &&
+                    point.x < Screen.width &&
+                    point.y > 0 &&
+                    point.y < Screen.height);
+            }
+
+            var points = new Vector2[]{
+                rt.GetTopRight(),
+                rt.GetTopLeft(),
+                rt.GetBottomLeft(),
+                rt.GetBottomRight()
+            };
+
+            int count = 0;
+            foreach(var  point in points)
+                count += IsPointInside(point) ? 1 : 0;
+            
+            if(count == 0){
+                extent = null;
+                return false;
+            }
+
+            extent = count == 4;
+            return true;
         }
     }
 }
