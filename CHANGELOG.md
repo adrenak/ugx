@@ -1,3 +1,15 @@
+# [2.10.0](https://github.com/adrenak/upf/compare/v2.9.0...v2.10.0) (2020-07-16)
+
+
+### Bug Fixes
+
+* Rename DynamicImageFakeRepo to DynamicImageStatelessRepo ([2b32cbf](https://github.com/adrenak/upf/commit/2b32cbff99c5d579e128436a4e9ac1eda8e35353))
+
+
+### Features
+
+* Simplify DynamicImage caching ([327f9c5](https://github.com/adrenak/upf/commit/327f9c5542424aadb183cba04acecd14c2b6b2d9))
+
 # [2.9.0](https://github.com/adrenak/upf/compare/v2.8.0...v2.9.0) (2020-07-14)
 
 
