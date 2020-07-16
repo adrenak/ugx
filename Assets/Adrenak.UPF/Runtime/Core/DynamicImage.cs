@@ -13,7 +13,7 @@ namespace Adrenak.UPF {
         public static DynamicImageRepository Repo {
             get {
                 if (repo == null)
-                    repo = new DynamicImageFakeRepo();
+                    repo = new DynamicImageStatelessRepo();
                 return repo;
             }
             set {
