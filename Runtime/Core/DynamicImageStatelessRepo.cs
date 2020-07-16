@@ -6,7 +6,7 @@ namespace Adrenak.UPF {
     /// <summary>
     /// This isn't a cache, it just 
     /// </summary>
-    public class DynamicImageFakeRepo : DynamicImageRepository {
+    public class DynamicImageStatelessRepo : DynamicImageRepository {
         public override Task Init(object obj = null) {
             return Task.CompletedTask;
         }
