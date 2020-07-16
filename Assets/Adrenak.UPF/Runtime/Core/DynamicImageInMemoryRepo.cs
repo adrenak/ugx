@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Threading.Tasks;
 
 using UnityEngine;
@@ -9,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Adrenak.UPF {
-    public class DynamicImageMemoryCache : Cache<Texture2D> {
+    public class DynamicImageInMemoryRepo : DynamicImageRepository {
         class CachingKey {
             public string path;
             public DynamicImage.Compression compression;
@@ -35,20 +34,14 @@ namespace Adrenak.UPF {
         /// <see cref="obj"/> is not used
         /// </summary>
         public override Task Init(object obj = null) {
-            Runnable.Init();
             return Task.CompletedTask;
         }
 
         /// <summary>
         /// <see cref="obj"/> should contain the image path, compression and instance. In that order
         /// </summary>
-        public override void Get(object obj, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
-            var args = obj as object[];
-            var path = (args)[0] as string;
-            var compression = (DynamicImage.Compression)(args)[1];
-            var instance = (DynamicImage)(args)[2];
-
-            var cachingKey = new CachingKey { path = path, compression = compression };
+        public override void Get(string location, DynamicImage.Compression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
+            var cachingKey = new CachingKey { path = location, compression = compression };
 
             // Check if the cached resources have this key
             foreach (var key in resources.Keys) {
@@ -67,8 +60,8 @@ namespace Adrenak.UPF {
 
             // If the key requested is new, we need to fetch the texture,
             // add it to the cache, and start a new instance entry
-            var cacheKey = new CachingKey { path = path, compression = compression };
-            Runnable.Run(DownloadSpriteCo(path, compression,
+            var cacheKey = new CachingKey { path = location, compression = compression };
+            Runnable.Run(DownloadSpriteCo(location, compression,
                 result => {
                     instances.Add(cacheKey, new List<DynamicImage> { instance });
                     resources.Add(cacheKey, result);
@@ -81,9 +74,9 @@ namespace Adrenak.UPF {
         /// <summary>
         /// <see cref="obj"/> should contain the image path, compression and instance. In that order
         /// </summary>
-        public override Task<Texture2D> Get(object obj) {
+        public override Task<Texture2D> Get(string location, DynamicImage.Compression compression, DynamicImage instance) {
             var source = new TaskCompletionSource<Texture2D>();
-            Get(obj,
+            Get(location, compression, instance,
                 result => source.SetResult(result),
                 exception => source.SetException(exception)
             );
@@ -93,14 +86,9 @@ namespace Adrenak.UPF {
         /// <summary>
         /// <see cref="obj"/> should contain the image path, compression and instance. In that order
         /// </summary>
-        public override void Free(object obj, Action onSuccess, Action<Exception> onFailure) {
+        public override void Free(string location, DynamicImage.Compression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure) {
             try {
-                var args = obj as object[];
-                var path = args[0] as string;
-                var compression = (DynamicImage.Compression)(args)[1];
-                var instance = (DynamicImage)(args)[2];
-
-                var cachingKey = new CachingKey { path = path, compression = compression };
+                var cachingKey = new CachingKey { path = location, compression = compression };
 
                 for (int i = 0; i < instances.Keys.Count; i++) {
                     var key = instances.Keys.ToList()[i];
@@ -133,35 +121,13 @@ namespace Adrenak.UPF {
         /// <summary>
         /// <see cref="obj"/> should contain the image path, compression and instance. In that order
         /// </summary>
-        public override Task Free(object obj) {
+        public override Task Free(string location, DynamicImage.Compression compression, DynamicImage instance) {
             var source = new TaskCompletionSource<bool>();
-            Free(obj,
+            Free(location, compression, instance,
                 () => source.SetResult(true),
                 exception => source.SetException(exception)
             );
             return source.Task;
-        }
-
-        IEnumerator DownloadSpriteCo(string path, DynamicImage.Compression compression, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
-            var www = new WWW(path);
-            yield return www;
-            while (!www.isDone)
-                yield return null;
-
-            if (!string.IsNullOrWhiteSpace(www.error)) {
-                onFailure?.Invoke(new Exception(www.error));
-                yield break;
-            }
-
-            var tex = new Texture2D(2, 2);
-            tex.LoadImage(www.bytes);
-            tex.Apply();
-            if (compression != DynamicImage.Compression.None)
-                tex.Compress(compression == DynamicImage.Compression.HighQuality);
-
-            onSuccess?.Invoke(tex);
-
-            www.Dispose();
         }
     }
 }

@@ -9,20 +9,20 @@ namespace Adrenak.UPF {
     [Serializable]
     public class DynamicImage : Image {
         // Ambient context dependency pattern
-        static Cache<Texture2D> cache;
-        public static Cache<Texture2D> Cache {
+        static DynamicImageRepository repo;
+        public static DynamicImageRepository Repo {
             get {
-                if (cache == null)
-                    cache = new DynamicImageMemoryCache();
-                return cache;
+                if (repo == null)
+                    repo = new DynamicImageFakeRepo();
+                return repo;
             }
             set {
-                if (cache != null)
+                if (repo != null)
                     throw new Exception("DynamicImage.Cache can only be set once and before any get calls");
 
                 if (value == null)
                     throw new Exception("Can not set Cache to null!");
-                cache = value;
+                repo = value;
             }
         }
 
@@ -56,7 +56,7 @@ namespace Adrenak.UPF {
         public void Refresh() {
             if (!Application.isPlaying) return;
 
-            Cache.Free(new object[] { oldPath, oldCompression, this });
+            Repo.Free(oldPath, oldCompression, this);
 
             switch (source) {
                 case Source.Resource:
@@ -80,8 +80,8 @@ namespace Adrenak.UPF {
                     }
 
                     try {
-                        Cache.Get(
-                            new object[] { path, compression, this },
+                        Repo.Get(
+                            path, compression, this,
                             result => SetSprite(result.ToSprite()),
                             error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
                         );
@@ -103,7 +103,7 @@ namespace Adrenak.UPF {
         protected override void OnDestroy() {
             if (!Application.isPlaying) return;
 
-            Cache.Free(new object[] { path, compression, this });
+            Repo.Free(path, compression, this);
         }
     }
 }
