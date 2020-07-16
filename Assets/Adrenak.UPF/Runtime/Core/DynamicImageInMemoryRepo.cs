@@ -27,8 +27,19 @@ namespace Adrenak.UPF {
             }
         }
 
+        class Request {
+            public Action<Texture2D> onSuccess;
+            public Action<Exception> onFailure;
+
+            public Request(Action<Texture2D> _onSuccess, Action<Exception> _onFailure) {
+                onSuccess = _onSuccess;
+                onFailure = _onFailure;
+            }
+        }
+
         Dictionary<CachingKey, List<DynamicImage>> instances = new Dictionary<CachingKey, List<DynamicImage>>();
         Dictionary<CachingKey, Texture2D> resources = new Dictionary<CachingKey, Texture2D>();
+        Dictionary<CachingKey, List<Request>> pendingRequests = new Dictionary<CachingKey, List<Request>>();
 
         /// <summary>
         /// <see cref="obj"/> is not used
@@ -37,43 +48,48 @@ namespace Adrenak.UPF {
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// <see cref="obj"/> should contain the image path, compression and instance. In that order
-        /// </summary>
         public override void Get(string location, DynamicImage.Compression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
             var cachingKey = new CachingKey { path = location, compression = compression };
 
-            // Check if the cached resources have this key
-            foreach (var key in resources.Keys) {
-                // If the key exists in resources, we just send back the cached texture
-                // And if the requesting DynamicImage instance is new, we add it
-                if (key.Equals(cachingKey)) {
-                    var tex = resources[key];
-                    onSuccess?.Invoke(tex);
+            if (resources.Keys.Contains(cachingKey)) {
+                var tex = resources[cachingKey];
+                onSuccess?.Invoke(tex);
 
-                    if (!instances[key].Contains(instance))
-                        instances[key].Add(instance);
+                if (!instances[cachingKey].Contains(instance))
+                    instances[cachingKey].Add(instance);
 
-                    return;
-                }
+                return;
+            }
+
+            if(!pendingRequests.ContainsKey(cachingKey))
+                pendingRequests.Add(cachingKey, new List<Request>());
+            var request = new Request(onSuccess, onFailure);
+            pendingRequests[cachingKey].Add(request);
+
+            if (pendingRequests[cachingKey].Count > 1) {
+                return;
             }
 
             // If the key requested is new, we need to fetch the texture,
             // add it to the cache, and start a new instance entry
-            var cacheKey = new CachingKey { path = location, compression = compression };
             Runnable.Run(DownloadSpriteCo(location, compression,
                 result => {
-                    instances.Add(cacheKey, new List<DynamicImage> { instance });
-                    resources.Add(cacheKey, result);
-                    onSuccess?.Invoke(result);
+                    resources.Add(cachingKey, result);
+                    instances.Add(cachingKey, new List<DynamicImage> { instance });
+
+                    foreach(var req in pendingRequests[cachingKey])
+                        req.onSuccess?.Invoke(result);
+
+                    pendingRequests[cachingKey].Remove(request);
                 },
-                onFailure
+                error => {
+                    foreach (var req in pendingRequests[cachingKey])
+                        req.onFailure?.Invoke(error);
+                    pendingRequests[cachingKey].Remove(request);
+                }
             ));
         }
 
-        /// <summary>
-        /// <see cref="obj"/> should contain the image path, compression and instance. In that order
-        /// </summary>
         public override Task<Texture2D> Get(string location, DynamicImage.Compression compression, DynamicImage instance) {
             var source = new TaskCompletionSource<Texture2D>();
             Get(location, compression, instance,
@@ -83,9 +99,6 @@ namespace Adrenak.UPF {
             return source.Task;
         }
 
-        /// <summary>
-        /// <see cref="obj"/> should contain the image path, compression and instance. In that order
-        /// </summary>
         public override void Free(string location, DynamicImage.Compression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure) {
             try {
                 var cachingKey = new CachingKey { path = location, compression = compression };
@@ -118,9 +131,6 @@ namespace Adrenak.UPF {
             }
         }
 
-        /// <summary>
-        /// <see cref="obj"/> should contain the image path, compression and instance. In that order
-        /// </summary>
         public override Task Free(string location, DynamicImage.Compression compression, DynamicImage instance) {
             var source = new TaskCompletionSource<bool>();
             Free(location, compression, instance,
