@@ -1,3 +1,10 @@
+## [2.10.2](https://github.com/adrenak/upf/compare/v2.10.1...v2.10.2) (2020-07-18)
+
+
+### Bug Fixes
+
+* Issues with DynamicImage In Memory Repository ([e442d14](https://github.com/adrenak/upf/commit/e442d14fb9ec99199ac88c51a7291c2c1e308773))
+
 ## [2.10.1](https://github.com/adrenak/upf/compare/v2.10.0...v2.10.1) (2020-07-18)
 
 
