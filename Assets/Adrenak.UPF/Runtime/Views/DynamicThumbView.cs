@@ -18,17 +18,19 @@ namespace Adrenak.UPF {
         }
 
         protected override void InitializeView() {
-            Refresh();
+            HandleViewModelSet();
         }
 
-        protected override void Refresh() {
+        protected override void HandleViewModelSet() {
+            gameObject.name = ViewModel.Text;
             text.text = ViewModel.Text;
             image.source = DynamicImage.Source.URL;
             image.path = ViewModel.ImageURL;
+            image.Refresh();
         }
 
-        protected override void ObserveModel(string propertyName) {
-            Refresh();
+        protected override void HandleViewModelMoficiation(string propertyName) {
+            HandleViewModelSet();
         }
 
         protected override void ObserveView() { }

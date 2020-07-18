@@ -9,11 +9,9 @@ namespace Adrenak.UPF {
         public abstract Task Init(object obj = null);
 
         public abstract void Get(string location, DynamicImage.Compression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure);
-
         public abstract Task<Texture2D> Get(string location, DynamicImage.Compression compression, DynamicImage instance);
 
         public abstract void Free(string location, DynamicImage.Compression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure);
-
         public abstract Task Free(string location, DynamicImage.Compression compression, DynamicImage instance);
 
         protected void DownloadSprite(string path, DynamicImage.Compression compression, Action<Texture2D> onSuccess, Action<Exception> onFailure) {

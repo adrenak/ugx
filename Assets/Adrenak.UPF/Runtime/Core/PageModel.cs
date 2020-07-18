@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Adrenak.UPF.Examples.Unigram {
+namespace Adrenak.UPF {
     [System.Serializable]
     public class PageModel : ViewModel {
         [SerializeField] string title = string.Empty;

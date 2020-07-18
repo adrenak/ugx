@@ -1,8 +1,9 @@
-﻿using Adrenak.UPF.Examples.Unigram;
-using NaughtyAttributes;
-using System;
+﻿using System;
+
 using UnityEngine;
 using UnityEngine.Events;
+
+using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]

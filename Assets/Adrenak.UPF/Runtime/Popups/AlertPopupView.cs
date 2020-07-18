@@ -26,7 +26,6 @@ namespace Adrenak.UPF {
             onPopupClose?.Invoke();
         }
 
-
         Action OnAcknowledge;
         public void Acknowledge() {
             OnAcknowledge?.Invoke();

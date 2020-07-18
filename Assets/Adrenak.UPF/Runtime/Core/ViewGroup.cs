@@ -16,6 +16,7 @@ namespace Adrenak.UPF {
         public ViewGroup(Transform container, TView viewTemplate = null) {
             ViewTemplate = viewTemplate;
             Container = container;
+
             ViewModelGroup = new ViewModelGroup<TModel>();
             ViewModelGroup.ViewModels.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
@@ -24,8 +25,8 @@ namespace Adrenak.UPF {
                             Instantiate(newItem as TModel);
                         break;
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (var removed in args.OldItems)
-                            Destroy(removed as TModel);
+                        foreach (var removedItem in args.OldItems)
+                            Destroy(removedItem as TModel);
                         break;
                     case NotifyCollectionChangedAction.Reset:
                         foreach (var instance in instantiated)
@@ -41,17 +42,14 @@ namespace Adrenak.UPF {
 
             var instance = Object.Instantiate(ViewTemplate, Container);
             instance.hideFlags = HideFlags.DontSave;
-            instantiated.Add(instance);
             instance.ViewModel = t;
+            instantiated.Add(instance);
         }
 
         void Destroy(TModel t) {
             foreach (var instance in instantiated)
-                if (instance != null &&
-                    instance.ViewModel == t &&
-                    instance.gameObject != null
-                )
-                Object.Destroy(instance.gameObject);
+                if (instance != null && instance.ViewModel.Equals(t) && instance.gameObject != null)
+                    Object.Destroy(instance.gameObject);
         }
     }
 }

@@ -10,6 +10,26 @@ namespace Adrenak.UPF {
                 destination.Add(element);
         }
 
+        public static float GetLeftExit(this RectTransform rt) {
+            var parentRect = rt.parent.GetComponent<RectTransform>().rect;
+            return -parentRect.width / 2 - rt.rect.width / 2;
+        }
+
+        public static float GetRightExit(this RectTransform rt) {
+            var parentRect = rt.parent.GetComponent<RectTransform>().rect;
+            return parentRect.width / 2 + rt.rect.width / 2;
+        }
+
+        public static float GetTopExit(this RectTransform rt) {
+            var parentRect = rt.parent.GetComponent<RectTransform>().rect;
+            return parentRect.height / 2 + rt.rect.height / 2;
+        }
+
+        public static float GetBottomExit(this RectTransform rt) {
+            var parentRect = rt.parent.GetComponent<RectTransform>().rect;
+            return -parentRect.width / 2 - rt.rect.height / 2;
+        }
+
         public static float GetLeft(this RectTransform rt) {
             return rt.position.x - rt.rect.width * rt.lossyScale.x / 2;
         }
@@ -23,7 +43,7 @@ namespace Adrenak.UPF {
         }
 
         public static float GetBottom(this RectTransform rt) {
-            return rt.position.y + rt.rect.height * rt.lossyScale.y / 2;
+            return rt.position.y - rt.rect.height * rt.lossyScale.y / 2;
         }
 
         public static Vector2 GetTopLeft(this RectTransform rt) {
@@ -50,7 +70,7 @@ namespace Adrenak.UPF {
             return new Vector2(right, bottom);
         }
 
-        public static bool IsVisible(this RectTransform rt, out bool? extent) {
+        public static bool IsVisible(this RectTransform rt, out bool? fully) {
             var screen = new Vector2(Screen.width, Screen.height);
 
             bool IsPointInside(Vector2 point){
@@ -61,10 +81,10 @@ namespace Adrenak.UPF {
             }
 
             var points = new Vector2[]{
-                rt.GetTopRight(),
                 rt.GetTopLeft(),
-                rt.GetBottomLeft(),
-                rt.GetBottomRight()
+                rt.GetTopRight(),
+                rt.GetBottomRight(),
+                rt.GetBottomLeft()
             };
 
             int count = 0;
@@ -72,12 +92,27 @@ namespace Adrenak.UPF {
                 count += IsPointInside(point) ? 1 : 0;
             
             if(count == 0){
-                extent = null;
+                fully = null;
                 return false;
             }
 
-            extent = count == 4;
+            fully = count == 4;
             return true;
+        }
+
+        public static void EnsureKey<T, K>(this Dictionary<T, K> dict, T t, K k){
+            if (!dict.ContainsKey(t))
+                dict.Add(t, k);
+        }
+
+        public static void EnsureExists<T>(this List<T> list, T t){
+            if (!list.Contains(t))
+                list.Add(t);
+        }
+
+        public static void EnsureDoesntExists<T>(this List<T> list, T t){
+            if (list.Contains(t))
+                list.Remove(t);
         }
     }
 }

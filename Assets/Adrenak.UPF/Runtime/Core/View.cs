@@ -5,52 +5,83 @@ namespace Adrenak.UPF {
     [Serializable]
     public abstract class View<TViewModel> : View where TViewModel : ViewModel {
         public event EventHandler<TViewModel> OnViewModelSet;
+        public event EventHandler<string> OnViewModelModified;
         [SerializeField] bool refreshOnStart = true;
 
-        [SerializeField] TViewModel _vm;
+        [SerializeField] TViewModel vm;
         public TViewModel ViewModel {
-            get => _vm;
+            get => vm;
             set {
-                _vm = value ?? throw new ArgumentNullException(nameof(ViewModel));
-                Refresh();
-                OnViewModelSet?.Invoke(this, _vm);
-                _vm.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
+                vm = value ?? throw new ArgumentNullException(nameof(ViewModel));
+
+                vm.PropertyChanged += (sender, e) => {
+                    HandleViewModelMoficiation(e.PropertyName);
+                    OnViewModelModified?.Invoke(this, e.PropertyName);
+                };
+                OnViewModelSet?.Invoke(this, vm);                
+                HandleViewModelSet();
             }
         }
 
         void Awake() {
             InitializeView();
-            _vm.PropertyChanged += (sender, e) => ObserveModel(e.PropertyName);
-
-            if(refreshOnStart)
-                Refresh();
+            vm.PropertyChanged += (sender, e) => {
+                HandleViewModelMoficiation(e.PropertyName);
+                OnViewModelModified?.Invoke(this, e.PropertyName);
+            };
             ObserveView();
+
+            if (refreshOnStart)
+                HandleViewModelSet();
         }
 
         protected abstract void InitializeView();
-        protected abstract void Refresh();
+        protected abstract void HandleViewModelSet();
         protected abstract void ObserveView();
-        protected abstract void ObserveModel(string propertyName);
+        protected abstract void HandleViewModelMoficiation(string propertyName);
     }
 
     [Serializable]
     public class View : BindableBehaviour {
+        public event EventHandler<Visibility> OnVisibilityChanged;
         public event EventHandler OnViewDestroyed;
 
-        public View GetSubView(string subViewName) {
-            for (int i = 0; i < transform.childCount; i++) {
-                var child = transform.GetChild(i);
-                if (child.gameObject.name.Equals(subViewName)) {
-                    var view = child.GetComponent<View>();
-                    if (view != null)
-                        return view;
-                }
+        public Visibility CurrentVisibility { get; private set; } = Visibility.None;
+
+        RectTransform rt;
+        RectTransform RT {
+            get {
+                if (rt == null)
+                    rt = GetComponent<RectTransform>();
+                return rt;
             }
-            throw new Exception($"No GameObject named {subViewName} with View component was found under {gameObject.name}");
+        }
+
+        void Start() {
+            CurrentVisibility = GetVisibility();
         }
 
         void OnDestroy() {
             OnViewDestroyed?.Invoke(this, EventArgs.Empty);
+        }
+
+        void Update() {
+            UpdateVisibility();
+        }
+
+        void UpdateVisibility() {
+            var visibility = GetVisibility();
+            if (CurrentVisibility == visibility) return;
+
+            CurrentVisibility = visibility;
+            OnVisibilityChanged?.Invoke(this, CurrentVisibility);
+        }
+
+        Visibility GetVisibility() {
+            if (RT.IsVisible(out bool? fully))
+                return fully.Value ? Visibility.None : Visibility.Partial;
+            else
+                return Visibility.Full;
         }
     }
 }

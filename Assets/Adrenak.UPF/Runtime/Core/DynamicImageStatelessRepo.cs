@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     /// <summary>
-    /// This isn't a cache, it just 
+    /// This isn't a cache, it just downloads downloads the image every time
     /// </summary>
     public class DynamicImageStatelessRepo : DynamicImageRepository {
         public override Task Init(object obj = null) {

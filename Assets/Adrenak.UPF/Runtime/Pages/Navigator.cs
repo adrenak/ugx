@@ -12,7 +12,7 @@ namespace Adrenak.UPF {
         public NavigationStack Stack => stack;
 #pragma warning restore 0649        
 
-        void Start() {
+        void Awake() {
             if (rootPage && useRootPage)
                 Push(rootPage);
         }
