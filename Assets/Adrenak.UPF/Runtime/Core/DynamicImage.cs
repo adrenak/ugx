@@ -39,10 +39,10 @@ namespace Adrenak.UPF {
 
         public Source source = Source.URL;
 
-        Compression oldCompression;
+        Compression oldCompression = Compression.None;
         public Compression compression = Compression.LowQuality;
 
-        string oldPath;
+        string oldPath = string.Empty;
         public string path = string.Empty;
 
         public bool loadOnStart = true;
@@ -58,6 +58,8 @@ namespace Adrenak.UPF {
 
         public Visibility CurrentVisibility { get; private set; } = Visibility.None;
 
+        int age = 0;
+
         protected override void Start() {
             rt = GetComponent<RectTransform>();
 
@@ -71,6 +73,7 @@ namespace Adrenak.UPF {
             if (oldPath.Equals(path) && oldCompression.Equals(oldCompression)) return;
 
             Repo.Free(oldPath, oldCompression, this);
+            sprite = null;
 
             switch (source) {
                 case Source.Resource:
@@ -112,6 +115,9 @@ namespace Adrenak.UPF {
         }
 
         void Update() {
+            age++;
+            if (age <= 1) return;
+
             var visibility = GetVisibility();
             if (CurrentVisibility != visibility) {
                 if (CurrentVisibility == Visibility.None && visibility != Visibility.None)

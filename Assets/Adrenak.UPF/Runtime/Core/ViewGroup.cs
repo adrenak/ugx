@@ -9,7 +9,7 @@ namespace Adrenak.UPF {
     public class ViewGroup<TModel, TView> where TModel : ViewModel where TView : View<TModel> {
         public Transform Container { get; private set; }
         public TView ViewTemplate { get; set; }
-        public ViewModelGroup<TModel> ViewModelGroup { get; private set; }
+        public ViewModelGroup<TModel> ViewModelGroup { get; private set; } = new ViewModelGroup<TModel>();
 
         readonly List<TView> instantiated = new List<TView>();
 
@@ -17,7 +17,6 @@ namespace Adrenak.UPF {
             ViewTemplate = viewTemplate;
             Container = container;
 
-            ViewModelGroup = new ViewModelGroup<TModel>();
             ViewModelGroup.ViewModels.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:

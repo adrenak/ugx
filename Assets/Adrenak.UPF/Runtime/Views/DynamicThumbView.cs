@@ -26,7 +26,6 @@ namespace Adrenak.UPF {
             text.text = ViewModel.Text;
             image.source = DynamicImage.Source.URL;
             image.path = ViewModel.ImageURL;
-            image.Refresh();
         }
 
         protected override void HandleViewModelMoficiation(string propertyName) {
