@@ -14,16 +14,16 @@ namespace Adrenak.UPF {
 #pragma warning disable 0649
 
         protected override void InitializeView() {
-            Refresh();
+            HandleViewModelSet();
         }
 
-        protected override void Refresh() {
+        protected override void HandleViewModelSet() {
             text.text = ViewModel.Text;
             image.sprite = ViewModel.Sprite;
         }
 
-        protected override void ObserveModel(string propertyName) {
-            Refresh();
+        protected override void HandleViewModelMoficiation(string propertyName) {
+            HandleViewModelSet();
         }
 
         protected override void ObserveView() { }

@@ -9,12 +9,17 @@ using System.Linq;
 
 namespace Adrenak.UPF {
     public class DynamicImageInMemoryRepo : DynamicImageRepository {
-        class CachingKey {
+        class Key {
             public string path;
             public DynamicImage.Compression compression;
 
+            public Key(string path, DynamicImage.Compression compression) {
+                this.path = path;
+                this.compression = compression;
+            }
+            #region OVERRIDES
             public override bool Equals(object obj) {
-                return obj is CachingKey key &&
+                return obj is Key key &&
                        path == key.path &&
                        compression == key.compression;
             }
@@ -25,6 +30,7 @@ namespace Adrenak.UPF {
                 hashCode = hashCode * -1521134295 + compression.GetHashCode();
                 return hashCode;
             }
+            #endregion
         }
 
         class Request {
@@ -37,57 +43,54 @@ namespace Adrenak.UPF {
             }
         }
 
-        Dictionary<CachingKey, List<DynamicImage>> instances = new Dictionary<CachingKey, List<DynamicImage>>();
-        Dictionary<CachingKey, Texture2D> resources = new Dictionary<CachingKey, Texture2D>();
-        Dictionary<CachingKey, List<Request>> pendingRequests = new Dictionary<CachingKey, List<Request>>();
+        Dictionary<Key, List<DynamicImage>> instances = new Dictionary<Key, List<DynamicImage>>();
+        Dictionary<Key, Texture2D> resources = new Dictionary<Key, Texture2D>();
+        Dictionary<Key, List<Request>> requests = new Dictionary<Key, List<Request>>();
+        List<Key> unused = new List<Key>();
 
-        /// <summary>
-        /// <see cref="obj"/> is not used
-        /// </summary>
+        int maxResourceCount;
+
+        public DynamicImageInMemoryRepo(int maxCount) {
+            maxResourceCount = maxCount;
+        }
+
         public override Task Init(object obj = null) {
             return Task.CompletedTask;
         }
 
         public override void Get(string location, DynamicImage.Compression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
-            var cachingKey = new CachingKey { path = location, compression = compression };
+            var key = new Key(location, compression);
 
-            if (resources.Keys.Contains(cachingKey)) {
-                var tex = resources[cachingKey];
+            if (resources.Keys.Contains(key)) {
+                var tex = resources[key];
                 onSuccess?.Invoke(tex);
 
-                if (!instances[cachingKey].Contains(instance))
-                    instances[cachingKey].Add(instance);
-
+                instances[key].EnsureExists(instance);
+                unused.EnsureDoesntExists(key);
                 return;
             }
 
-            if(!pendingRequests.ContainsKey(cachingKey))
-                pendingRequests.Add(cachingKey, new List<Request>());
             var request = new Request(onSuccess, onFailure);
-            pendingRequests[cachingKey].Add(request);
-
-            if (pendingRequests[cachingKey].Count > 1) {
+            requests.EnsureKey(key, new List<Request>() { request });
+            if (requests[key].Count > 1)
                 return;
-            }
 
-            // If the key requested is new, we need to fetch the texture,
-            // add it to the cache, and start a new instance entry
-            Runnable.Run(DownloadSpriteCo(location, compression,
+            DownloadSprite(location, compression,
                 result => {
-                    resources.Add(cachingKey, result);
-                    instances.Add(cachingKey, new List<DynamicImage> { instance });
+                    resources.Add(key, result);
+                    instances.Add(key, new List<DynamicImage> { instance });
 
-                    foreach(var req in pendingRequests[cachingKey])
+                    foreach (var req in requests[key])
                         req.onSuccess?.Invoke(result);
+                    requests[key].Remove(request);
 
-                    pendingRequests[cachingKey].Remove(request);
+                    unused.EnsureDoesntExists(key);
                 },
                 error => {
-                    foreach (var req in pendingRequests[cachingKey])
-                        req.onFailure?.Invoke(error);
-                    pendingRequests[cachingKey].Remove(request);
+                    requests[key].ForEach(x => x.onFailure?.Invoke(error));
+                    requests[key].Remove(request);
                 }
-            ));
+            );
         }
 
         public override Task<Texture2D> Get(string location, DynamicImage.Compression compression, DynamicImage instance) {
@@ -101,26 +104,27 @@ namespace Adrenak.UPF {
 
         public override void Free(string location, DynamicImage.Compression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure) {
             try {
-                var cachingKey = new CachingKey { path = location, compression = compression };
+                var key = new Key(location, compression);
 
                 for (int i = 0; i < instances.Keys.Count; i++) {
-                    var key = instances.Keys.ToList()[i];
+                    var k = instances.Keys.ToList()[i];
 
-                    if (key.Equals(cachingKey)) {
+                    if (k.Equals(key)) {
                         // Find the matching key and remove the instance
-                        instances[key].Remove(instance);
+                        instances[k].Remove(instance);
 
-                        // If after removing the instance, the instance count is 0
-                        // then we destroy the texture associated with the key
-                        // and basically go back to as if that texture was never requested.
-                        if (instances[key].Count <= 0) {
-                            MonoBehaviour.Destroy(resources[key]);
-                            resources.Remove(key);
+                        if (instances[k].Count <= 0) {
+                            unused.Add(k);
 
-                            instances[key].Clear();
-                            instances.Remove(key);
+                            while (resources.Count > maxResourceCount && unused.Count > 0) {
+                                var oldestUnused = unused[0];
+                                MonoBehaviour.Destroy(resources[oldestUnused]);
+                                resources.Remove(oldestUnused);
 
-                            break;
+                                instances[oldestUnused].Clear();
+                                instances.Remove(oldestUnused);
+                                unused.RemoveAt(0);
+                            }
                         }
                     }
                 }

@@ -47,14 +47,28 @@ namespace Adrenak.UPF {
 
         public bool loadOnStart = true;
 
+        RectTransform rt;
+        RectTransform RT {
+            get {
+                if (rt == null)
+                    rt = GetComponent<RectTransform>();
+                return rt;
+            }
+        }
+
+        public Visibility CurrentVisibility { get; private set; } = Visibility.None;
+
         protected override void Start() {
-            if (loadOnStart)
+            rt = GetComponent<RectTransform>();
+
+            if (loadOnStart && Application.isPlaying)
                 Refresh();
         }
 
         [ContextMenu("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying) return;
+            if (oldPath.Equals(path) && oldCompression.Equals(oldCompression)) return;
 
             Repo.Free(oldPath, oldCompression, this);
 
@@ -70,7 +84,8 @@ namespace Adrenak.UPF {
                         Debug.LogError($"Not Resource found at {path}");
                         break;
                     }
-                    SetSprite(resourceSprite);
+
+                    sprite = resourceSprite;
                     break;
 
                 case Source.URL:
@@ -82,7 +97,7 @@ namespace Adrenak.UPF {
                     try {
                         Repo.Get(
                             path, compression, this,
-                            result => SetSprite(result.ToSprite()),
+                            result => sprite = result.ToSprite(),
                             error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
                         );
                     }
@@ -96,8 +111,23 @@ namespace Adrenak.UPF {
             oldCompression = compression;
         }
 
-        void SetSprite(Sprite s) {
-            sprite = s;
+        void Update() {
+            var visibility = GetVisibility();
+            if (CurrentVisibility != visibility) {
+                if (CurrentVisibility == Visibility.None && visibility != Visibility.None)
+                    Refresh();
+                else if(CurrentVisibility != Visibility.None && visibility == Visibility.None)
+                    Repo.Free(path, compression, this);
+
+                CurrentVisibility = visibility;
+            }
+        }
+
+        Visibility GetVisibility() {
+            if (RT.IsVisible(out bool? fully))
+                return fully.Value ? Visibility.Full : Visibility.Partial;
+            else
+                return Visibility.None;
         }
 
         protected override void OnDestroy() {

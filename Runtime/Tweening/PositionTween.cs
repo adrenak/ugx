@@ -9,7 +9,7 @@ namespace Adrenak.UPF {
             private set => duration = value;
         }
 
-        [SerializeField] float delay;
+        [SerializeField] float delay = 0;
         public float Delay {
             get => delay;
             private set => delay = value;
@@ -26,7 +26,7 @@ namespace Adrenak.UPF {
             get => loop;
             private set => loop = value;
         }
-        
+
         public PositionTween(float duration) {
             Duration = duration;
         }
@@ -36,12 +36,12 @@ namespace Adrenak.UPF {
             return this;
         }
 
-        public PositionTween SetCurve(CurveType curve){
+        public PositionTween SetCurve(CurveType curve) {
             Curve = curve;
             return this;
         }
 
-        public PositionTween SetLoop(LoopType loop){
+        public PositionTween SetLoop(LoopType loop) {
             Loop = loop;
             return this;
         }

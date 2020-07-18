@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 
 namespace Adrenak.UPF {
     public class ViewModelGroup<T> where T : ViewModel {
@@ -10,7 +9,11 @@ namespace Adrenak.UPF {
 
         public Action<T>[] Subscribers { get; set; }
         public Action<T> PrimarySubscriber {
-            get => Subscribers[0];
+            get {
+                if(Subscribers != null && Subscribers.Length > 0)
+                    return Subscribers[0];
+                return null;
+            }
             set {
                 if (Subscribers == null)
                     Subscribers = new Action<T>[] { value };
@@ -20,7 +23,11 @@ namespace Adrenak.UPF {
         }
         public Action<T>[] Unsubscribers { get; set; }
         public Action<T> PrimaryUnsubscriber {
-            get => Unsubscribers[0];
+            get {
+                if (Unsubscribers != null && Unsubscribers.Length > 0)
+                    return Unsubscribers[0];
+                return null;
+            }
             set {
                 if (Unsubscribers == null)
                     Unsubscribers = new Action<T>[] { value };

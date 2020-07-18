@@ -50,7 +50,6 @@ namespace Adrenak.UPF {
         #region TWEENING
         // ================================================
         // OPACITY TWEENING
-
         async public void FadeInAndForget() => await FadeIn();
         async public Task FadeIn() {
             CG.alpha = 0;
