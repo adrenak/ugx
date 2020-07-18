@@ -77,18 +77,22 @@ namespace Adrenak.UPF {
 
             DownloadSprite(location, compression,
                 result => {
-                    resources.Add(key, result);
-                    instances.Add(key, new List<DynamicImage> { instance });
+                    resources.EnsureKey(key, result);
+                    instances.EnsureKey(key, new List<DynamicImage>());
+                    instances[key].Add(instance);
 
                     foreach (var req in requests[key])
                         req.onSuccess?.Invoke(result);
                     requests[key].Remove(request);
 
                     unused.EnsureDoesntExists(key);
+
+                    onSuccess?.Invoke(result);
                 },
                 error => {
                     requests[key].ForEach(x => x.onFailure?.Invoke(error));
                     requests[key].Remove(request);
+                    onFailure?.Invoke(error);
                 }
             );
         }
