@@ -73,7 +73,6 @@ namespace Adrenak.UPF {
             if (oldPath.Equals(path) && oldCompression.Equals(oldCompression)) return;
 
             Repo.Free(oldPath, oldCompression, this);
-            sprite = null;
 
             switch (source) {
                 case Source.Resource:
