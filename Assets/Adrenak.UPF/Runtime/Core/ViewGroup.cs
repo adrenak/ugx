@@ -7,14 +7,14 @@ using System.Collections.ObjectModel;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public class ViewGroup<TModel, TView> where TModel : ViewModel where TView : View<TModel> {
+    public class ViewGroup<TModel> where TModel : ViewModel {
         public Transform Container { get; private set; }
-        public TView ViewTemplate { get; set; }
+        public View<TModel> ViewTemplate { get; set; }
         public ObservableCollection<TModel> ViewModels { get; private set; } = new ObservableCollection<TModel>();
 
-        readonly List<TView> instantiated = new List<TView>();
+        readonly List<View<TModel>> instantiated = new List<View<TModel>>();
 
-        public ViewGroup(Transform container, TView viewTemplate = null) {
+        public ViewGroup(Transform container, View<TModel> viewTemplate = null) {
             ViewTemplate = viewTemplate;
             Container = container;
 
