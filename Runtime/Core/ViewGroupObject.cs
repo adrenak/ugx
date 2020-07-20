@@ -13,8 +13,8 @@ namespace Adrenak.UPF {
 
         void Start() {
             ViewGroup = new ViewGroup<TModel, TView>(container, template);
-            ViewGroup.ViewModelGroup.ViewModels.Clear();
-            ViewGroup.ViewModelGroup.ViewModels.AddRange(models);
+            ViewGroup.ViewModels.Clear();
+            ViewGroup.ViewModels.AddRange(models);
         }
     }
 }

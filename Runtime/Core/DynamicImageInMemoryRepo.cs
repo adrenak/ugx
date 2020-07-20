@@ -46,8 +46,6 @@ namespace Adrenak.UPF {
         Dictionary<Key, List<DynamicImage>> instances = new Dictionary<Key, List<DynamicImage>>();
         Dictionary<Key, Texture2D> resources = new Dictionary<Key, Texture2D>();
         Dictionary<Key, List<Request>> requests = new Dictionary<Key, List<Request>>();
-        List<Key> unused = new List<Key>();
-
         int maxResourceCount;
 
         public DynamicImageInMemoryRepo(int maxCount) {
@@ -62,16 +60,16 @@ namespace Adrenak.UPF {
             var key = new Key(location, compression);
 
             if (resources.Keys.Contains(key)) {
+                instances[key].EnsureExists(instance);
+
                 var tex = resources[key];
                 onSuccess?.Invoke(tex);
-
-                instances[key].EnsureExists(instance);
-                unused.EnsureDoesntExists(key);
                 return;
             }
 
             var request = new Request(onSuccess, onFailure);
-            requests.EnsureKey(key, new List<Request>() { request });
+            requests.EnsureKey(key, new List<Request>());
+            requests[key].Add(request);
             if (requests[key].Count > 1)
                 return;
 
@@ -84,8 +82,6 @@ namespace Adrenak.UPF {
                     foreach (var req in requests[key])
                         req.onSuccess?.Invoke(result);
                     requests[key].Remove(request);
-
-                    unused.EnsureDoesntExists(key);
 
                     onSuccess?.Invoke(result);
                 },
@@ -117,19 +113,20 @@ namespace Adrenak.UPF {
                         // Find the matching key and remove the instance
                         instances[k].Remove(instance);
 
-                        if (instances[k].Count <= 0) {
-                            unused.Add(k);
+                        //if (instances[k].Count <= 0) {
+                            var unusedKeys = instances.Where(x => x.Value.Count <= 0).Select(x => x.Key).ToList();
 
-                            while (resources.Count > maxResourceCount && unused.Count > 0) {
-                                var oldestUnused = unused[0];
-                                MonoBehaviour.Destroy(resources[oldestUnused]);
-                                resources.Remove(oldestUnused);
-
+                            while (resources.Count > maxResourceCount && 
+                            unusedKeys.Count > 0) {
+                                //&& unused.Count > 0) {
+                                var oldestUnused = unusedKeys[0];
                                 instances[oldestUnused].Clear();
                                 instances.Remove(oldestUnused);
-                                unused.RemoveAt(0);
+
+                                MonoBehaviour.Destroy(resources[oldestUnused]);
+                                resources.Remove(oldestUnused);
                             }
-                        }
+                        //}
                     }
                 }
                 onSuccess?.Invoke();
