@@ -13,6 +13,7 @@ namespace Adrenak.UPF {
 #pragma warning restore 0649
 
         async public Task<bool> Show(string header, string body, string positive, string negative) {
+            IsOpen = true;
             onPopupOpen?.Invoke();
 
             headerDisplay.text = header;
@@ -28,6 +29,7 @@ namespace Adrenak.UPF {
                 await Task.Delay(100);
 
             onPopupClose?.Invoke();
+            IsOpen = false;
             return response.Value;
         }
 

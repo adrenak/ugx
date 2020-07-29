@@ -22,7 +22,7 @@ namespace Adrenak.UPF {
             image.sprite = ViewModel.Sprite;
         }
 
-        protected override void HandleViewModelMoficiation(string propertyName) {
+        protected override void HandleViewModelModification(string propertyName) {
             HandleViewModelSet();
         }
 

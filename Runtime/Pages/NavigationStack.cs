@@ -3,6 +3,7 @@ using UnityEngine;
 using Adrenak.Unex;
 using NaughtyAttributes;
 using System;
+using System.Linq.Expressions;
 
 namespace Adrenak.UPF {
     [Serializable]
@@ -24,37 +25,27 @@ namespace Adrenak.UPF {
                 return;
             }
 
-            // If the current pointer was in the middle
-            // and we try to open the last page again, we
-            // simply set the last page to current
-            if (IsLast(view)) {
-                if (IsMidHistory)
-                    SetAsCurrent(history.Last());
-                else
-                    return;
+            if (history.Last() == view)
+                return;
+
+            if (history.Count > 1 && history.FromLast(1) == view) {
+                history.RemoveAt(history.Count - 1);
+                SetAsCurrent(history.Last());
+                return;
             }
-            else {
-                // If we're not repushing the last view and we're 
-                // mid history, we "slice" the history and add the 
-                // view to that, making it the last element of history
-                // and then we set it as current
-                if (IsMidHistory) {
-                    history = history.GetRange(0, currentIndex + 1);
-                    history.Add(view);
-                    SetAsCurrent(view);
-                }
-                // If we're not repushing the last view and we're 
-                // at the last view, we simply add it and make it current
-                else {
-                    history.Add(view);
-                    SetAsCurrent(view);
-                }
-            }
+
+            history.Add(view);
+            SetAsCurrent(view);
         }
 
         public bool Pop() {
-            currentIndex--;
-            return ValidateMove();
+            if (history.Count > 1) {
+                history.RemoveAt(history.Count - 1);
+                SetAsCurrent(history.Last());
+            }
+            return true;
+            //currentIndex--;
+            //return ValidateMove();
         }
 
         public bool Back() {

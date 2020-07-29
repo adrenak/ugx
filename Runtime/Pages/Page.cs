@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Events;
 
 using NaughtyAttributes;
+using Adrenak.Unex;
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace Adrenak.UPF {
     [Serializable]
@@ -22,37 +26,57 @@ namespace Adrenak.UPF {
     }
 
     [Serializable]
-    public class Page : BindableBehaviour {
+    public class Page : View {
 #pragma warning disable 0649
-        [SerializeField] UnityEvent onPageOpen;
-        [SerializeField] UnityEvent onPageClose;
-        [SerializeField] UnityEvent onPressBack;
+        public UnityEvent onPageOpen;
+        public UnityEvent onPageClose;
+        public UnityEvent onPressBack;
 
         [SerializeField] protected Navigator navigator;
         [ReadOnly] [SerializeField] bool isOpen;
         public bool IsOpen => isOpen;
 #pragma warning restore 0649
 
-        public void OpenPage() {
-            isOpen = true;
+        bool isOpening, isClosing;
+
+        public void OpenPage(bool silently = false) {
+            if (isOpen || isOpening) return;
+
+            isOpening = true;
+            Dispatcher.Enqueue(() => {
+                isOpen = true;
+                isOpening = false;
+            });
+
             OnPageOpen();
-            onPageOpen?.Invoke();
+            if (!silently)
+                onPageOpen?.Invoke();
         }
 
-        public void ClosePage() {
-            isOpen = false;
+        public void ClosePage(bool silently = false) {
+            if (!isOpen || isClosing) return;
+
+            isClosing = true;
+            Dispatcher.Enqueue(() => {
+                isOpen = false;
+                isClosing = false;
+            });
+
             OnPageClose();
-            onPageClose?.Invoke();
+            if (!silently)
+                onPageClose?.Invoke();
         }
 
         void Update() {
+            OnPageUpdate();
             if (Input.GetKeyUp(KeyCode.Escape) && IsOpen) {
+                onPressBack?.Invoke();
                 OnPressBack();
-                onPressBack.Invoke();
             }
         }
 
         protected virtual void OnPageOpen() { }
+        protected virtual void OnPageUpdate() { }
         protected virtual void OnPageClose() { }
         protected virtual void OnPressBack() { }
     }

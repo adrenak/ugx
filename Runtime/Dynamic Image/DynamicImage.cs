@@ -4,12 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Adrenak.Unex;
+using UnityEngine.Events;
 
 namespace Adrenak.UPF {
+    public enum Texture2DCompression {
+        None,
+        HighQuality,
+        LowQuality
+    }
+
     [Serializable]
     public class DynamicImage : Image {
         // Ambient context dependency pattern
         static DynamicImageRepository repo;
+        public static bool RepoLocked => repo != null;
         public static DynamicImageRepository Repo {
             get {
                 if (repo == null)
@@ -21,7 +29,8 @@ namespace Adrenak.UPF {
                     throw new Exception("DynamicImage.Cache can only be set once and before any get calls");
 
                 if (value == null)
-                    throw new Exception("Can not set Cache to null!");
+                    throw new Exception("DynamicImage.Cache cannot set Cache to null!");
+
                 repo = value;
             }
         }
@@ -31,16 +40,13 @@ namespace Adrenak.UPF {
             URL
         }
 
-        public enum Compression {
-            None,
-            HighQuality,
-            LowQuality
-        }
+        public UnityEvent onSpriteSet;
+        public UnityEvent onSpriteRemoved;
 
         public Source source = Source.URL;
 
-        Compression oldCompression = Compression.None;
-        public Compression compression = Compression.LowQuality;
+        Texture2DCompression oldCompression = Texture2DCompression.None;
+        public Texture2DCompression compression = Texture2DCompression.LowQuality;
 
         string oldPath = string.Empty;
         public string path = string.Empty;
@@ -60,9 +66,12 @@ namespace Adrenak.UPF {
 
         int age = 0;
 
+        protected override void Awake() {
+            Clear();
+        }
+
         protected override void Start() {
             rt = GetComponent<RectTransform>();
-
             if (loadOnStart && Application.isPlaying)
                 Refresh();
         }
@@ -70,16 +79,13 @@ namespace Adrenak.UPF {
         [ContextMenu("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying) return;
-            if (oldPath.Equals(path) && oldCompression.Equals(oldCompression)) return;
 
             Repo.Free(oldPath, oldCompression, this);
 
             switch (source) {
                 case Source.Resource:
-                    if (string.IsNullOrWhiteSpace(path)) {
-                        Debug.LogWarning("Source path is null or whitespace");
+                    if (string.IsNullOrWhiteSpace(path))
                         break;
-                    }
 
                     var resourceSprite = Resources.Load<Sprite>(path);
                     if (resourceSprite == null) {
@@ -87,19 +93,17 @@ namespace Adrenak.UPF {
                         break;
                     }
 
-                    sprite = resourceSprite;
+                    SetSprite(resourceSprite);
                     break;
 
                 case Source.URL:
-                    if (string.IsNullOrWhiteSpace(path)) {
-                        Debug.LogWarning("Source path is null or whitespace");
+                    if (string.IsNullOrWhiteSpace(path))
                         break;
-                    }
 
                     try {
                         Repo.Get(
                             path, compression, this,
-                            result => sprite = result.ToSprite(),
+                            result => SetSprite(result.ToSprite()),
                             error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
                         );
                     }
@@ -121,10 +125,22 @@ namespace Adrenak.UPF {
             if (CurrentVisibility != visibility) {
                 if (CurrentVisibility == Visibility.None && visibility != Visibility.None)
                     Refresh();
-                else if(CurrentVisibility != Visibility.None && visibility == Visibility.None)
+                else if (CurrentVisibility != Visibility.None && visibility == Visibility.None)
                     Repo.Free(path, compression, this);
 
                 CurrentVisibility = visibility;
+            }
+        }
+
+        public void Clear() {
+            sprite = null;
+            onSpriteRemoved?.Invoke();
+        }
+
+        void SetSprite(Sprite s) {
+            if (s != null && !destroyed) {
+                sprite = s;
+                onSpriteSet?.Invoke();
             }
         }
 
@@ -135,9 +151,10 @@ namespace Adrenak.UPF {
                 return Visibility.None;
         }
 
+        bool destroyed = false;
         protected override void OnDestroy() {
+            destroyed = true;
             if (!Application.isPlaying) return;
-
             Repo.Free(path, compression, this);
         }
     }

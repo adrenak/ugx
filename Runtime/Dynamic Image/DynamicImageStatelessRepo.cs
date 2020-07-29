@@ -11,19 +11,19 @@ namespace Adrenak.UPF {
             return Task.CompletedTask;
         }
 
-        public override void Free(string location, DynamicImage.Compression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure) {
+        public override void Free(string location, Texture2DCompression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure) {
             // DynamicImageFaceCache does not free instances as it never stores them in the first place
         }
 
-        public override Task Free(string location, DynamicImage.Compression compression, DynamicImage instance) {
+        public override Task Free(string location, Texture2DCompression compression, DynamicImage instance) {
             return Task.CompletedTask;
         }
 
-        public override void Get(string location, DynamicImage.Compression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
-            DownloadSprite(location, compression, onSuccess, onFailure);
+        public override void Get(string location, Texture2DCompression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
+            Downloader.Download(location, compression, onSuccess, onFailure);
         }
 
-        public override Task<Texture2D> Get(string location, DynamicImage.Compression compression, DynamicImage instance) {
+        public override Task<Texture2D> Get(string location, Texture2DCompression compression, DynamicImage instance) {
             var source = new TaskCompletionSource<Texture2D>();
             Get(location, compression, instance,
                 result => source.SetResult(result),

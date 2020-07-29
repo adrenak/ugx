@@ -1,10 +1,16 @@
 ﻿using Adrenak.Unex;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
+using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Adrenak.UPF {
     public static class Extensions {
+        public static void SetColor(this Image image, Color color){
+            image.color = color;
+        }
+
         public static void AddRange<T>(this IList<T> destination, IList<T> source) {
             foreach (var element in source)
                 destination.Add(element);
@@ -100,7 +106,7 @@ namespace Adrenak.UPF {
             return true;
         }
 
-        public static void EnsureKey<T, K>(this Dictionary<T, K> dict, T t, K k){
+        public static void EnsureKey<T, K>(this IDictionary<T, K> dict, T t, K k){
             if (!dict.ContainsKey(t))
                 dict.Add(t, k);
         }
@@ -110,7 +116,7 @@ namespace Adrenak.UPF {
                 list.Add(t);
         }
 
-        public static void EnsureDoesntExists<T>(this List<T> list, T t){
+        public static void EnsureDoesntExist<T>(this List<T> list, T t){
             if (list.Contains(t))
                 list.Remove(t);
         }

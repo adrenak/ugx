@@ -26,9 +26,11 @@ namespace Adrenak.UPF {
             text.text = ViewModel.Text;
             image.source = DynamicImage.Source.URL;
             image.path = ViewModel.ImageURL;
+            if (image.CurrentVisibility != Visibility.None)
+                image.Refresh();
         }
 
-        protected override void HandleViewModelMoficiation(string propertyName) {
+        protected override void HandleViewModelModification(string propertyName) {
             HandleViewModelSet();
         }
 

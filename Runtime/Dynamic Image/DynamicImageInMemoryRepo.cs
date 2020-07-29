@@ -11,9 +11,9 @@ namespace Adrenak.UPF {
     public class DynamicImageInMemoryRepo : DynamicImageRepository {
         class Key {
             public string path;
-            public DynamicImage.Compression compression;
+            public Texture2DCompression compression;
 
-            public Key(string path, DynamicImage.Compression compression) {
+            public Key(string path, Texture2DCompression compression) {
                 this.path = path;
                 this.compression = compression;
             }
@@ -43,6 +43,7 @@ namespace Adrenak.UPF {
             }
         }
 
+        List<Key> unused = new List<Key>();
         Dictionary<Key, List<DynamicImage>> instances = new Dictionary<Key, List<DynamicImage>>();
         Dictionary<Key, Texture2D> resources = new Dictionary<Key, Texture2D>();
         Dictionary<Key, List<Request>> requests = new Dictionary<Key, List<Request>>();
@@ -56,10 +57,11 @@ namespace Adrenak.UPF {
             return Task.CompletedTask;
         }
 
-        public override void Get(string location, DynamicImage.Compression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
+        public override void Get(string location, Texture2DCompression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
             var key = new Key(location, compression);
 
             if (resources.Keys.Contains(key)) {
+                unused.EnsureDoesntExist(key);
                 instances[key].EnsureExists(instance);
 
                 var tex = resources[key];
@@ -73,27 +75,34 @@ namespace Adrenak.UPF {
             if (requests[key].Count > 1)
                 return;
 
-            DownloadSprite(location, compression,
+            Downloader.Download(location, compression,
                 result => {
+                    unused.EnsureDoesntExist(key);
                     resources.EnsureKey(key, result);
                     instances.EnsureKey(key, new List<DynamicImage>());
                     instances[key].Add(instance);
 
                     foreach (var req in requests[key])
                         req.onSuccess?.Invoke(result);
-                    requests[key].Remove(request);
 
-                    onSuccess?.Invoke(result);
+                    requests[key].Clear();
+                    requests.Remove(key);
+
+                    if (instance != null)
+                        onSuccess?.Invoke(result);
                 },
                 error => {
                     requests[key].ForEach(x => x.onFailure?.Invoke(error));
-                    requests[key].Remove(request);
-                    onFailure?.Invoke(error);
+                    requests[key].Clear();
+                    requests.Remove(key);
+
+                    if (instance != null)
+                        onFailure?.Invoke(error);
                 }
             );
         }
 
-        public override Task<Texture2D> Get(string location, DynamicImage.Compression compression, DynamicImage instance) {
+        public override Task<Texture2D> Get(string location, Texture2DCompression compression, DynamicImage instance) {
             var source = new TaskCompletionSource<Texture2D>();
             Get(location, compression, instance,
                 result => source.SetResult(result),
@@ -102,31 +111,30 @@ namespace Adrenak.UPF {
             return source.Task;
         }
 
-        public override void Free(string location, DynamicImage.Compression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure) {
+        public override void Free(string location, Texture2DCompression compression, DynamicImage instance, Action onSuccess, Action<Exception> onFailure) {
             try {
-                var key = new Key(location, compression);
+                var k = new Key(location, compression);
 
                 for (int i = 0; i < instances.Keys.Count; i++) {
-                    var k = instances.Keys.ToList()[i];
+                    var key = instances.Keys.ToList()[i];
 
-                    if (k.Equals(key)) {
-                        // Find the matching key and remove the instance
-                        instances[k].Remove(instance);
+                    if (key.Equals(k)) {
+                        instances[key].Remove(instance);
 
-                        //if (instances[k].Count <= 0) {
+                        if (instances[key].Count <= 0) {
+                            unused.EnsureExists(key);
+
                             var unusedKeys = instances.Where(x => x.Value.Count <= 0).Select(x => x.Key).ToList();
-
-                            while (resources.Count > maxResourceCount && 
-                            unusedKeys.Count > 0) {
-                                //&& unused.Count > 0) {
-                                var oldestUnused = unusedKeys[0];
+                            while (resources.Count > maxResourceCount && unusedKeys.Count > 0) {
+                                var oldestUnused = unused[0];
                                 instances[oldestUnused].Clear();
                                 instances.Remove(oldestUnused);
 
                                 MonoBehaviour.Destroy(resources[oldestUnused]);
                                 resources.Remove(oldestUnused);
+                                unused.EnsureDoesntExist(oldestUnused);
                             }
-                        //}
+                        }
                     }
                 }
                 onSuccess?.Invoke();
@@ -136,7 +144,7 @@ namespace Adrenak.UPF {
             }
         }
 
-        public override Task Free(string location, DynamicImage.Compression compression, DynamicImage instance) {
+        public override Task Free(string location, Texture2DCompression compression, DynamicImage instance) {
             var source = new TaskCompletionSource<bool>();
             Free(location, compression, instance,
                 () => source.SetResult(true),
