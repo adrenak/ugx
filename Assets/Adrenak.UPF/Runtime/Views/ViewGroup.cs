@@ -21,22 +21,16 @@ namespace Adrenak.UPF {
             ViewModels.CollectionChanged += (sender, args) => {
                 switch (args.Action) {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (var newItem in args.NewItems){
+                        foreach (var newItem in args.NewItems)
                             Instantiate(newItem as TModel);
-                            ViewModelInit?.Invoke(newItem as TModel);
-                        }
                         break;
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (var removedItem in args.OldItems){
+                        foreach (var removedItem in args.OldItems)
                             Destroy(removedItem as TModel);
-                            ViewModelDeinit?.Invoke(removedItem as TModel);
-                        }
                         break;
                     case NotifyCollectionChangedAction.Reset:
-                        foreach (var instance in instantiated){
+                        foreach (var instance in instantiated)
                             Destroy(instance.ViewModel);
-                            ViewModelDeinit?.Invoke(instance as TModel);
-                        }
                         break;
                 }
             };
@@ -58,12 +52,17 @@ namespace Adrenak.UPF {
             instance.hideFlags = HideFlags.DontSave;
             instance.ViewModel = t;
             instantiated.Add(instance);
+
+            ViewModelInit?.Invoke(t);
         }
 
         void Destroy(TModel t) {
-            foreach (var instance in instantiated)
-                if (instance != null && instance.ViewModel.Equals(t) && instance.gameObject != null)
+            foreach (var instance in instantiated){
+                if (instance != null && instance.ViewModel.Equals(t) && instance.gameObject != null){
+                    ViewModelDeinit?.Invoke(instance.ViewModel);
                     Object.Destroy(instance.gameObject);
+                }
+            }
         }
     }
 }

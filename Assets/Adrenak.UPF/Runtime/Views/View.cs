@@ -15,7 +15,7 @@ namespace Adrenak.UPF {
                 vm = value ?? throw new ArgumentNullException(nameof(ViewModel));
 
                 vm.PropertyChanged += (sender, e) => {
-                    HandleViewModelMoficiation(e.PropertyName);
+                    HandleViewModelModification(e.PropertyName);
                     OnViewModelModified?.Invoke(this, e.PropertyName);
                 };
                 OnViewModelSet?.Invoke(this, vm);                
@@ -26,7 +26,7 @@ namespace Adrenak.UPF {
         void Awake() {
             InitializeView();
             vm.PropertyChanged += (sender, e) => {
-                HandleViewModelMoficiation(e.PropertyName);
+                HandleViewModelModification(e.PropertyName);
                 OnViewModelModified?.Invoke(this, e.PropertyName);
             };
             ObserveView();
@@ -38,7 +38,7 @@ namespace Adrenak.UPF {
         protected abstract void InitializeView();
         protected abstract void HandleViewModelSet();
         protected abstract void ObserveView();
-        protected abstract void HandleViewModelMoficiation(string propertyName);
+        protected abstract void HandleViewModelModification(string propertyName);
     }
 
     [Serializable]
