@@ -1,3 +1,16 @@
+# [3.0.0](https://github.com/adrenak/upf/compare/v2.10.2...v3.0.0) (2020-07-29)
+
+
+### Features
+
+* Numerous features ([6902b27](https://github.com/adrenak/upf/commit/6902b27751d9f59b88ce6446521d231282eb6cfe))
+* ViewGroup class made more convenient by having only one generic ([35aae79](https://github.com/adrenak/upf/commit/35aae794021bfa01904f239466cba19685c5abd5))
+
+
+### BREAKING CHANGES
+
+* Several
+
 ## [2.10.2](https://github.com/adrenak/upf/compare/v2.10.1...v2.10.2) (2020-07-18)
 
 
