@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Events;
 
 using NaughtyAttributes;
 using Adrenak.Unex;
-using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
 
 namespace Adrenak.UPF {
     [Serializable]
@@ -28,15 +25,18 @@ namespace Adrenak.UPF {
     [Serializable]
     public class Page : View {
 #pragma warning disable 0649
-        public UnityEvent onPageOpen;
-        public UnityEvent onPageClose;
-        public UnityEvent onPressBack;
+        [Header("UNITY EVENTS")]
+        [SerializeField] bool showEvents;
+        [ShowIf("showEvents")] public UnityEvent onPageOpen;
+        [ShowIf("showEvents")] public UnityEvent onPageClose;
+        [ShowIf("showEvents")] public UnityEvent onPressBack;
 
+        [HorizontalLine(color:EColor.Blue)]
         [SerializeField] protected Navigator navigator;
         [ReadOnly] [SerializeField] bool isOpen;
-        public bool IsOpen => isOpen;
 #pragma warning restore 0649
 
+        public bool IsOpen => isOpen;
         bool isOpening, isClosing;
 
         public void OpenPage(bool silently = false) {
@@ -67,16 +67,22 @@ namespace Adrenak.UPF {
                 onPageClose?.Invoke();
         }
 
-        void Update() {
-            OnPageUpdate();
+        /// <summary>
+        /// If you're overriding this, make sure to call base.Update() in your subclass
+        /// </summary>
+        protected void Update() {
+            CheckBackPress();
+        }
+
+        void CheckBackPress(){
             if (Input.GetKeyUp(KeyCode.Escape) && IsOpen) {
+                navigator.Pop();
                 onPressBack?.Invoke();
                 OnPressBack();
             }
         }
 
         protected virtual void OnPageOpen() { }
-        protected virtual void OnPageUpdate() { }
         protected virtual void OnPageClose() { }
         protected virtual void OnPressBack() { }
     }
