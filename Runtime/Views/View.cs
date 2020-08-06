@@ -4,8 +4,8 @@ using UnityEngine;
 namespace Adrenak.UPF {
     [Serializable]
     public abstract class View<TViewModel> : View where TViewModel : ViewModel {
-        public event EventHandler<TViewModel> OnViewModelSet;
-        public event EventHandler<string> OnViewModelModified;
+        public event EventHandler<TViewModel> ViewModelSet;
+        public event EventHandler<string> ViewModelModified;
         [SerializeField] bool refreshOnStart = true;
 
         [SerializeField] TViewModel vm;
@@ -15,41 +15,40 @@ namespace Adrenak.UPF {
                 vm = value ?? throw new ArgumentNullException(nameof(ViewModel));
 
                 vm.PropertyChanged += (sender, e) => {
-                    HandleViewModelModification(e.PropertyName);
-                    OnViewModelModified?.Invoke(this, e.PropertyName);
+                    OnViewModelModified(e.PropertyName);
+                    ViewModelModified?.Invoke(this, e.PropertyName);
                 };
-                OnViewModelSet?.Invoke(this, vm);                
-                HandleViewModelSet();
+                ViewModelSet?.Invoke(this, vm);
+                OnViewModelSet();
             }
         }
 
         void Awake() {
-            InitializeView();
+            OnViewAwake();
             vm.PropertyChanged += (sender, e) => {
-                HandleViewModelModification(e.PropertyName);
-                OnViewModelModified?.Invoke(this, e.PropertyName);
+                OnViewModelModified(e.PropertyName);
+                ViewModelModified?.Invoke(this, e.PropertyName);
             };
-            ObserveView();
 
             if (refreshOnStart)
-                HandleViewModelSet();
+                OnViewModelSet();
         }
 
-        protected abstract void InitializeView();
-        protected abstract void HandleViewModelSet();
-        protected abstract void ObserveView();
-        protected abstract void HandleViewModelModification(string propertyName);
+        protected abstract void OnViewAwake();
+        protected abstract void OnViewModelSet();
+        protected abstract void OnViewModelModified(string propertyName);
     }
 
     [Serializable]
     public class View : BindableBehaviour {
-        public event EventHandler<Visibility> OnVisibilityChanged;
-        public event EventHandler OnViewDestroyed;
+        public event EventHandler<Visibility> VisibilityChanged;
+        public event EventHandler ViewDestroyed;
 
         public Visibility CurrentVisibility { get; private set; } = Visibility.None;
+        public bool IsDestroyed { get; private set; } = false;
 
         RectTransform rt;
-        RectTransform RT {
+        RectTransform RectTransform {
             get {
                 if (rt == null)
                     rt = GetComponent<RectTransform>();
@@ -62,7 +61,8 @@ namespace Adrenak.UPF {
         }
 
         void OnDestroy() {
-            OnViewDestroyed?.Invoke(this, EventArgs.Empty);
+            IsDestroyed = true;
+            ViewDestroyed?.Invoke(this, EventArgs.Empty);
         }
 
         void Update() {
@@ -74,11 +74,11 @@ namespace Adrenak.UPF {
             if (CurrentVisibility == visibility) return;
 
             CurrentVisibility = visibility;
-            OnVisibilityChanged?.Invoke(this, CurrentVisibility);
+            VisibilityChanged?.Invoke(this, CurrentVisibility);
         }
 
         Visibility GetVisibility() {
-            if (RT.IsVisible(out bool? fully))
+            if (RectTransform.IsVisible(out bool? fully))
                 return fully.Value ? Visibility.None : Visibility.Partial;
             else
                 return Visibility.Full;

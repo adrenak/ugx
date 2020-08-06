@@ -13,20 +13,18 @@ namespace Adrenak.UPF {
         [SerializeField] Image image;
 #pragma warning disable 0649
 
-        protected override void InitializeView() {
-            HandleViewModelSet();
+        protected override void OnViewAwake() {
+            OnViewModelSet();
         }
 
-        protected override void HandleViewModelSet() {
+        protected override void OnViewModelSet() {
             text.text = ViewModel.Text;
             image.sprite = ViewModel.Sprite;
         }
 
-        protected override void HandleViewModelModification(string propertyName) {
-            HandleViewModelSet();
+        protected override void OnViewModelModified(string propertyName) {
+            OnViewModelSet();
         }
-
-        protected override void ObserveView() { }
 
         public void OnPointerClick(PointerEventData eventData) {
             ViewModel.Click();

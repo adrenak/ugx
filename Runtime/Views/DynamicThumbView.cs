@@ -17,11 +17,11 @@ namespace Adrenak.UPF {
             ViewModel.Click();
         }
 
-        protected override void InitializeView() {
-            HandleViewModelSet();
+        protected override void OnViewAwake() {
+            OnViewModelSet();
         }
 
-        protected override void HandleViewModelSet() {
+        protected override void OnViewModelSet() {
             gameObject.name = ViewModel.Text;
             text.text = ViewModel.Text;
             image.source = DynamicImage.Source.URL;
@@ -30,12 +30,10 @@ namespace Adrenak.UPF {
                 image.Refresh();
         }
 
-        protected override void HandleViewModelModification(string propertyName) {
-            HandleViewModelSet();
+        protected override void OnViewModelModified(string propertyName) {
+            OnViewModelSet();
         }
-
-        protected override void ObserveView() { }
-
+        
         public void OnPointerExit(PointerEventData eventData) {
             onPointerExit.Invoke();
         }
