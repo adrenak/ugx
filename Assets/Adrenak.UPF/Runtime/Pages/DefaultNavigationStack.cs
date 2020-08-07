@@ -7,13 +7,13 @@ using System;
 namespace Adrenak.UPF {
     [Serializable]
     public class DefaultNavigationStack : INavigationStack {
-        [ReadOnly] [SerializeField] Page current = null;
-        public Page Current => current;
+        [ReadOnly] [SerializeField] View current = null;
+        public View Current => current;
 
-        [ReorderableList] [ReadOnly] [SerializeField] List<Page> history = new List<Page>();
-        public List<Page> History => history;
+        [ReorderableList] [ReadOnly] [SerializeField] List<View> history = new List<View>();
+        public List<View> History => history;
 
-        public void Push(Page page) {
+        public void Push(View page) {
             // First push
             if (history.Count == 0) {
                 history.Add(page);
@@ -44,7 +44,7 @@ namespace Adrenak.UPF {
             }
         }
 
-        void SetAsCurrent(Page page) {
+        void SetAsCurrent(View page) {
             page.OpenPage();
             current?.ClosePage();
             current = page;

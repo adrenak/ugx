@@ -17,10 +17,6 @@ namespace Adrenak.UPF {
             ViewModel.Click();
         }
 
-        protected override void OnViewAwake() {
-            OnViewModelSet();
-        }
-
         protected override void OnViewModelSet() {
             gameObject.name = ViewModel.Text;
             text.text = ViewModel.Text;
