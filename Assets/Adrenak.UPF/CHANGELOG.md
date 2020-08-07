@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/adrenak/upf/compare/v3.0.0...v4.0.0) (2020-08-07)
+
+
+### Features
+
+* Refactoring 1 ([e7d704d](https://github.com/adrenak/upf/commit/e7d704d9efcb5bfc38d763d7c47a4ac6356967a1))
+
+
+### BREAKING CHANGES
+
+* Cycle 4.x starts
+
 # [3.0.0](https://github.com/adrenak/upf/compare/v2.10.2...v3.0.0) (2020-07-29)
 
 
