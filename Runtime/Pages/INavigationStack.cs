@@ -2,8 +2,8 @@
 
 namespace Adrenak.UPF {
     public interface INavigationStack {
-        List<Page> History { get; }
-        void Push(Page page);
+        List<View> History { get; }
+        void Push(View page);
         void Pop();
     }
 }

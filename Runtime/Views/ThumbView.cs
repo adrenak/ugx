@@ -13,10 +13,6 @@ namespace Adrenak.UPF {
         [SerializeField] Image image;
 #pragma warning disable 0649
 
-        protected override void OnViewAwake() {
-            OnViewModelSet();
-        }
-
         protected override void OnViewModelSet() {
             text.text = ViewModel.Text;
             image.sprite = ViewModel.Sprite;

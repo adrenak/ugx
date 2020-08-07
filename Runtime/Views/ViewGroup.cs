@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using Object = UnityEngine.Object;
 using System.Collections.ObjectModel;
+using UnityEngine.Events;
 
 namespace Adrenak.UPF {
     [Serializable]
@@ -36,7 +37,7 @@ namespace Adrenak.UPF {
             };
         }
 
-        public Action<TModel> ViewModelInit, ViewModelDeinit;
+        public Action<TModel> ElementInit, ElementDeinit;
 
         void Instantiate(TModel t) {
             if (ViewTemplate == null)
@@ -53,13 +54,13 @@ namespace Adrenak.UPF {
             instance.ViewModel = t;
             instantiated.Add(instance);
 
-            ViewModelInit?.Invoke(t);
+            ElementInit?.Invoke(t);
         }
 
         void Destroy(TModel t) {
             foreach (var instance in instantiated){
                 if (instance != null && instance.ViewModel.Equals(t) && instance.gameObject != null){
-                    ViewModelDeinit?.Invoke(instance.ViewModel);
+                    ElementDeinit?.Invoke(instance.ViewModel);
                     Object.Destroy(instance.gameObject);
                 }
             }

@@ -9,8 +9,8 @@ namespace Adrenak.UPF {
         public UnityEvent onPop;
 
         [SerializeField] bool useRootPage;
-        [ShowIf("useRootPage")] [SerializeField] Page rootPage;
-        public Page Root => rootPage;
+        [ShowIf("useRootPage")] [SerializeField] View rootPage;
+        public View Root => rootPage;
 
         [SerializeField] INavigationStack stack = new DefaultNavigationStack();
         public INavigationStack Stack => stack;
@@ -21,7 +21,7 @@ namespace Adrenak.UPF {
                 Push(rootPage);
         }
 
-        public void Push(Page page) {
+        public void Push(View page) {
             stack.Push(page);
             onPush?.Invoke();
         }

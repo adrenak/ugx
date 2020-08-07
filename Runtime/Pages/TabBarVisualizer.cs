@@ -10,7 +10,7 @@ namespace Adrenak.UPF {
     public class TabBarVisualizer : MonoBehaviour {
         [Serializable]
         public class Entry {
-            public Page page;
+            public View page;
             public UnityEvent onOpen;
             public UnityEvent onClose;
         }
