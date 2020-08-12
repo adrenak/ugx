@@ -45,8 +45,8 @@ namespace Adrenak.UPF {
         }
 
         void SetAsCurrent(View page) {
-            page.OpenPage();
-            current?.ClosePage();
+            page.OpenView();
+            current?.CloseView();
             current = page;
         }
     }

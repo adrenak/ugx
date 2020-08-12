@@ -2,7 +2,7 @@
 
 namespace Adrenak.UPF {
     [Serializable]
-    public abstract class ViewModel : Bindable {
-        public string Identifier;
+    public abstract class ViewModel {
+        public string identifier = Guid.NewGuid().ToString().Replace("-", string.Empty);
     }
 }

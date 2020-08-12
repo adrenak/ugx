@@ -4,25 +4,23 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Adrenak.UPF {
-    public class ThumbView : View<ThumbViewModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
-        [SerializeField] UnityEvent onPointerEnter = null;
-        [SerializeField] UnityEvent onPointerExit = null;
+    public class IconView : View<IconViewModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 
 #pragma warning disable 0649
+        [SerializeField] UnityEvent onPointerEnter = null;
+        [SerializeField] UnityEvent onPointerExit = null;
+        [SerializeField] UnityEvent onPointerClick;
         [SerializeField] Text text;
         [SerializeField] Image image;
 #pragma warning disable 0649
 
         protected override void OnViewModelSet() {
-            text.text = ViewModel.Text;
-            image.sprite = ViewModel.Sprite;
-        }
-
-        protected override void OnViewModelModified(string propertyName) {
-            OnViewModelSet();
+            text.text = ViewModel.text;
+            image.sprite = ViewModel.sprite;
         }
 
         public void OnPointerClick(PointerEventData eventData) {
+            onPointerClick.Invoke();
             ViewModel.Click();
         }
 
