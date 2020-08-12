@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
 namespace Adrenak.UPF {
-    public class DynamicThumbView : View<DynamicThumbViewModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+    public class DIconView : View<DIconViewModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 #pragma warning disable 0649
         [SerializeField] UnityEvent onPointerEnter;
         [SerializeField] UnityEvent onPointerExit;
@@ -18,16 +18,12 @@ namespace Adrenak.UPF {
         }
 
         protected override void OnViewModelSet() {
-            gameObject.name = ViewModel.Text;
-            text.text = ViewModel.Text;
+            gameObject.name = ViewModel.text;
+            text.text = ViewModel.text;
             image.source = DynamicImage.Source.URL;
-            image.path = ViewModel.ImageURL;
+            image.path = ViewModel.imageURL;
             if (image.CurrentVisibility != Visibility.None)
                 image.Refresh();
-        }
-
-        protected override void OnViewModelModified(string propertyName) {
-            OnViewModelSet();
         }
         
         public void OnPointerExit(PointerEventData eventData) {
@@ -40,6 +36,7 @@ namespace Adrenak.UPF {
 
         public void OnPointerClick(PointerEventData eventData) {
             onPointerClick.Invoke();
+            ViewModel?.Click();
         }
     }
 }

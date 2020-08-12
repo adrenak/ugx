@@ -34,12 +34,12 @@ namespace Adrenak.UPF {
 
         void Appear(View view) {
             if (view.IsOpen) return;
-            view.OpenPage();
+            view.OpenView();
         }
 
         void Disappear(View view) {
             if (!view.IsOpen) return;
-            view.ClosePage();
+            view.CloseView();
         }
     }
 }

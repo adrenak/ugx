@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Adrenak.Unex;
 using UnityEngine;
 
-using Request = System.Collections.Generic.KeyValuePair<string, Adrenak.UPF.Texture2DCompression>;
-
 namespace Adrenak.UPF {
     public class ImageDownloader {
         class Request {
