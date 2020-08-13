@@ -4,7 +4,11 @@ using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     public abstract class PopupView : BindableBehaviour {
-        public bool IsOpen { get; protected set; }
+        [ReadOnly] [SerializeField] bool isOpen;
+        public bool IsOpen { 
+            get => isOpen;
+            protected set => isOpen = value; 
+        }
 
         [SerializeField] bool showEvents;
         [ShowIf("showEvents")] public UnityEvent onPopupOpen;
