@@ -2,16 +2,20 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]
     public class ViewGroup<TView, TModel> : MonoBehaviour, ICollection<TModel>, IList<TModel> where TModel : ViewModel where TView : View<TModel> {
         public Action<TModel> ElementInit, ElementDeinit;
 
+#pragma warning disable 0649
         public Transform container;
         public TView viewTemplate;
-        public List<TView> Instantiated { get; private set; } = new List<TView>();
+        [ReadOnly] [SerializeField] List<TModel> viewModels;
+#pragma warning restore 0649
 
+        public List<TView> Instantiated { get; private set; } = new List<TView>();
         public int Count => viewModels.Count;
         public bool IsReadOnly => false;
         public TModel this[int index] {
@@ -21,8 +25,6 @@ namespace Adrenak.UPF {
                 Instantiated[index].ViewModel = value;
             }
         }
-
-        [SerializeField] List<TModel> viewModels;
 
         TView Instantiate(TModel t) {
             if (viewTemplate == null)
