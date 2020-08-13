@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/adrenak/upf/compare/v4.1.0...v4.1.1) (2020-08-13)
+
+
+### Bug Fixes
+
+* History stack fixed ([0eb8b08](https://github.com/adrenak/upf/commit/0eb8b08f6d4691b6c6394c4a91ce5f015909e803))
+
 # [4.1.0](https://github.com/adrenak/upf/compare/v4.0.0...v4.1.0) (2020-08-13)
 
 
