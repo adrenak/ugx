@@ -1,13 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using Adrenak.Unex;
-using System.Collections;
 using System.Threading.Tasks;
 
 namespace Adrenak.UPF {
     public abstract class DynamicImageRepository {
-        int coroutineID = -1;
-
         public abstract Task Init(object obj = null);
 
         public abstract void Get(string location, Texture2DCompression compression, DynamicImage instance, Action<Texture2D> onSuccess, Action<Exception> onFailure);

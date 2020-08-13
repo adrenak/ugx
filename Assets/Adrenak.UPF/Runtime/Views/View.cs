@@ -9,7 +9,7 @@ namespace Adrenak.UPF {
     public abstract class View<TViewModel> : View where TViewModel : ViewModel {
         public event EventHandler<TViewModel> ViewModelSet;
 
-        [BoxGroup("Data")] [SerializeField] TViewModel viewModel;
+        [BoxGroup("---VIEW---")] [SerializeField] TViewModel viewModel;
         public TViewModel ViewModel {
             get => viewModel;
             set {
@@ -20,24 +20,21 @@ namespace Adrenak.UPF {
         }
 
         [Button]
-        public void Refresh() =>
-            OnViewModelSet();
+        public void Refresh() => OnViewModelSet();
+
+        [Button]
+        public void Clear() => ViewModel = default;
         
         protected abstract void OnViewModelSet();
     }
 
     [Serializable]
-    public class BlankViewModel : ViewModel { }
-
-    [Serializable]
     public class View : BindableBehaviour {
-        [BoxGroup("Events")] [SerializeField] bool showEvents;
-        [BoxGroup("Events")] [ShowIf("showEvents")] public UnityEvent onPageOpen;
-        [BoxGroup("Events")] [ShowIf("showEvents")] public UnityEvent onViewOpen;
-        [BoxGroup("Events")] [ShowIf("showEvents")] public UnityEvent onPageClose;
-        [BoxGroup("Events")] [ShowIf("showEvents")] public UnityEvent onViewClose;
-        [BoxGroup("Events")] [ShowIf("showEvents")] public UnityEvent onPressBack;
-        [BoxGroup("Events")] [ShowIf("showEvents")] public UnityEvent onViewDestroyed;
+        [BoxGroup("---VIEW---")] [SerializeField] bool showEvents;
+        [BoxGroup("---VIEW---")] [ShowIf("showEvents")] public UnityEvent onViewOpen;
+        [BoxGroup("---VIEW---")] [ShowIf("showEvents")] public UnityEvent onViewClose;
+        [BoxGroup("---VIEW---")] [ShowIf("showEvents")] public UnityEvent onPressBack;
+        [BoxGroup("---VIEW---")] [ShowIf("showEvents")] public UnityEvent onViewDestroyed;
         public UnityEvent<Visibility> onVisibilityChanged;
 
         public bool IsDestroyed { get; private set; } = false;
@@ -46,13 +43,11 @@ namespace Adrenak.UPF {
 
         public RectTransform RectTransform => rt ?? (rt = GetComponent<RectTransform>());
 
-        [BoxGroup("Navigation")] [SerializeField] protected Navigator navigator;
-        [ReadOnly] [BoxGroup("Navigation")] [SerializeField] bool isOpen;
+        [ReadOnly] [BoxGroup("---VIEW---")] [SerializeField] bool isOpen;
         
         RectTransform rt;
         bool isOpening, isClosing;
 
-        public void OpenPage(bool silently = false) => OpenView(silently);
         public void OpenView(bool silently = false) {
             if (isOpen || isOpening) return;
 
@@ -63,14 +58,10 @@ namespace Adrenak.UPF {
             });
 
             OnViewOpen();
-            OnPageOpen();
-            if (!silently){
-                onPageOpen?.Invoke();
+            if (!silently)
                 onViewOpen?.Invoke();
-            }
         }
 
-        public void ClosePage(bool silently = false) => CloseView(silently);
         public void CloseView(bool silently = false) {
             if (!isOpen || isClosing) return;
 
@@ -81,11 +72,8 @@ namespace Adrenak.UPF {
             });
 
             OnViewClose();
-            OnPageClose();
-            if (!silently){
-                onPageClose?.Invoke();
+            if (!silently)
                 onViewClose?.Invoke();
-            }
         }
 
         void Start() {
@@ -107,7 +95,6 @@ namespace Adrenak.UPF {
 
         void CheckBackPress() {
             if (Input.GetKeyUp(KeyCode.Escape) && IsOpen) {
-                navigator.Pop();
                 onPressBack?.Invoke();
                 OnPressBack();
             }
@@ -129,9 +116,7 @@ namespace Adrenak.UPF {
         }
 
         protected virtual void OnViewOpen() { }
-        protected virtual void OnPageOpen() { }
         protected virtual void OnViewClose() { }
-        protected virtual void OnPageClose() { }
         protected virtual void OnPressBack() { }
     }
 }

@@ -6,9 +6,12 @@ using UnityEngine.UI;
 
 namespace Adrenak.UPF {
     public class ToastView : PopupView {
+#pragma warning disable 0649
         [SerializeField] Text title;
         [SerializeField] Text description;
         [SerializeField] float delay;
+#pragma warning restore 0649
+
 
         CancellationTokenSource source;
 

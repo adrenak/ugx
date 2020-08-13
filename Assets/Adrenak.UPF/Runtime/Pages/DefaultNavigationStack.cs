@@ -1,46 +1,37 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using Adrenak.Unex;
-using NaughtyAttributes;
+﻿using Adrenak.Unex;
 using System;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public class DefaultNavigationStack : INavigationStack {
-        [ReadOnly] [SerializeField] View current = null;
-        public View Current => current;
-
-        [ReorderableList] [ReadOnly] [SerializeField] List<View> history = new List<View>();
-        public List<View> History => history;
-
-        public void Push(View page) {
+    public class DefaultNavigationStack : NavigationStack {
+        public override void Push(View page) {
             // First push
-            if (history.Count == 0) {
-                history.Add(page);
+            if (History.Count == 0) {
+                History.Add(page);
                 SetAsCurrent(page);
                 return;
             }
 
             // Repeat push
-            if (history.Last() == page)
+            if (History.Last().gameObject == page.gameObject)
                 return;
 
             // Alternate repeat push
-            if (history.Count > 1 && history.FromLast(1) == page) {
-                history.RemoveAt(history.Count - 1);
-                SetAsCurrent(history.Last());
+            if (History.Count > 1 && History.FromLast(1).gameObject == page.gameObject) {
+                History.RemoveAt(History.Count - 1);
+                SetAsCurrent(History.Last());
                 return;
             }
 
             // All other cases
-            history.Add(page);
+            History.Add(page);
             SetAsCurrent(page);
         }
 
-        public void Pop() {
-            if (history.Count > 1) {
-                history.RemoveAt(history.Count - 1);
-                SetAsCurrent(history.Last());
+        public override void Pop() {
+            if (History.Count > 1) {
+                History.RemoveAt(History.Count - 1);
+                SetAsCurrent(History.Last());
             }
         }
 

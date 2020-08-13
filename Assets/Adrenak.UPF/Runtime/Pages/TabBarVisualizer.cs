@@ -21,10 +21,10 @@ namespace Adrenak.UPF {
 
         void Awake() {
             foreach (var entry in entries) {
-                entry.page.onPageOpen.AddListener(() =>
+                entry.page.onViewOpen.AddListener(() =>
                     entry.onOpen?.Invoke());
 
-                entry.page.onPageClose.AddListener(() =>
+                entry.page.onViewOpen.AddListener(() =>
                     entry.onClose?.Invoke());
             }
         }
