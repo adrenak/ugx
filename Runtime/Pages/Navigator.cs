@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Events;
-using System.Collections.Generic;
 
 namespace Adrenak.UPF {
     public class Navigator : MonoBehaviour {
@@ -9,15 +8,12 @@ namespace Adrenak.UPF {
         public UnityEvent onPush;
         public UnityEvent onPop;
 
-        [SerializeField] [ReadOnly] List<View> _history = new List<View>();
         [SerializeField] NavigationStack stack = new DefaultNavigationStack();
+        public NavigationStack Stack { get => stack; }
 
         [SerializeField] bool useRootPage;
         [ShowIf("useRootPage")] [SerializeField] View rootPage;
-#pragma warning restore 0649        
-
-        public List<View> History => _history;
-        public View Root => rootPage;
+#pragma warning restore 0649
 
         void Awake() {
             if (rootPage && useRootPage)
