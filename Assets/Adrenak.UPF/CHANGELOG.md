@@ -1,3 +1,17 @@
+# [4.1.0](https://github.com/adrenak/upf/compare/v4.0.0...v4.1.0) (2020-08-13)
+
+
+### Bug Fixes
+
+* Remove PageModel as it was useless ([a6a4857](https://github.com/adrenak/upf/commit/a6a4857ee383612d0fb00f00e55b7a33633ac46e))
+
+
+### Features
+
+* Add IController<T, K> ([55c8f26](https://github.com/adrenak/upf/commit/55c8f261c0fff525ab3dd71db6c8e80be9290622))
+* Make NavigationStack serializable in inspector ([77ad334](https://github.com/adrenak/upf/commit/77ad334d69db0dad06ff368c4f29f6fa3b13483e))
+* Page class merged into View ([91ac047](https://github.com/adrenak/upf/commit/91ac0479ea0d667ba15793a143b194e3bf2f8cbb))
+
 # [4.0.0](https://github.com/adrenak/upf/compare/v3.0.0...v4.0.0) (2020-08-07)
 
 
