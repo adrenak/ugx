@@ -1,9 +1,10 @@
 ﻿#if UNITY_EDITOR
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.UI;
 using UnityEditor.AnimatedValues;
 
-namespace UnityEditor.UI {
+namespace Adrenak.UPF {
     [CustomEditor(typeof(ScrollRectPropagated), true)]
     [CanEditMultipleObjects]
     /// <summary>
