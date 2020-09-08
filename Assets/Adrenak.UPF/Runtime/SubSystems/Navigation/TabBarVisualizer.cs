@@ -10,7 +10,7 @@ namespace Adrenak.UPF {
     public class TabBarVisualizer : MonoBehaviour {
         [Serializable]
         public class Entry {
-            public Page page;
+            public Window page;
             public UnityEvent onOpen;
             public UnityEvent onClose;
         }
@@ -21,10 +21,10 @@ namespace Adrenak.UPF {
 
         void Awake() {
             foreach (var entry in entries) {
-                entry.page.onPageOpen.AddListener(() =>
+                entry.page.onWindowOpen.AddListener(() =>
                     entry.onOpen?.Invoke());
 
-                entry.page.onPageClose.AddListener(() =>
+                entry.page.onWindowClose.AddListener(() =>
                     entry.onClose?.Invoke());
             }
         }

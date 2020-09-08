@@ -12,7 +12,7 @@ namespace Adrenak.UPF {
         public NavigationStack Stack { get => stack; }
 
         [SerializeField] bool useRootPage;
-        [ShowIf("useRootPage")] [SerializeField] Page rootPage;
+        [ShowIf("useRootPage")] [SerializeField] Window rootPage;
 #pragma warning restore 0649
 
         void Awake() {
@@ -20,7 +20,7 @@ namespace Adrenak.UPF {
                 Push(rootPage);
         }
 
-        public void Push(Page view) {
+        public void Push(Window view) {
             stack.Push(view);
             onPush?.Invoke();
         }

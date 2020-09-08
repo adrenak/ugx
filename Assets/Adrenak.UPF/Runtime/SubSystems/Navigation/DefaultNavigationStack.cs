@@ -4,7 +4,7 @@ using System;
 namespace Adrenak.UPF {
     [Serializable]
     public class DefaultNavigationStack : NavigationStack {
-        public override void Push(Page page) {
+        public override void Push(Window page) {
             // First push
             if (History.Count == 0) {
                 History.Add(page);
@@ -35,9 +35,9 @@ namespace Adrenak.UPF {
             }
         }
 
-        void SetAsCurrent(Page page) {
-            page.OpenPage();
-            current?.ClosePage();
+        void SetAsCurrent(Window page) {
+            page.OpenWindow();
+            current?.CloseWindow();
             current = page;
         }
     }

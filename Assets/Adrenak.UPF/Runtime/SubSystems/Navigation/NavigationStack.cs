@@ -10,13 +10,13 @@ namespace Adrenak.UPF {
     /// </summary>
     [Serializable]
     public class NavigationStack {
-        [ReadOnly] [SerializeField] protected Page current = null;
-        public Page Current => current;
+        [ReadOnly] [SerializeField] protected Window current = null;
+        public Window Current => current;
 
-        [ReadOnly] [ReorderableList] [SerializeField] List<Page> _history = new List<Page>();
-        public List<Page> History => _history;
+        [ReadOnly] [ReorderableList] [SerializeField] List<Window> _history = new List<Window>();
+        public List<Window> History => _history;
 
-        public virtual void Push(Page page) => throw new NotImplementedException();
+        public virtual void Push(Window page) => throw new NotImplementedException();
         public virtual void Pop() => throw new NotImplementedException();
     }
 }
