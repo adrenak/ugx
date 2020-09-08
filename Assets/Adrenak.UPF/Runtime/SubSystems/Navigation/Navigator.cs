@@ -8,8 +8,11 @@ namespace Adrenak.UPF {
         public UnityEvent onPush;
         public UnityEvent onPop;
 
-        [SerializeField] NavigationStack stack = new DefaultNavigationStack();
-        public NavigationStack Stack { get => stack; }
+        [SerializeField] NavigationStack stack;
+        public NavigationStack Stack { 
+            get => stack;
+            set => stack = value;
+        }
 
         [SerializeField] bool useRootPage;
         [ShowIf("useRootPage")] [SerializeField] Window rootPage;
