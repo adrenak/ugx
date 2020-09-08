@@ -6,20 +6,17 @@ using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]
-    public class ViewList<T> : ICollection<T>, IList<T> where T : ViewModel {
-        public Action<T> ElementInit, ElementDeinit;
-        public Action<object, T> init;
-
+    public class ViewList<TModel, TView> : MonoBehaviour, ICollection<TModel>, IList<TModel> where TModel : ViewModel where TView : View<TModel> {
 #pragma warning disable 0649
         public Transform container;
-        public View<T> template;
-        [ReadOnly] [SerializeField] List<T> viewModels = new List<T>();
+        public TView template;
+        [ReadOnly] [SerializeField] List<TModel> viewModels = new List<TModel>();
 #pragma warning restore 0649
 
-        public List<View<T>> Instantiated { get; private set; } = new List<View<T>>();
+        public List<View<TModel>> Instantiated { get; private set; } = new List<View<TModel>>();
         public int Count => viewModels.Count;
         public bool IsReadOnly => false;
-        public T this[int index] {
+        public TModel this[int index] {
             get => viewModels[index];
             set {
                 viewModels[index] = value;
@@ -27,11 +24,13 @@ namespace Adrenak.UPF {
             }
         }
 
-        public ViewList(Transform _container) {
-            container = _container;
+        Action<TModel> onInit, onDeinit;
+        public void Setup(Action<TModel> onInit, Action<TModel> onDeinit) {
+            this.onInit = onInit;
+            this.onDeinit = onDeinit;
         }
 
-        View<T> Instantiate(T t) {
+        View<TModel> Instantiate(TModel t) {
             if (template == null)
                 throw new Exception("No ViewTemplate assigned! Cannot instantiate elements in ViewGroup.");
 
@@ -41,21 +40,21 @@ namespace Adrenak.UPF {
             if (!Application.isPlaying)
                 return null;
 
-            var instance = MonoBehaviour.Instantiate(template, container);
+            var instance = Instantiate(template, container);
             instance.hideFlags = HideFlags.DontSave;
             instance.ViewModel = t;
 
-            ElementInit?.Invoke(t);
+            onInit?.Invoke(t);
 
             return instance;
         }
 
-        void Destroy(T t) {
+        void Destroy(TModel t) {
             foreach (var instance in Instantiated) {
                 if (instance != null && instance.ViewModel.Equals(t) && instance.gameObject != null) {
-                    ElementDeinit?.Invoke(instance.ViewModel);
+                    onDeinit?.Invoke(instance.ViewModel);
                     Instantiated.Remove(instance);
-                    MonoBehaviour.Destroy(instance.gameObject);
+                    Destroy(instance.gameObject);
                     break;
                 }
             }
@@ -67,22 +66,22 @@ namespace Adrenak.UPF {
             viewModels.Clear();
         }
 
-        public bool Contains(T item) {
+        public bool Contains(TModel item) {
             return viewModels.Contains(item);
         }
 
-        public void Add(T item) {
+        public void Add(TModel item) {
             viewModels.Add(item);
             var instance = Instantiate(item);
             if (instance != null)
                 Instantiated.Add(instance);
         }
 
-        public void CopyTo(T[] array, int arrayIndex) {
-            throw new NotImplementedException();
+        public void CopyTo(TModel[] array, int arrayIndex) {
+            throw new NotImplementedException("ViewList doesn't support CopyTo yet.");
         }
 
-        public bool Remove(T item) {
+        public bool Remove(TModel item) {
             if (Contains(item)) {
                 Destroy(item);
                 viewModels.Remove(item);
@@ -91,11 +90,11 @@ namespace Adrenak.UPF {
             return false;
         }
 
-        public int IndexOf(T item) {
+        public int IndexOf(TModel item) {
             return viewModels.IndexOf(item);
         }
 
-        public void Insert(int index, T item) {
+        public void Insert(int index, TModel item) {
             if (item == null)
                 throw new Exception("Inserted item cannot be null");
 
@@ -116,12 +115,12 @@ namespace Adrenak.UPF {
             viewModels.RemoveAt(index);
         }
 
-        public IEnumerator<T> GetEnumerator() {
-            return (IEnumerator<T>)new ViewGroupEnum<T>(viewModels.ToArray());
+        public IEnumerator<TModel> GetEnumerator() {
+            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(viewModels.ToArray());
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator<T>)new ViewGroupEnum<T>(viewModels.ToArray());
+            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(viewModels.ToArray());
         }
     }
 
