@@ -1,3 +1,10 @@
+## [5.2.2](https://github.com/adrenak/ugx/compare/v5.2.1...v5.2.2) (2020-09-09)
+
+
+### Bug Fixes
+
+* ToastPopup class now inside ToastPopup.cs ([c0ec387](https://github.com/adrenak/ugx/commit/c0ec38752a225f223ac8ca90f51c4cb3d8eef120))
+
 ## [5.2.1](https://github.com/adrenak/ugx/compare/v5.2.0...v5.2.1) (2020-09-09)
 
 
