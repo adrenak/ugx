@@ -5,14 +5,14 @@
     "@semantic-release/release-notes-generator",
     ["@semantic-release/changelog", { 
       "preset": "angular",
-      "changelogFile":"Assets/Adrenak.UPF/CHANGELOG.md"
+      "changelogFile":"Assets/Adrenak.UGX/CHANGELOG.md"
     }],
     ["@semantic-release/npm", { 
       "npmPublish": false,
-      "pkgRoot":"Assets/Adrenak.UPF/"
+      "pkgRoot":"Assets/Adrenak.UGX/"
     }],
     ["@semantic-release/git", {
-      "assets": ["Assets/Adrenak.UPF/CHANGELOG.md", "Assets/Adrenak.UPF/package.json"],
+      "assets": ["Assets/Adrenak.UGX/CHANGELOG.md", "Assets/Adrenak.UGX/package.json"],
       "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
     }],
     "@semantic-release/github"

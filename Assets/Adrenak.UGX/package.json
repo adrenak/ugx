@@ -1,7 +1,7 @@
 {
 	"name": "com.adrenak.ugx",
 	"version": "4.1.1",
-	"displayName": "UGUI Extended",
+	"displayName": "UGUI extended",
 	"description": "Extensions for Unity UI with out of the box features and boilerplate code.",
 	"unity": "2018.4",
 	"author": {
