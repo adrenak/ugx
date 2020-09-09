@@ -6,13 +6,14 @@ namespace Adrenak.UGX {
 using NaughtyAttributes;
     [DisallowMultipleComponent]
     public class Window : UIBehaviour {
-        public UnityEvent onWindowOpen;
-        public UnityEvent onWindowClose;
-        public UnityEvent onWindowBack;
+        [SerializeField] bool showEvents;
+        [ShowIf("showEvents")] public UnityEvent onWindowOpen;
+        [ShowIf("showEvents")] public UnityEvent onWindowClose;
+        [ShowIf("showEvents")] public UnityEvent onWindowBack;
 
         public Navigator navigator;
-        [ReadOnly] [SerializeField] bool iswindowOpen;
-        public bool IsWindowOpen => iswindowOpen;
+        [ReadOnly] [SerializeField] bool isWindowOpen;
+        public bool IsWindowOpen => isWindowOpen;
 
         bool isOpening, isClosing;
 
@@ -34,11 +35,11 @@ using NaughtyAttributes;
 
         [Button]
         public void OpenWindow() {
-            if (iswindowOpen || isOpening) return;
+            if (isWindowOpen || isOpening) return;
 
             isOpening = true;
             Dispatcher.Enqueue(() => {
-                iswindowOpen = true;
+                isWindowOpen = true;
                 isOpening = false;
             });
 
@@ -49,11 +50,11 @@ using NaughtyAttributes;
 
         [Button]
         public void CloseWindow() {
-            if (!iswindowOpen || isClosing) return;
+            if (!isWindowOpen || isClosing) return;
 
             isClosing = true;
             Dispatcher.Enqueue(() => {
-                iswindowOpen = false;
+                isWindowOpen = false;
                 isClosing = false;
             });
 

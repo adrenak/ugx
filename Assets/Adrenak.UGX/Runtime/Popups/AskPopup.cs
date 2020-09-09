@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UGX {
-    public class AskPopup : Popup {
+    public class AskPopup : Window {
 #pragma warning disable 0649
         [SerializeField] Text headerDisplay;
         [SerializeField] Text bodyDisplay;
@@ -14,7 +14,7 @@ namespace Adrenak.UGX {
 
         async public Task<bool> Show(string header, string body, string positive, string negative) {
             OpenWindow();
-            onPopupOpen?.Invoke();
+            onWindowOpen?.Invoke();
 
             headerDisplay.text = header;
             bodyDisplay.text = body;
@@ -28,7 +28,7 @@ namespace Adrenak.UGX {
             while (response == null)
                 await Task.Delay(100);
 
-            onPopupClose?.Invoke();
+            onWindowClose?.Invoke();
             CloseWindow();
             return response.Value;
         }
