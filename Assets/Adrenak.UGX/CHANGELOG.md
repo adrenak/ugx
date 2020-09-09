@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/adrenak/ugx/compare/v5.0.0...v5.1.0) (2020-09-09)
+
+
+### Features
+
+* Add IconViewList.cs ([16360c8](https://github.com/adrenak/ugx/commit/16360c8ec6511ccbc372e822db1db292a69d0744))
+
 # [5.0.0](https://github.com/adrenak/upf/compare/v4.1.1...v5.0.0) (2020-09-09)
 
 
