@@ -1,3 +1,20 @@
+# [5.0.0](https://github.com/adrenak/upf/compare/v4.1.1...v5.0.0) (2020-09-09)
+
+
+### Bug Fixes
+
+* Rename UPF to UGX ([efbe808](https://github.com/adrenak/upf/commit/efbe80800cf89e0bcdf04e22fad799dc0a4e7e8d))
+
+
+### Features
+
+* Version 6.0.0 ready ([6941945](https://github.com/adrenak/upf/commit/6941945b234088b8e483dbf3ce6fd4d6c2ff1adf))
+
+
+### BREAKING CHANGES
+
+* Several
+
 ## [4.1.1](https://github.com/adrenak/upf/compare/v4.1.0...v4.1.1) (2020-08-13)
 
 
