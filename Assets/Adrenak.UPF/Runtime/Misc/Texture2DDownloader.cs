@@ -5,7 +5,7 @@ using Adrenak.Unex;
 using UnityEngine;
 
 namespace Adrenak.UPF {
-    public class ImageDownloader {
+    public class Texture2DDownloader {
         class Request {
             public string path;
             public Texture2DCompression compression;
@@ -26,7 +26,7 @@ namespace Adrenak.UPF {
 
         bool CanSendNewRequest => ongoing.Count < maxConcurrentDownloads;
 
-        public ImageDownloader(int _maxConcurrentDownloads = 10000) {
+        public Texture2DDownloader(int _maxConcurrentDownloads = 10000) {
             maxConcurrentDownloads = _maxConcurrentDownloads;
         }
 

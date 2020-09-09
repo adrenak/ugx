@@ -5,17 +5,18 @@ using UnityEngine.UI;
 
 using Adrenak.Unex;
 using UnityEngine.Events;
+using NaughtyAttributes;
 
 namespace Adrenak.UPF {
     [Serializable]
     public class Picture : Image {
         // Ambient context dependency pattern
-        static PictureRepository repo;
+        static AbstractPictureCache repo;
         public static bool RepoLocked => repo != null;
-        public static PictureRepository Repo {
+        public static AbstractPictureCache Repo {
             get {
                 if (repo == null)
-                    repo = new PictureStatelessRepo();
+                    repo = new PictureStatelessCache();
                 return repo;
             }
             set {
@@ -48,17 +49,9 @@ namespace Adrenak.UPF {
         public bool loadOnStart = true;
 
         RectTransform rt;
-        RectTransform RT {
-            get {
-                if (rt == null)
-                    rt = GetComponent<RectTransform>();
-                return rt;
-            }
-        }
+        RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
 
         public Visibility CurrentVisibility { get; private set; } = Visibility.None;
-
-        int age = 0;
 
         protected override void Awake() {
             Clear();
@@ -70,7 +63,7 @@ namespace Adrenak.UPF {
                 Refresh();
         }
 
-        [ContextMenu("Refresh")]
+        [Button("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying) return;
 
@@ -111,6 +104,7 @@ namespace Adrenak.UPF {
             oldCompression = compression;
         }
 
+        int age = 0;
         void Update() {
             age++;
             if (age <= 1) return;

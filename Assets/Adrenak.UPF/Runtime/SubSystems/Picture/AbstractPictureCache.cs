@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 
 namespace Adrenak.UPF {
-    public abstract class PictureRepository {
+    public abstract class AbstractPictureCache {
         public abstract Task Init(object obj = null);
 
         public abstract void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure);
@@ -12,12 +12,12 @@ namespace Adrenak.UPF {
         public abstract void Free(string location, Texture2DCompression compression, Picture instance, Action onSuccess, Action<Exception> onFailure);
         public abstract Task Free(string location, Texture2DCompression compression, Picture instance);
 
-        static ImageDownloader downloader;
+        static Texture2DDownloader downloader;
         public static bool DownloaderLocked => downloader != null;
-        public static ImageDownloader Downloader {
+        public static Texture2DDownloader Downloader {
             get {
                 if (downloader == null)
-                    downloader = new ImageDownloader();
+                    downloader = new Texture2DDownloader();
                 return downloader;
             }
             set {

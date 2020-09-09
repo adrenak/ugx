@@ -16,6 +16,9 @@ namespace Adrenak.UPF {
             image.loadOnStart = EditorGUILayout.Toggle("Refresh On Start", image.loadOnStart);
             serializedObject.ApplyModifiedProperties();
 
+            if (GUILayout.Button("Refresh"))
+                image.Refresh();
+
             base.OnInspectorGUI();
         }
     }

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Adrenak.UPF {
-    public class PictureInMemoryRepo : PictureRepository {
+    public class PictureMemoryCache : AbstractPictureCache {
         class Key {
             public string path;
             public Texture2DCompression compression;
@@ -49,7 +49,7 @@ namespace Adrenak.UPF {
         Dictionary<Key, List<Request>> requests = new Dictionary<Key, List<Request>>();
         int maxResourceCount;
 
-        public PictureInMemoryRepo(int maxCount) {
+        public PictureMemoryCache(int maxCount) {
             maxResourceCount = maxCount;
         }
 

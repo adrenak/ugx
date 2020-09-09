@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Adrenak.UPF {
     /// <summary>
-    /// This isn't a cache, it just downloads downloads the image every time
+    /// This a stateless cache, it just downloads downloads the image every time
     /// </summary>
-    public class PictureStatelessRepo : PictureRepository {
+    public class PictureStatelessCache : AbstractPictureCache {
         public override Task Init(object obj = null) {
             return Task.CompletedTask;
         }
