@@ -1,3 +1,10 @@
+# [5.2.0](https://github.com/adrenak/ugx/compare/v5.1.0...v5.2.0) (2020-09-09)
+
+
+### Features
+
+* Remove Popup.cs. Popups now implement Window directly ([1de1dfa](https://github.com/adrenak/ugx/commit/1de1dfa3b79910f9dc8210c0ae0693e32c732ce7))
+
 # [5.1.0](https://github.com/adrenak/ugx/compare/v5.0.0...v5.1.0) (2020-09-09)
 
 
