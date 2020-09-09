@@ -1,3 +1,10 @@
+# [5.3.0](https://github.com/adrenak/ugx/compare/v5.2.2...v5.3.0) (2020-09-09)
+
+
+### Features
+
+* Invoke OnViewModelSet in View.Start() ([bab75fb](https://github.com/adrenak/ugx/commit/bab75fba85fed3e22bc69622762a1ca367ef6140))
+
 ## [5.2.2](https://github.com/adrenak/ugx/compare/v5.2.1...v5.2.2) (2020-09-09)
 
 
