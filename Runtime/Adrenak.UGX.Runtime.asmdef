@@ -1,0 +1,16 @@
+{
+    "name": "Adrenak.UPF.Runtime",
+    "references": [
+        "Adrenak.Unex.Runtime",
+        "NaughtyAttributes.Core",
+        "Surge.Tween.Runtime"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
