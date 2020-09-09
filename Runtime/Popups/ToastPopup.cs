@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UGX {
-    public class ToastDialog : Window {
+    public class ToastPopup : Window {
 #pragma warning disable 0649
         [SerializeField] Text title;
         [SerializeField] Text description;
