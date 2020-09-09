@@ -1,3 +1,10 @@
+## [5.2.1](https://github.com/adrenak/ugx/compare/v5.2.0...v5.2.1) (2020-09-09)
+
+
+### Bug Fixes
+
+* new up ViewEvent objects in IconView and FormView ([68e3bf6](https://github.com/adrenak/ugx/commit/68e3bf6fee138b067cc46b766b2cacdcd2f45e16))
+
 # [5.2.0](https://github.com/adrenak/ugx/compare/v5.1.0...v5.2.0) (2020-09-09)
 
 
