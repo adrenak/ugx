@@ -7,13 +7,13 @@ using Pixelplacement;
 
 namespace Adrenak.UPF {
     public class SurgeTransitioner : ITransitioner {
-        public Task TransitionPosition(RectTransform rt, Vector3 endValue, PositionTransition tween) {
+        public Task TransitionPosition(RectTransform rt, Vector3 endValue, PositionTransitionArgs tween) {
             var source = new TaskCompletionSource<bool>();
             TransitionPosition(rt, endValue, tween, () => source.SetResult(true));
             return source.Task;
         }
 
-        public void TransitionPosition(RectTransform rt,Vector3 endValue, PositionTransition tween, Action onComplete) {
+        public void TransitionPosition(RectTransform rt,Vector3 endValue, PositionTransitionArgs tween, Action onComplete) {
             Tween.Value(
                 rt.localPosition,
                 endValue,
@@ -26,13 +26,13 @@ namespace Adrenak.UPF {
             );
         }
 
-        public Task TransitionOpacity(CanvasGroup group, float endValue, OpacityTransition tween) {
+        public Task TransitionOpacity(CanvasGroup group, float endValue, OpacityTransitionArgs tween) {
             var source = new TaskCompletionSource<bool>();
             TransitionOpacity(group, endValue, tween, () => source.SetResult(true));
             return source.Task;
         }
 
-        public void TransitionOpacity(CanvasGroup group, float endValue, OpacityTransition tween, Action onComplete) {
+        public void TransitionOpacity(CanvasGroup group, float endValue, OpacityTransitionArgs tween, Action onComplete) {
             Tween.CanvasGroupAlpha(
                 group,
                 endValue,

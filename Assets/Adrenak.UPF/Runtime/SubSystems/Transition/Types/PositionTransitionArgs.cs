@@ -2,7 +2,7 @@
 
 namespace Adrenak.UPF {
     [System.Serializable]
-    public class PositionTransition {
+    public class PositionTransitionArgs {
         [SerializeField] float duration;
         public float Duration {
             get => duration;
@@ -27,21 +27,21 @@ namespace Adrenak.UPF {
             private set => loop = value;
         }
 
-        public PositionTransition(float duration) {
+        public PositionTransitionArgs(float duration) {
             Duration = duration;
         }
 
-        public PositionTransition SetDelay(float delay) {
+        public PositionTransitionArgs SetDelay(float delay) {
             Delay = delay;
             return this;
         }
 
-        public PositionTransition SetCurve(CurveType curve) {
+        public PositionTransitionArgs SetCurve(CurveType curve) {
             Curve = curve;
             return this;
         }
 
-        public PositionTransition SetLoop(LoopType loop) {
+        public PositionTransitionArgs SetLoop(LoopType loop) {
             Loop = loop;
             return this;
         }

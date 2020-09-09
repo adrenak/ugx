@@ -16,7 +16,7 @@ namespace Adrenak.UPF {
         [ReadOnly] [ReorderableList] [SerializeField] List<Window> _history = new List<Window>();
         public List<Window> History => _history;
 
-        public virtual void Push(Window page) => throw new NotImplementedException("You need to set Navigator.Stack to an implementation of NavigationStack class");
+        public virtual void Push(Window window) => throw new NotImplementedException("You need to set Navigator.Stack to an implementation of NavigationStack class");
         public virtual void Pop() => throw new NotImplementedException("You need to set Navigator.Stack to an implementation of NavigationStack class");
     }
 }

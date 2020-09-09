@@ -2,7 +2,7 @@
 
 namespace Adrenak.UPF {
     [System.Serializable]
-    public class OpacityTransition {
+    public class OpacityTransitionArgs {
         [SerializeField] float duration = 1;
         public float Duration {
             get => duration;
@@ -27,21 +27,21 @@ namespace Adrenak.UPF {
             private set => loop = value;
         }
 
-        public OpacityTransition(float duration){
+        public OpacityTransitionArgs(float duration){
             Duration = duration;
         }
 
-        public OpacityTransition SetDelay(float delay){
+        public OpacityTransitionArgs SetDelay(float delay){
             Delay = delay;
             return this;
         }
 
-        public OpacityTransition SetCurve(CurveType curve) {
+        public OpacityTransitionArgs SetCurve(CurveType curve) {
             Curve = curve;
             return this;
         }
 
-        public OpacityTransition SetLoop(LoopType loop){
+        public OpacityTransitionArgs SetLoop(LoopType loop){
             Loop = loop;
             return this;
         }

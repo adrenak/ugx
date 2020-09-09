@@ -14,13 +14,13 @@ namespace Adrenak.UPF {
             set => stack = value;
         }
 
-        [SerializeField] bool useRootPage;
-        [ShowIf("useRootPage")] [SerializeField] Window rootPage;
+        [SerializeField] bool useInitialWindow;
+        [ShowIf("useInitialWindow")] [SerializeField] Window initialWindow;
 #pragma warning restore 0649
 
         void Awake() {
-            if (rootPage && useRootPage)
-                Push(rootPage);
+            if (initialWindow && useInitialWindow)
+                Push(initialWindow);
         }
 
         public void Push(Window view) {

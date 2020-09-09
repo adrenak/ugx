@@ -4,28 +4,28 @@ using System;
 namespace Adrenak.UPF {
     [Serializable]
     public class DefaultNavigationStack : NavigationStack {
-        public override void Push(Window page) {
+        public override void Push(Window window) {
             // First push
             if (History.Count == 0) {
-                History.Add(page);
-                SetAsCurrent(page);
+                History.Add(window);
+                SetAsCurrent(window);
                 return;
             }
 
             // Repeat push
-            if (History.Last().gameObject == page.gameObject)
+            if (History.Last().gameObject == window.gameObject)
                 return;
 
             // Alternate repeat push
-            if (History.Count > 1 && History.FromLast(1).gameObject == page.gameObject) {
+            if (History.Count > 1 && History.FromLast(1).gameObject == window.gameObject) {
                 History.RemoveAt(History.Count - 1);
                 SetAsCurrent(History.Last());
                 return;
             }
 
             // All other cases
-            History.Add(page);
-            SetAsCurrent(page);
+            History.Add(window);
+            SetAsCurrent(window);
         }
 
         public override void Pop() {
@@ -35,10 +35,10 @@ namespace Adrenak.UPF {
             }
         }
 
-        void SetAsCurrent(Window page) {
-            page.OpenWindow();
+        void SetAsCurrent(Window window) {
+            window.OpenWindow();
             current?.CloseWindow();
-            current = page;
+            current = window;
         }
     }
 }
