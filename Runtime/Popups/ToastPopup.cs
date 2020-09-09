@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UGX {
-    public class ToastDialog : Popup {
+    public class ToastDialog : Window {
 #pragma warning disable 0649
         [SerializeField] Text title;
         [SerializeField] Text description;
@@ -17,7 +17,7 @@ namespace Adrenak.UGX {
         public async void Show(string _title, string _description, float _delay = -1) {
             if (source != null) source.Cancel();
 
-            onPopupOpen?.Invoke();
+            onWindowOpen?.Invoke();
             title.text = _title;
             description.text = _description;
 
@@ -28,7 +28,7 @@ namespace Adrenak.UGX {
             try {
                 await Task.Delay((int)(_delay * 1000), source.Token);
                 source = null;
-                onPopupClose?.Invoke();
+                onWindowClose?.Invoke();
             }
             catch { }
         }
