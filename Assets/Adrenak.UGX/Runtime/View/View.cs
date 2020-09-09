@@ -23,6 +23,8 @@ namespace Adrenak.UGX {
             }
         }
 
+        void Start() => OnViewModelSet();
+
         [Button]
         public void Refresh() => OnViewModelSet();
 
