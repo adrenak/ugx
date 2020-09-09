@@ -3,14 +3,14 @@
 namespace Adrenak.UGX {
     [Serializable]
     public abstract class FormViewModel : ViewModel {
-        public ViewEvent submit;
-        public ViewEvent cancel;
+        public ViewEvent onSubmit = new ViewEvent();
+        public ViewEvent onCancel = new ViewEvent();
 
         public void Submit() =>
-            submit.Invoke(this);
+            onSubmit.Invoke(this);
 
         public void Cancel() =>
-            cancel.Invoke(this);
+            onCancel.Invoke(this);
     }
 
     public abstract class FormView<T> : View<T> where T : FormViewModel {
