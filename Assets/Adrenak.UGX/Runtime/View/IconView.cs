@@ -7,7 +7,7 @@ using UnityEngine.Events;
 namespace Adrenak.UGX {
     [Serializable]
     public class IconViewModel : ViewModel {
-        public ViewEvent click;
+        public ViewEvent onClick = new ViewEvent();
         
         public string text;
         public string imageURL;
@@ -31,7 +31,7 @@ namespace Adrenak.UGX {
                 picture.Refresh();
         }
 
-        public void Click() => ViewModel.click.Invoke(this);
+        public void Click() => ViewModel.onClick.Invoke(this);
         
         public void OnPointerExit(PointerEventData eventData) {
             onPointerExit.Invoke();
