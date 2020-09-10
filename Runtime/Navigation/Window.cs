@@ -58,7 +58,6 @@ using NaughtyAttributes;
                 isClosing = false;
             });
 
-            navigator.Pop();
             WindowClosed();
             onWindowClose?.Invoke();
         }

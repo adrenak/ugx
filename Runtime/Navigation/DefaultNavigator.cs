@@ -1,9 +1,12 @@
 ﻿using Adrenak.Unex;
-using System;
 
 namespace Adrenak.UGX {
-    [Serializable]
-    public class DefaultNavigationStack : NavigationStack {
+    public class DefaultNavigator : Navigator {
+        void Start() {
+            if (initialWindow && useInitialWindow)
+                Push(initialWindow);
+        }
+
         public override void Push(Window window) {
             // First push
             if (History.Count == 0) {
@@ -26,19 +29,16 @@ namespace Adrenak.UGX {
             // All other cases
             History.Add(window);
             SetAsCurrent(window);
+
+            onPush?.Invoke();
         }
 
         public override void Pop() {
             if (History.Count > 1) {
                 History.RemoveAt(History.Count - 1);
                 SetAsCurrent(History.Last());
+                onPop?.Invoke();
             }
-        }
-
-        void SetAsCurrent(Window window) {
-            window.OpenWindow();
-            current?.CloseWindow();
-            current = window;
         }
     }
 }

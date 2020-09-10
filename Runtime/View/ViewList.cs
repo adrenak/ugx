@@ -13,7 +13,7 @@ namespace Adrenak.UGX {
         [ReadOnly] [SerializeField] List<TModel> viewModels = new List<TModel>();
 #pragma warning restore 0649
 
-        public List<View<TModel>> Instantiated { get; private set; } = new List<View<TModel>>();
+        public List<TView> Instantiated { get; private set; } = new List<TView>();
         public int Count => viewModels.Count;
         public bool IsReadOnly => false;
         public TModel this[int index] {
@@ -24,13 +24,14 @@ namespace Adrenak.UGX {
             }
         }
 
-        Action<TModel> onInit, onDeinit;
-        public void Setup(Action<TModel> onInit, Action<TModel> onDeinit) {
+        Action<TView> onInit, onDeinit;
+        public void Setup(Action<TView> onInit, Action<TView> onDeinit) {
             this.onInit = onInit;
+            Instantiated.ForEach(x => this.onInit(x));
             this.onDeinit = onDeinit;
         }
 
-        View<TModel> Instantiate(TModel t) {
+        TView Instantiate(TModel t) {
             if (template == null)
                 throw new Exception("No ViewTemplate assigned! Cannot instantiate elements in ViewGroup.");
 
@@ -44,7 +45,7 @@ namespace Adrenak.UGX {
             instance.hideFlags = HideFlags.DontSave;
             instance.ViewModel = t;
 
-            onInit?.Invoke(t);
+            onInit?.Invoke(instance);
 
             return instance;
         }
@@ -52,7 +53,7 @@ namespace Adrenak.UGX {
         void Destroy(TModel t) {
             foreach (var instance in Instantiated) {
                 if (instance != null && instance.ViewModel.Equals(t) && instance.gameObject != null) {
-                    onDeinit?.Invoke(instance.ViewModel);
+                    onDeinit?.Invoke(instance);
                     Instantiated.Remove(instance);
                     Destroy(instance.gameObject);
                     break;

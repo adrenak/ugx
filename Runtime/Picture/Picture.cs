@@ -12,8 +12,8 @@ namespace Adrenak.UGX {
     public class Picture : Image {
         // Ambient context dependency pattern
         static AbstractPictureCache repo;
-        public static bool RepoLocked => repo != null;
-        public static AbstractPictureCache Repo {
+        public static bool CacheLocked => repo != null;
+        public static AbstractPictureCache Cache {
             get {
                 if (repo == null)
                     repo = new PictureStatelessCache();
@@ -67,7 +67,7 @@ namespace Adrenak.UGX {
         public void Refresh() {
             if (!Application.isPlaying) return;
 
-            Repo.Free(oldPath, oldCompression, this);
+            Cache.Free(oldPath, oldCompression, this);
 
             switch (source) {
                 case Source.Resource:
@@ -88,7 +88,7 @@ namespace Adrenak.UGX {
                         break;
 
                     try {
-                        Repo.Get(
+                        Cache.Get(
                             path, compression, this,
                             result => SetSprite(result.ToSprite()),
                             error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
@@ -114,7 +114,7 @@ namespace Adrenak.UGX {
                 if (CurrentVisibility == Visibility.None && visibility != Visibility.None)
                     Refresh();
                 else if (CurrentVisibility != Visibility.None && visibility == Visibility.None)
-                    Repo.Free(path, compression, this);
+                    Cache.Free(path, compression, this);
 
                 CurrentVisibility = visibility;
             }
@@ -143,7 +143,7 @@ namespace Adrenak.UGX {
         protected override void OnDestroy() {
             destroyed = true;
             if (!Application.isPlaying) return;
-            Repo.Free(path, compression, this);
+            Cache.Free(path, compression, this);
         }
     }
 }

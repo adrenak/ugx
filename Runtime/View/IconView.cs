@@ -6,14 +6,14 @@ using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class IconViewModel : ViewModel {
-        public ViewEvent onClick = new ViewEvent();
-        
+    public class IconViewModel : ViewModel {        
         public string text;
         public string imageURL;
     }
 
     public class IconView : View<IconViewModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+        public ViewEvent onClick = new ViewEvent();
+
 #pragma warning disable 0649
         [SerializeField] UnityEvent onPointerEnter;
         [SerializeField] UnityEvent onPointerExit;
@@ -31,18 +31,16 @@ namespace Adrenak.UGX {
                 picture.Refresh();
         }
 
-        public void Click() => ViewModel.onClick.Invoke(this);
+        public void Click() =>
+            onClick.Invoke(this);        
         
-        public void OnPointerExit(PointerEventData eventData) {
+        public void OnPointerExit(PointerEventData eventData) =>
             onPointerExit.Invoke();
-        }
 
-        public void OnPointerEnter(PointerEventData eventData) {
+        public void OnPointerEnter(PointerEventData eventData) =>
             onPointerEnter.Invoke();
-        }
 
-        public void OnPointerClick(PointerEventData eventData) {
+        public void OnPointerClick(PointerEventData eventData) =>
             onPointerClick.Invoke();
-        }
     }
 }
