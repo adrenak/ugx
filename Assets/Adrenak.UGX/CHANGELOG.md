@@ -1,3 +1,10 @@
+# [5.4.0](https://github.com/adrenak/ugx/compare/v5.3.0...v5.4.0) (2020-09-10)
+
+
+### Features
+
+* Navigation improved. ViewEvent is now in Views, not ViewModels ([d7b3172](https://github.com/adrenak/ugx/commit/d7b3172310a9810c15efa41ae46eb920d847a085))
+
 # [5.3.0](https://github.com/adrenak/ugx/compare/v5.2.2...v5.3.0) (2020-09-09)
 
 
