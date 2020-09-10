@@ -6,9 +6,12 @@ using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class IconViewModel : ViewModel {        
+    public class IconViewModel : ViewModel {
+        public Picture.Source source;       
         public string text;
         public string imageURL;
+        public string resourcePath;
+        public Sprite sprite;
     }
 
     public class IconView : View<IconViewModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
@@ -25,8 +28,20 @@ namespace Adrenak.UGX {
         protected override void OnViewModelSet() {
             gameObject.name = ViewModel.text;
             text.text = ViewModel.text;
-            picture.source = Picture.Source.URL;
-            picture.path = ViewModel.imageURL;
+            picture.source = ViewModel.source;
+
+            switch (ViewModel.source) {
+                case Picture.Source.Asset:
+                    picture.sprite = ViewModel.sprite;
+                    break;
+                case Picture.Source.Resource:
+                    picture.path = ViewModel.resourcePath;
+                    break;
+                case Picture.Source.URL:
+                    picture.path = ViewModel.imageURL;
+                    break;
+            }
+
             if (picture.CurrentVisibility != Visibility.None)
                 picture.Refresh();
         }

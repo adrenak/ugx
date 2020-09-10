@@ -28,7 +28,7 @@ using NaughtyAttributes;
 
         [Button]
         public void GoBack() {
-            navigator.Pop();
+            navigator?.Pop();
             onWindowBack?.Invoke();
             WindowBackPressed();
         }
@@ -43,7 +43,7 @@ using NaughtyAttributes;
                 isOpening = false;
             });
 
-            navigator.Push(this);
+            navigator?.Push(this);
             WindowOpened();
             onWindowOpen?.Invoke();
         }

@@ -31,6 +31,7 @@ namespace Adrenak.UGX {
         }
 
         public enum Source {
+            Asset,
             Resource,
             URL
         }
