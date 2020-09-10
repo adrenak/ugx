@@ -1,36 +1,31 @@
-﻿using UnityEngine;
-using NaughtyAttributes;
+﻿using NaughtyAttributes;
 using UnityEngine.Events;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Adrenak.UGX {
-    public class Navigator : MonoBehaviour {
+    public abstract class Navigator : MonoBehaviour {
 #pragma warning disable 0649
+        [ReadOnly] [SerializeField] protected Window current = null;
+        public Window Current => current;
+
+        [ReadOnly] [ReorderableList] [SerializeField] protected List<Window> history = new List<Window>();
+        public List<Window> History => history;
+
         public UnityEvent onPush;
         public UnityEvent onPop;
 
-        [SerializeField] NavigationStack stack;
-        public NavigationStack Stack { 
-            get => stack;
-            set => stack = value;
-        }
-
-        [SerializeField] bool useInitialWindow;
-        [ShowIf("useInitialWindow")] [SerializeField] Window initialWindow;
+        [SerializeField] protected bool useInitialWindow;
+        [ShowIf("useInitialWindow")] [SerializeField] protected Window initialWindow;
 #pragma warning restore 0649
 
-        void Awake() {
-            if (initialWindow && useInitialWindow)
-                Push(initialWindow);
-        }
+        public abstract void Push(Window window);
+        public abstract void Pop();
 
-        public void Push(Window view) {
-            stack.Push(view);
-            onPush?.Invoke();
-        }
-
-        public void Pop() {
-            stack.Pop();
-            onPop?.Invoke();
+        protected void SetAsCurrent(Window window) {
+            window.OpenWindow();
+            current?.CloseWindow();
+            current = window;
         }
     }
 }
