@@ -1,3 +1,10 @@
+# [5.5.0](https://github.com/adrenak/ugx/compare/v5.4.0...v5.5.0) (2020-09-10)
+
+
+### Features
+
+* Add source types to Picture.cs ([98ff242](https://github.com/adrenak/ugx/commit/98ff2425b40a9c1cf5ea0b5d92e7a99302c5a3f1))
+
 # [5.4.0](https://github.com/adrenak/ugx/compare/v5.3.0...v5.4.0) (2020-09-10)
 
 
