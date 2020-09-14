@@ -1,5 +1,5 @@
 {
-    "name": "Adrenak.UPF.Runtime",
+    "name": "Adrenak.UGX.Runtime",
     "references": [
         "Adrenak.Unex.Runtime",
         "NaughtyAttributes.Core",
