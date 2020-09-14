@@ -1,3 +1,10 @@
+## [5.5.1](https://github.com/adrenak/ugx/compare/v5.5.0...v5.5.1) (2020-09-14)
+
+
+### Bug Fixes
+
+* Unmark ViewEvent as Serializable ([e91d201](https://github.com/adrenak/ugx/commit/e91d20137b6faf56a6f13c0e42e12cc8d1afb687))
+
 # [5.5.0](https://github.com/adrenak/ugx/compare/v5.4.0...v5.5.0) (2020-09-10)
 
 
