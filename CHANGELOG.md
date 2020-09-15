@@ -1,3 +1,10 @@
+# [5.6.0](https://github.com/adrenak/ugx/compare/v5.5.1...v5.6.0) (2020-09-15)
+
+
+### Features
+
+* Create Start method protected in View and View<T> ([7aba479](https://github.com/adrenak/ugx/commit/7aba479fe2e1ada69b8576b76d8a9bc9eb5cf43b))
+
 ## [5.5.1](https://github.com/adrenak/ugx/compare/v5.5.0...v5.5.1) (2020-09-14)
 
 
