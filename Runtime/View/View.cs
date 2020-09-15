@@ -13,6 +13,8 @@ namespace Adrenak.UGX {
     public abstract class View<TViewModel> : View where TViewModel : ViewModel {
         public event EventHandler<TViewModel> ViewModelSet;
 
+        [SerializeField] bool autoStart;
+
         [SerializeField] TViewModel viewModel;
         public TViewModel ViewModel {
             get => viewModel;
@@ -23,7 +25,11 @@ namespace Adrenak.UGX {
             }
         }
 
-        void Awake() => OnViewModelSet();
+        protected new void Start() {
+            base.Start();
+            if (autoStart)
+                OnViewModelSet();
+        }
 
         [Button]
         public void Refresh() => OnViewModelSet();
@@ -39,15 +45,15 @@ namespace Adrenak.UGX {
         public UnityEvent<Visibility> onVisibilityChanged;
         [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
 
-        public Visibility CurrentVisibility { 
-            get => currentVisibility; 
-            private set => currentVisibility = value; 
+        public Visibility CurrentVisibility {
+            get => currentVisibility;
+            private set => currentVisibility = value;
         }
 
         RectTransform rt;
         public RectTransform RectTransform => rt ?? (rt = GetComponent<RectTransform>());
 
-        void Start() => CurrentVisibility = GetVisibility();
+        protected void Start() => CurrentVisibility = GetVisibility();
 
         /// <summary>
         /// If you're overriding this, make sure to call base.Update() in your subclass
