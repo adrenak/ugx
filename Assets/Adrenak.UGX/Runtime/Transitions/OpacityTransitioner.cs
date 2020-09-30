@@ -20,6 +20,8 @@ namespace Adrenak.UGX {
         async public Task FadeIn() {
             if (!Application.isPlaying) {
                 CG.alpha = 1;
+                CG.blocksRaycasts = true;
+                CG.interactable = true;
                 return;
             }
             CG.alpha = 0;
@@ -34,6 +36,8 @@ namespace Adrenak.UGX {
         async public Task FadeOut() {
             if (!Application.isPlaying) {
                 CG.alpha = 0;
+                CG.blocksRaycasts = false;
+                CG.interactable = false;
                 return;
             }
             CG.alpha = 1;
