@@ -1,12 +1,12 @@
 {
 	"name": "com.adrenak.ugx",
 	"version": "5.6.0",
-	"displayName": "UGUI extended",
+	"displayName": "UGUI Extended",
 	"description": "Extensions for Unity UI with out of the box features and boilerplate code.",
 	"unity": "2018.4",
 	"author": {
 		"name": "Vatsal Ambastha",
-		"email": "adrenak_@outlook.com",
+		"email": "adrenak1024@gmail.com",
 		"url": "www.vatsalambastha.com"
 	},
 	"dependencies": {
