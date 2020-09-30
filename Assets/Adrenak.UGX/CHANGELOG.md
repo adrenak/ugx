@@ -1,3 +1,10 @@
+# [5.7.0](https://github.com/adrenak/ugx/compare/v5.6.0...v5.7.0) (2020-09-30)
+
+
+### Features
+
+* Add UGXInitializer for setting up dependencies ([ff48877](https://github.com/adrenak/ugx/commit/ff48877456719125ac1a49808e782744625d1a88))
+
 # [5.6.0](https://github.com/adrenak/ugx/compare/v5.5.1...v5.6.0) (2020-09-15)
 
 
