@@ -1,5 +1,5 @@
 ﻿namespace Adrenak.UGX {
-    public abstract class FormView<T> : View<T> where T : ViewModel {
+    public abstract class Form<T> : View<T> where T : ViewModel {
         public ViewEvent onSubmit = new ViewEvent();
         public ViewEvent onCancel = new ViewEvent();
 
