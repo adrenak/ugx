@@ -40,5 +40,10 @@ namespace Adrenak.UGX {
                 onPop?.Invoke();
             }
         }
+
+        public override void Clear() {
+            while(History.Count != 0)
+                Pop();
+        }
     }
 }

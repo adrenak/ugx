@@ -21,6 +21,7 @@ namespace Adrenak.UGX {
 
         public abstract void Push(Window window);
         public abstract void Pop();
+        public abstract void Clear();
 
         protected void SetAsCurrent(Window window) {
             window.OpenWindow();
