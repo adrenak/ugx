@@ -1,3 +1,16 @@
+# [5.8.0](https://github.com/adrenak/ugx/compare/v5.7.0...v5.8.0) (2020-11-06)
+
+
+### Bug Fixes
+
+* Simplify naming conventions ([8046bce](https://github.com/adrenak/ugx/commit/8046bce5367b63ab9a1044d3925baf8211c3e1c8))
+
+
+### Features
+
+* Add Clear method to Navigator ([a7eeb2c](https://github.com/adrenak/ugx/commit/a7eeb2cda9d993b69501f2ece85cadd1efee4ef3))
+* Make UGXInitializer MonoBehaviour based ([a7764fe](https://github.com/adrenak/ugx/commit/a7764fe1599463de19ac9c71a11da07e4fa9e2a0))
+
 # [5.7.0](https://github.com/adrenak/ugx/compare/v5.6.0...v5.7.0) (2020-09-30)
 
 
