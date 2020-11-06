@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class IconViewModel : ViewModel {
+    public class IconModel : ViewModel {
         public Picture.Source source;       
         public string text;
         public string imageURL;
@@ -14,7 +14,7 @@ namespace Adrenak.UGX {
         public Sprite sprite;
     }
 
-    public class IconView : View<IconViewModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+    public class Icon : View<IconModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
         public ViewEvent onClick = new ViewEvent();
 
 #pragma warning disable 0649
