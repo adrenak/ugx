@@ -3,7 +3,8 @@
     "references": [
         "Adrenak.Unex.Runtime",
         "NaughtyAttributes.Core",
-        "Surge.Tween.Runtime"
+        "Surge.Tween.Runtime",
+        "UniTask"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

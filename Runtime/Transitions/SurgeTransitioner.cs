@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
@@ -7,9 +7,9 @@ using Pixelplacement;
 
 namespace Adrenak.UGX {
     public class SurgeTransitioner : ITransitioner {
-        public Task TransitionPosition(RectTransform rt, Vector3 endValue, PositionTransitionArgs tween) {
-            var source = new TaskCompletionSource<bool>();
-            TransitionPosition(rt, endValue, tween, () => source.SetResult(true));
+        public UniTask TransitionPosition(RectTransform rt, Vector3 endValue, PositionTransitionArgs tween) {
+            var source = new UniTaskCompletionSource<bool>();
+            TransitionPosition(rt, endValue, tween, () => source.TrySetResult(true));
             return source.Task;
         }
 
@@ -26,9 +26,9 @@ namespace Adrenak.UGX {
             );
         }
 
-        public Task TransitionOpacity(CanvasGroup group, float endValue, OpacityTransitionArgs tween) {
-            var source = new TaskCompletionSource<bool>();
-            TransitionOpacity(group, endValue, tween, () => source.SetResult(true));
+        public UniTask TransitionOpacity(CanvasGroup group, float endValue, OpacityTransitionArgs tween) {
+            var source = new UniTaskCompletionSource<bool>();
+            TransitionOpacity(group, endValue, tween, () => source.TrySetResult(true));
             return source.Task;
         }
 
