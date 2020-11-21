@@ -1,3 +1,10 @@
+# [5.9.0](https://github.com/adrenak/ugx/compare/v5.8.0...v5.9.0) (2020-11-21)
+
+
+### Features
+
+* Update Unex and move to UniTask for async/await ([098dfe9](https://github.com/adrenak/ugx/commit/098dfe91e283da10c13cf085c587dc779fbb2566))
+
 # [5.8.0](https://github.com/adrenak/ugx/compare/v5.7.0...v5.8.0) (2020-11-06)
 
 
