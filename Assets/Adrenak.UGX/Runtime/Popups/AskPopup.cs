@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +12,7 @@ namespace Adrenak.UGX {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        async public Task<bool> Show(string header, string body, string positive, string negative) {
+        async public UniTask<bool> Show(string header, string body, string positive, string negative) {
             OpenWindow();
             onWindowOpen?.Invoke();
 
@@ -26,7 +26,7 @@ namespace Adrenak.UGX {
             OnConfirm = () => response = true;
             OnDeny = () => response = false;
             while (response == null)
-                await Task.Delay(100);
+                await UniTask.Delay(100);
 
             onWindowClose?.Invoke();
             CloseWindow();

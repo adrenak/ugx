@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -27,7 +27,7 @@ namespace Adrenak.UGX {
 
         [Button("Move In")]
         async public void MoveInAndForget() => await MoveIn();
-        async public Task MoveIn() {
+        async public UniTask MoveIn() {
             if (!Application.isPlaying) {
                 RT.localPosition = InPosition;
                 return;
@@ -39,7 +39,7 @@ namespace Adrenak.UGX {
 
         [Button("Move Out")]
         async public void MoveOutAndForget() => await MoveOut();
-        async public Task MoveOut() {
+        async public UniTask MoveOut() {
             if (!Application.isPlaying) {
                 RT.localPosition = OutPosition;
                 return;
@@ -49,7 +49,7 @@ namespace Adrenak.UGX {
             RT.localPosition = OutPosition;
         }
 
-        async public Task TweenPosition(Vector3 endValue, PositionTransitionArgs tween)
+        async public UniTask TweenPosition(Vector3 endValue, PositionTransitionArgs tween)
             => await tweener.TransitionPosition(RT, endValue, tween);
 
         public Vector3 GetPositionVector3(PositionType position) {

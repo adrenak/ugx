@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +11,7 @@ namespace Adrenak.UGX {
         [SerializeField] Text ackDisplay;
 #pragma warning restore 0649
 
-        async public Task Show(string header, string body, string ack) {
+        async public UniTask Show(string header, string body, string ack) {
             onWindowOpen?.Invoke();
 
             headerDisplay.text = header;
@@ -21,7 +21,7 @@ namespace Adrenak.UGX {
             bool responded = false;
             OnAcknowledge = () => responded = true;
             while (!responded)
-                await Task.Delay(100);
+                await UniTask.Delay(100);
 
             onWindowClose?.Invoke();
         }

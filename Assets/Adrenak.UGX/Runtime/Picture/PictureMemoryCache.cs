@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
@@ -52,8 +52,8 @@ namespace Adrenak.UGX {
             maxResourceCount = maxCount;
         }
 
-        public override Task Init(object obj = null) {
-            return Task.CompletedTask;
+        public override UniTask Init(object obj = null) {
+            return UniTask.CompletedTask;
         }
 
         public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
@@ -101,11 +101,11 @@ namespace Adrenak.UGX {
             );
         }
 
-        public override Task<Texture2D> Get(string location, Texture2DCompression compression, Picture instance) {
-            var source = new TaskCompletionSource<Texture2D>();
+        public override UniTask<Texture2D> Get(string location, Texture2DCompression compression, Picture instance) {
+            var source = new UniTaskCompletionSource<Texture2D>();
             Get(location, compression, instance,
-                result => source.SetResult(result),
-                exception => source.SetException(exception)
+                result => source.TrySetResult(result),
+                exception => source.TrySetException(exception)
             );
             return source.Task;
         }
@@ -143,11 +143,11 @@ namespace Adrenak.UGX {
             }
         }
 
-        public override Task Free(string location, Texture2DCompression compression, Picture instance) {
-            var source = new TaskCompletionSource<bool>();
+        public override UniTask Free(string location, Texture2DCompression compression, Picture instance) {
+            var source = new UniTaskCompletionSource<bool>();
             Free(location, compression, instance,
-                () => source.SetResult(true),
-                exception => source.SetException(exception)
+                () => source.TrySetResult(true),
+                exception => source.TrySetException(exception)
             );
             return source.Task;
         }

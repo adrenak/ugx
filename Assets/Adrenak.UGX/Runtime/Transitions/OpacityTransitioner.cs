@@ -1,5 +1,5 @@
 ﻿using NaughtyAttributes;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Adrenak.UGX {
@@ -17,7 +17,7 @@ namespace Adrenak.UGX {
 
         [Button]
         async public void FadeInAndForget() => await FadeIn();
-        async public Task FadeIn() {
+        async public UniTask FadeIn() {
             if (!Application.isPlaying) {
                 CG.alpha = 1;
                 CG.blocksRaycasts = true;
@@ -33,7 +33,7 @@ namespace Adrenak.UGX {
 
         [Button]
         async public void FadeOutAndForget() => await FadeOut();
-        async public Task FadeOut() {
+        async public UniTask FadeOut() {
             if (!Application.isPlaying) {
                 CG.alpha = 0;
                 CG.blocksRaycasts = false;
@@ -47,7 +47,7 @@ namespace Adrenak.UGX {
             CG.interactable = false;
         }
 
-        async public Task TweenOpacity(float endValue, OpacityTransitionArgs tween)
+        async public UniTask TweenOpacity(float endValue, OpacityTransitionArgs tween)
             => await tweener.TransitionOpacity(CG, endValue, tween);
     }
 }

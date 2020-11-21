@@ -1,5 +1,6 @@
 ﻿using System.Threading;
-using System.Threading.Tasks;
+
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +26,7 @@ namespace Adrenak.UGX {
                 _delay = delay;
 
             try {
-                await Task.Delay((int)(_delay * 1000), source.Token);
+                await UniTask.Delay((int)(_delay * 1000), DelayType.DeltaTime, PlayerLoopTiming.Update, source.Token);
                 source = null;
                 onWindowClose?.Invoke();
             }

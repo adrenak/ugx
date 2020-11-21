@@ -13,7 +13,7 @@ namespace Adrenak.UGX {
     public abstract class View<TViewModel> : View where TViewModel : ViewModel {
         public event EventHandler<TViewModel> ViewModelSet;
 
-        [SerializeField] bool autoStart;
+        [SerializeField] bool autoStart = false;
 
         [SerializeField] TViewModel viewModel;
         public TViewModel ViewModel {
