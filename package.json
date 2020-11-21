@@ -1,6 +1,6 @@
 {
 	"name": "com.adrenak.ugx",
-	"version": "5.8.0",
+	"version": "5.9.0",
 	"displayName": "Adrenak.UGX",
 	"description": "UGX: UGUI Extended. UI framework for Unity UI.",
 	"unity": "2018.4",
@@ -13,7 +13,7 @@
 		"com.pixelplacement.surge.tween": "1.0.2",
 		"com.dbrizov.naughtyattributes": "2.0.4",
 		"com.adrenak.unex": "2.4.0",
-		"com.cysharp.unitask":"2.0.37"
+		"com.cysharp.unitask": "2.0.37"
 	},
 	"scopedRegistries": [
 		{
@@ -35,7 +35,7 @@
 			]
 		}
 	],
-	"publishConfig" : {
-		"registry":"https://registry.npmjs.org"
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org"
 	}
 }
