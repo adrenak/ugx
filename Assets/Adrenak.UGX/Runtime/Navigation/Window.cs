@@ -12,6 +12,7 @@ using NaughtyAttributes;
         [ShowIf("showEvents")] public UnityEvent onWindowBack;
 
         public Navigator navigator;
+        public bool autoPopOnBack;
         [ReadOnly] [SerializeField] bool isWindowOpen;
         public bool IsWindowOpen => isWindowOpen;
 
@@ -28,7 +29,8 @@ using NaughtyAttributes;
 
         [Button]
         public void GoBack() {
-            navigator?.Pop();
+            if(autoPopOnBack)
+                navigator?.Pop();
             onWindowBack?.Invoke();
             WindowBackPressed();
         }
