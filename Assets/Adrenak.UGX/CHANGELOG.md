@@ -1,3 +1,10 @@
+# [5.10.0](https://github.com/adrenak/ugx/compare/v5.9.0...v5.10.0) (2020-11-22)
+
+
+### Features
+
+* Add Window.autoPopOnBack ([918d968](https://github.com/adrenak/ugx/commit/918d968427d574583e754d2faf613708664076b0))
+
 # [5.9.0](https://github.com/adrenak/ugx/compare/v5.8.0...v5.9.0) (2020-11-21)
 
 
