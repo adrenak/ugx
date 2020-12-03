@@ -1,3 +1,10 @@
+## [5.10.1](https://github.com/adrenak/ugx/compare/v5.10.0...v5.10.1) (2020-12-03)
+
+
+### Bug Fixes
+
+* Explicitly declare ComponentModel members in BindableBehaviour ([fb20931](https://github.com/adrenak/ugx/commit/fb20931bec9da7c136396da9cb8fe184965b9739))
+
 # [5.10.0](https://github.com/adrenak/ugx/compare/v5.9.0...v5.10.0) (2020-11-22)
 
 
