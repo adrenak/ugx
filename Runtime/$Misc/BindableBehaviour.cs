@@ -2,14 +2,7 @@
 using UnityEngine;
 using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
-
-// declaring these because projects with JSON.NET has conflicts sometimes.
-using INotifyPropertyChanging = System.ComponentModel.INotifyPropertyChanging;
-using INotifyPropertyChanged = System.ComponentModel.INotifyPropertyChanged;
-using PropertyChangedEventHandler = System.ComponentModel.PropertyChangedEventHandler;
-using PropertyChangingEventHandler = System.ComponentModel.PropertyChangingEventHandler;
-using PropertyChangingEventArgs = System.ComponentModel.PropertyChangingEventArgs;
-using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
+using System.ComponentModel;
 
 namespace Adrenak.UGX {
     [AttributeUsage(AttributeTargets.Method)]
@@ -24,23 +17,15 @@ namespace Adrenak.UGX {
     }
 
     [Serializable]
-    public class Bindable : INotifyPropertyChanged, INotifyPropertyChanging {
+    public class Bindable : INotifyPropertyChanged {
         readonly ConcurrentDictionary<string, object> _properties = new ConcurrentDictionary<string, object>();
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-
-        protected bool CallPropertyChangeEvent { get; set; } = true;
 
         [NotifyPropertyChangedInvocator]
         void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        void OnPropertyChanging([CallerMemberName] string propertyName = null) {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-        }
-
 
         protected T Get<T>(string name, T defValue = default(T)) {
             return !string.IsNullOrEmpty(name) && _properties.TryGetValue(name, out var value)
@@ -56,13 +41,9 @@ namespace Adrenak.UGX {
             if (isExists && Equals(value, getValue))
                 return false;
 
-            if (CallPropertyChangeEvent)
-                OnPropertyChanging(name);
-
             _properties.AddOrUpdate(name, value, (s, o) => value);
 
-            if (CallPropertyChangeEvent)
-                OnPropertyChanged(name);
+            OnPropertyChanged(name);
 
             return true;
         }
@@ -73,23 +54,15 @@ namespace Adrenak.UGX {
         }
     }
 
-    public class BindableBehaviour : MonoBehaviour, INotifyPropertyChanged, INotifyPropertyChanging {
+    public class BindableBehaviour : MonoBehaviour, INotifyPropertyChanged {
         readonly ConcurrentDictionary<string, object> _properties = new ConcurrentDictionary<string, object>();
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
-
-        protected bool CallPropertyChangeEvent { get; set; } = true;
 
         [NotifyPropertyChangedInvocator]
         void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        void OnPropertyChanging([CallerMemberName] string propertyName = null) {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-        }
-
 
         protected T Get<T>(string name, T defValue = default(T)) {
             return !string.IsNullOrEmpty(name) && _properties.TryGetValue(name, out var value)
@@ -105,13 +78,9 @@ namespace Adrenak.UGX {
             if (isExists && Equals(value, getValue))
                 return false;
 
-            if (CallPropertyChangeEvent)
-                OnPropertyChanging(name);
-
             _properties.AddOrUpdate(name, value, (s, o) => value);
 
-            if (CallPropertyChangeEvent)
-                OnPropertyChanged(name);
+            OnPropertyChanged(name);
 
             return true;
         }
