@@ -1,3 +1,10 @@
+## [5.10.2](https://github.com/adrenak/ugx/compare/v5.10.1...v5.10.2) (2020-12-03)
+
+
+### Bug Fixes
+
+* Remove INotifyPropertyChanged from Bindable because it conflicts ([04c4b7a](https://github.com/adrenak/ugx/commit/04c4b7a2f42595bc9acf816d75e36a87c17426f0))
+
 ## [5.10.1](https://github.com/adrenak/ugx/compare/v5.10.0...v5.10.1) (2020-12-03)
 
 
