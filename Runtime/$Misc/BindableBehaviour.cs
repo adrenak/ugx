@@ -1,8 +1,15 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Concurrent;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
+
+// declaring these because projects with JSON.NET has conflicts sometimes.
+using INotifyPropertyChanging = System.ComponentModel.INotifyPropertyChanging;
+using INotifyPropertyChanged = System.ComponentModel.INotifyPropertyChanged;
+using PropertyChangedEventHandler = System.ComponentModel.PropertyChangedEventHandler;
+using PropertyChangingEventHandler = System.ComponentModel.PropertyChangingEventHandler;
+using PropertyChangingEventArgs = System.ComponentModel.PropertyChangingEventArgs;
+using PropertyChangedEventArgs = System.ComponentModel.PropertyChangedEventArgs;
 
 namespace Adrenak.UGX {
     [AttributeUsage(AttributeTargets.Method)]
