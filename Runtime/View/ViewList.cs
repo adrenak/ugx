@@ -2,11 +2,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using NaughtyAttributes;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class ViewList<TModel, TView> : MonoBehaviour, ICollection<TModel>, IList<TModel> where TModel : ViewModel where TView : View<TModel> {
+    public class ViewList<TModel, TView> : ICollection<TModel>, IList<TModel> where TModel : ViewModel where TView : View<TModel> {
         public Transform container = null;
         public TView template = null;
         [SerializeField] List<TModel> data = new List<TModel>();
@@ -20,6 +19,11 @@ namespace Adrenak.UGX {
                 data[index] = value;
                 Instantiated[index].ViewData = value;
             }
+        }
+
+        public ViewList(Transform container, TView template) {
+            this.container = container;
+            this.template = template;
         }
 
         Action<TView> onInit, onDeinit;
@@ -39,7 +43,9 @@ namespace Adrenak.UGX {
             if (!Application.isPlaying)
                 return null;
 
-            var instance = Instantiate(template, container);
+            var instance = MonoBehaviour.Instantiate(template, container);
+            if (!instance.gameObject.activeSelf)
+                instance.gameObject.SetActive(true);
             instance.hideFlags = HideFlags.DontSave;
             instance.ViewData = t;
 
@@ -53,7 +59,7 @@ namespace Adrenak.UGX {
                 if (instance != null && instance.ViewData.Equals(t) && instance.gameObject != null) {
                     onDeinit?.Invoke(instance);
                     Instantiated.Remove(instance);
-                    Destroy(instance.gameObject);
+                    MonoBehaviour.Destroy(instance.gameObject);
                     break;
                 }
             }
@@ -115,23 +121,23 @@ namespace Adrenak.UGX {
         }
 
         public IEnumerator<TModel> GetEnumerator() {
-            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(data.ToArray());
+            return (IEnumerator<TModel>)new ViewListEnumerator<TModel>(data.ToArray());
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(data.ToArray());
+            return (IEnumerator<TModel>)new ViewListEnumerator<TModel>(data.ToArray());
         }
     }
 
     // When you implement IEnumerable, you must also implement IEnumerator.
-    public class ViewGroupEnum<T> : IEnumerator where T : ViewModel {
+    public class ViewListEnumerator<T> : IEnumerator where T : ViewModel {
         public T[] array;
 
         // Enumerators are positioned before the first element
         // until the first MoveNext() call.
         int position = -1;
 
-        public ViewGroupEnum(T[] list) {
+        public ViewListEnumerator(T[] list) {
             array = list;
         }
 
