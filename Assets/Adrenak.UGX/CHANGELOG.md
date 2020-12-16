@@ -1,3 +1,17 @@
+# [5.11.0](https://github.com/adrenak/ugx/compare/v5.10.2...v5.11.0) (2020-12-16)
+
+
+### Bug Fixes
+
+* Make RectTransform component mandatory for View ([c9a1758](https://github.com/adrenak/ugx/commit/c9a175871441756269f88d2a08d89ad38deac6d6))
+* use the term 'view data' for instances of view models ([48853a6](https://github.com/adrenak/ugx/commit/48853a6bdc36c2533eedcf016f08c6a51ef02cb2))
+
+
+### Features
+
+* Remove Bindable ([9407e1b](https://github.com/adrenak/ugx/commit/9407e1bf024a8277c6e195c93f5f413fdcb1c372))
+* Split ViewList into a plain C# class and a UIBehaviour ([1569625](https://github.com/adrenak/ugx/commit/15696258f2c2534511fe796f4fa4a5cebde2d7d5))
+
 ## [5.10.2](https://github.com/adrenak/ugx/compare/v5.10.1...v5.10.2) (2020-12-03)
 
 
