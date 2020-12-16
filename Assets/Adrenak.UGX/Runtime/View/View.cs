@@ -11,34 +11,33 @@ namespace Adrenak.UGX {
 
     [Serializable]
     public abstract class View<TViewModel> : View where TViewModel : ViewModel {
-        public event EventHandler<TViewModel> ViewModelSet;
+        public event EventHandler<TViewModel> OnViewDataSet;
 
-        [SerializeField] bool autoStart = false;
+        [SerializeField] bool refreshOnStart = false;
 
-        [SerializeField] TViewModel viewModel;
-        public TViewModel ViewModel {
-            get => viewModel;
+        [SerializeField] TViewModel viewData;
+        public TViewModel ViewData {
+            get => viewData;
             set {
-                viewModel = value ?? throw new ArgumentNullException(nameof(ViewModel));
-                ViewModelSet?.Invoke(this, viewModel);
-                OnViewModelSet();
+                viewData = value ?? throw new ArgumentNullException(nameof(ViewData));
+                OnViewDataSet?.Invoke(this, viewData);
+                HandleViewDataSet();
             }
         }
 
         protected new void Start() {
             base.Start();
-            if (autoStart)
-                OnViewModelSet();
+            if (refreshOnStart)
+                Refresh();
         }
 
         [Button]
-        public void Refresh() => OnViewModelSet();
+        public void Refresh() => HandleViewDataSet();
 
         [Button]
-        public void Clear() => ViewModel = default;
+        public void Clear() => ViewData = default;
 
-        protected abstract void OnViewModelSet();
-        protected virtual void OnViewModelModify(string name) { }
+        protected abstract void HandleViewDataSet();
     }
 
     [Serializable]
