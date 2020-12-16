@@ -5,8 +5,8 @@ using System;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class ViewModel {
-        public string identifier = Guid.NewGuid().ToString();
+    public abstract class ViewModel {
+        public string ID = Guid.NewGuid().ToString();
     }
 
     [Serializable]
@@ -42,6 +42,7 @@ namespace Adrenak.UGX {
     }
 
     [Serializable]
+    [RequireComponent(typeof(RectTransform))]
     public class View : UIBehaviour {
         public UnityEvent<Visibility> onVisibilityChanged;
         [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
@@ -54,10 +55,17 @@ namespace Adrenak.UGX {
         RectTransform rt;
         public RectTransform RectTransform => rt ?? (rt = GetComponent<RectTransform>());
 
+        /// <summary>
+        /// If you're overriding this, make sure to call base.Start() first thing
+        /// in the Start method of your subclass
+        /// By marking this method as protected, it'll warn any inheritors
+        /// </summary>
         protected void Start() => CurrentVisibility = GetVisibility();
 
         /// <summary>
-        /// If you're overriding this, make sure to call base.Update() in your subclass
+        /// If you're overriding this, make sure to call base.Update() first thing
+        /// in the Update method of your subclass
+        /// By marking this method as protected, it'll warn any inheritors
         /// </summary>
         protected void Update() {
             UpdateVisibility();
