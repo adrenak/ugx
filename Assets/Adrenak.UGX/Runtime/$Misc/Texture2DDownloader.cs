@@ -51,7 +51,11 @@ namespace Adrenak.UGX {
             pending.EnsureDoesntExist(request);
             ongoing.EnsureExists(request);
 
-            var www = new WWW(request.path);
+            string path = request.path;
+            if (!path.StartsWith("http"))
+                path = "file://" + path;
+            var www = new WWW(path);
+            
             yield return www;
             while (!www.isDone)
                 yield return null;
