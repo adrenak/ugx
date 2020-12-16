@@ -5,7 +5,7 @@ using System;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class ViewModel : Bindable {
+    public class ViewModel {
         public string identifier = Guid.NewGuid().ToString();
     }
 
@@ -38,6 +38,7 @@ namespace Adrenak.UGX {
         public void Clear() => ViewModel = default;
 
         protected abstract void OnViewModelSet();
+        protected virtual void OnViewModelModify(string name) { }
     }
 
     [Serializable]
