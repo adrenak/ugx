@@ -7,11 +7,11 @@ using UnityEngine.Events;
 namespace Adrenak.UGX {
     [Serializable]
     public class IconModel : ViewModel {
-        public Picture.Source source;       
         public string text;
-        public string imageURL;
-        public string resourcePath;
-        public Sprite sprite;
+        public Picture.Source source;
+        public string spriteImageURL;
+        public string spriteResourcePath;
+        public Sprite spriteAsset;
     }
 
     public class Icon : View<IconModel>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
@@ -25,20 +25,20 @@ namespace Adrenak.UGX {
         [SerializeField] Picture picture;
 #pragma warning disable 0649
 
-        protected override void OnViewModelSet() {
-            gameObject.name = ViewModel.text;
-            text.text = ViewModel.text;
-            picture.source = ViewModel.source;
+        protected override void HandleViewDataSet() {
+            gameObject.name = ViewData.text;
+            text.text = ViewData.text;
+            picture.source = ViewData.source;
 
-            switch (ViewModel.source) {
+            switch (ViewData.source) {
                 case Picture.Source.Asset:
-                    picture.sprite = ViewModel.sprite;
+                    picture.sprite = ViewData.spriteAsset;
                     break;
                 case Picture.Source.Resource:
-                    picture.path = ViewModel.resourcePath;
+                    picture.path = ViewData.spriteResourcePath;
                     break;
                 case Picture.Source.URL:
-                    picture.path = ViewModel.imageURL;
+                    picture.path = ViewData.spriteImageURL;
                     break;
             }
 

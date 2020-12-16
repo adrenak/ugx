@@ -7,28 +7,26 @@ using NaughtyAttributes;
 namespace Adrenak.UGX {
     [Serializable]
     public class ViewList<TModel, TView> : MonoBehaviour, ICollection<TModel>, IList<TModel> where TModel : ViewModel where TView : View<TModel> {
-#pragma warning disable 0649
-        public Transform container;
-        public TView template;
-        [ReadOnly] [SerializeField] List<TModel> viewModels = new List<TModel>();
-#pragma warning restore 0649
+        public Transform container = null;
+        public TView template = null;
+        [SerializeField] List<TModel> data = new List<TModel>();
 
         public List<TView> Instantiated { get; private set; } = new List<TView>();
-        public int Count => viewModels.Count;
+        public int Count => data.Count;
         public bool IsReadOnly => false;
         public TModel this[int index] {
-            get => viewModels[index];
+            get => data[index];
             set {
-                viewModels[index] = value;
-                Instantiated[index].ViewModel = value;
+                data[index] = value;
+                Instantiated[index].ViewData = value;
             }
         }
 
         Action<TView> onInit, onDeinit;
         public void Setup(Action<TView> onInit, Action<TView> onDeinit) {
             this.onInit = onInit;
-            Instantiated.ForEach(x => this.onInit(x));
             this.onDeinit = onDeinit;
+            Instantiated.ForEach(x => this.onInit(x));
         }
 
         TView Instantiate(TModel t) {
@@ -43,7 +41,7 @@ namespace Adrenak.UGX {
 
             var instance = Instantiate(template, container);
             instance.hideFlags = HideFlags.DontSave;
-            instance.ViewModel = t;
+            instance.ViewData = t;
 
             onInit?.Invoke(instance);
 
@@ -52,7 +50,7 @@ namespace Adrenak.UGX {
 
         void Destroy(TModel t) {
             foreach (var instance in Instantiated) {
-                if (instance != null && instance.ViewModel.Equals(t) && instance.gameObject != null) {
+                if (instance != null && instance.ViewData.Equals(t) && instance.gameObject != null) {
                     onDeinit?.Invoke(instance);
                     Instantiated.Remove(instance);
                     Destroy(instance.gameObject);
@@ -62,17 +60,17 @@ namespace Adrenak.UGX {
         }
 
         public void Clear() {
-            foreach (var model in viewModels)
+            foreach (var model in data)
                 Destroy(model);
-            viewModels.Clear();
+            data.Clear();
         }
 
         public bool Contains(TModel item) {
-            return viewModels.Contains(item);
+            return data.Contains(item);
         }
 
         public void Add(TModel item) {
-            viewModels.Add(item);
+            data.Add(item);
             var instance = Instantiate(item);
             if (instance != null)
                 Instantiated.Add(instance);
@@ -85,43 +83,43 @@ namespace Adrenak.UGX {
         public bool Remove(TModel item) {
             if (Contains(item)) {
                 Destroy(item);
-                viewModels.Remove(item);
+                data.Remove(item);
                 return true;
             }
             return false;
         }
 
         public int IndexOf(TModel item) {
-            return viewModels.IndexOf(item);
+            return data.IndexOf(item);
         }
 
         public void Insert(int index, TModel item) {
             if (item == null)
                 throw new Exception("Inserted item cannot be null");
 
-            if (index < 0 || index >= viewModels.Count)
+            if (index < 0 || index >= data.Count)
                 throw new IndexOutOfRangeException("Insert method index was out of range");
 
-            viewModels.Insert(index, item);
+            data.Insert(index, item);
             var instance = Instantiate(item);
             Instantiated.Insert(index, instance);
         }
 
         public void RemoveAt(int index) {
-            if (index < 0 || index >= viewModels.Count)
+            if (index < 0 || index >= data.Count)
                 throw new IndexOutOfRangeException("RemoveAt method index was out of range");
 
-            var vm = viewModels[index];
+            var vm = data[index];
             Destroy(vm);
-            viewModels.RemoveAt(index);
+            data.RemoveAt(index);
         }
 
         public IEnumerator<TModel> GetEnumerator() {
-            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(viewModels.ToArray());
+            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(data.ToArray());
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(viewModels.ToArray());
+            return (IEnumerator<TModel>)new ViewGroupEnum<TModel>(data.ToArray());
         }
     }
 
