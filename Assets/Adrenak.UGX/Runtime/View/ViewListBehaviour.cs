@@ -5,16 +5,16 @@ using System.Collections.Generic;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public abstract class ViewListBehaviour<TModel, TView> : UIBehaviour where TModel : ViewModel where TView : View<TModel> {
+    public abstract class ViewListBehaviour<TState, TView> : UIBehaviour where TState : ViewState where TView : View<TState> {
         public Transform container = null;
         public TView template = null;
         [SerializeField] bool useDefaultData;
-        [ShowIf("useDefaultData")] public List<TModel> defaultData;
+        [ShowIf("useDefaultData")] public List<TState> defaultData;
 
-        public ViewList<TModel, TView> InnerList { get; private set; }
+        public ViewList<TState, TView> InnerList { get; private set; }
 
         void Start() {
-            InnerList = new ViewList<TModel, TView>(container, template);
+            InnerList = new ViewList<TState, TView>(container, template);
 
             if (useDefaultData)
                 InnerList.AddRange(defaultData);
