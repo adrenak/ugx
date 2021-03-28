@@ -1,3 +1,10 @@
+## [5.11.1](https://github.com/adrenak/ugx/compare/v5.11.0...v5.11.1) (2021-03-28)
+
+
+### Bug Fixes
+
+* [#33](https://github.com/adrenak/ugx/issues/33). ([bb3b4de](https://github.com/adrenak/ugx/commit/bb3b4de50b6b1c76737dec35ee4cee8d01237f9b))
+
 # [5.11.0](https://github.com/adrenak/ugx/compare/v5.10.2...v5.11.0) (2020-12-16)
 
 
