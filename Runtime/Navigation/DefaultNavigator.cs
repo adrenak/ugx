@@ -2,7 +2,7 @@
 
 namespace Adrenak.UGX {
     public class DefaultNavigator : Navigator {
-        void Start() {
+        void Awake() {
             if (initialWindow && useInitialWindow)
                 Push(initialWindow);
         }

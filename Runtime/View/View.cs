@@ -13,7 +13,7 @@ namespace Adrenak.UGX {
     public abstract class View<TViewState> : View where TViewState : ViewState {
         public event EventHandler<TViewState> OnViewStateSet;
 
-        [SerializeField] bool refreshOnStart = false;
+        public bool refreshOnAwake = false;
 
         [SerializeField] TViewState myViewState;
         public TViewState MyViewState {
@@ -25,9 +25,9 @@ namespace Adrenak.UGX {
             }
         }
 
-        protected new void Start() {
-            base.Start();
-            if (refreshOnStart)
+        protected new void Awake() {
+            base.Awake();
+            if (refreshOnAwake)
                 Refresh();
         }
 
@@ -55,11 +55,11 @@ namespace Adrenak.UGX {
         public RectTransform RectTransform => rt ?? (rt = GetComponent<RectTransform>());
 
         /// <summary>
-        /// If you're overriding this, make sure to call base.Start() first thing
-        /// in the Start method of your subclass
+        /// If you're overriding this, make sure to call base.Awake() first thing
+        /// in the Awake method of your subclass
         /// By marking this method as protected, it'll warn any inheritors
         /// </summary>
-        protected void Start() => CurrentVisibility = GetVisibility();
+        protected void Awake() => CurrentVisibility = GetVisibility();
 
         /// <summary>
         /// If you're overriding this, make sure to call base.Update() first thing

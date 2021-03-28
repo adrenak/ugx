@@ -15,6 +15,7 @@ namespace Adrenak.UGX {
         Texture2D tex;
 
         new void Update() {
+            base.Update();
             if (Image == null || Image.sprite == null) return;
 
             var t = Image.sprite.texture;
