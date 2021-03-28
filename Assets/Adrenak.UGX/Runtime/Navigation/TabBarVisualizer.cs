@@ -26,6 +26,8 @@ namespace Adrenak.UGX {
 
                 entry.window.onWindowClose.AddListener(() =>
                     entry.onClose?.Invoke());
+
+                entry.onClose?.Invoke();
             }
         }
     }

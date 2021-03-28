@@ -13,7 +13,7 @@ namespace Adrenak.UGX {
 
         public ViewList<TState, TView> InnerList { get; private set; }
 
-        void Start() {
+        void Awake() {
             InnerList = new ViewList<TState, TView>(container, template);
 
             if (useDefaultData)
