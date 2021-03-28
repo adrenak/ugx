@@ -5,19 +5,19 @@ using System.Collections;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class ViewList<TModel, TView> : ICollection<TModel>, IList<TModel> where TModel : ViewModel where TView : View<TModel> {
+    public class ViewList<TState, TView> : ICollection<TState>, IList<TState> where TState : ViewState where TView : View<TState> {
         public Transform container = null;
         public TView template = null;
-        [SerializeField] List<TModel> data = new List<TModel>();
+        [SerializeField] List<TState> states = new List<TState>();
 
         public List<TView> Instantiated { get; private set; } = new List<TView>();
-        public int Count => data.Count;
+        public int Count => states.Count;
         public bool IsReadOnly => false;
-        public TModel this[int index] {
-            get => data[index];
+        public TState this[int index] {
+            get => states[index];
             set {
-                data[index] = value;
-                Instantiated[index].ViewData = value;
+                states[index] = value;
+                Instantiated[index].MyViewState = value;
             }
         }
 
@@ -33,7 +33,7 @@ namespace Adrenak.UGX {
             Instantiated.ForEach(x => this.onInit(x));
         }
 
-        TView Instantiate(TModel t) {
+        TView Instantiate(TState t) {
             if (template == null)
                 throw new Exception("No ViewTemplate assigned! Cannot instantiate elements in ViewGroup.");
 
@@ -47,16 +47,16 @@ namespace Adrenak.UGX {
             if (!instance.gameObject.activeSelf)
                 instance.gameObject.SetActive(true);
             instance.hideFlags = HideFlags.DontSave;
-            instance.ViewData = t;
+            instance.MyViewState = t;
 
             onInit?.Invoke(instance);
 
             return instance;
         }
 
-        void Destroy(TModel t) {
+        void Destroy(TState t) {
             foreach (var instance in Instantiated) {
-                if (instance != null && instance.ViewData.Equals(t) && instance.gameObject != null) {
+                if (instance != null && instance.MyViewState.Equals(t) && instance.gameObject != null) {
                     onDeinit?.Invoke(instance);
                     Instantiated.Remove(instance);
                     MonoBehaviour.Destroy(instance.gameObject);
@@ -66,71 +66,71 @@ namespace Adrenak.UGX {
         }
 
         public void Clear() {
-            foreach (var model in data)
-                Destroy(model);
-            data.Clear();
+            foreach (var state in states)
+                Destroy(state);
+            states.Clear();
         }
 
-        public bool Contains(TModel item) {
-            return data.Contains(item);
+        public bool Contains(TState item) {
+            return states.Contains(item);
         }
 
-        public void Add(TModel item) {
-            data.Add(item);
+        public void Add(TState item) {
+            states.Add(item);
             var instance = Instantiate(item);
             if (instance != null)
                 Instantiated.Add(instance);
         }
 
-        public void CopyTo(TModel[] array, int arrayIndex) {
+        public void CopyTo(TState[] array, int arrayIndex) {
             throw new NotImplementedException("ViewList doesn't support CopyTo yet.");
         }
 
-        public bool Remove(TModel item) {
+        public bool Remove(TState item) {
             if (Contains(item)) {
                 Destroy(item);
-                data.Remove(item);
+                states.Remove(item);
                 return true;
             }
             return false;
         }
 
-        public int IndexOf(TModel item) {
-            return data.IndexOf(item);
+        public int IndexOf(TState item) {
+            return states.IndexOf(item);
         }
 
-        public void Insert(int index, TModel item) {
+        public void Insert(int index, TState item) {
             if (item == null)
                 throw new Exception("Inserted item cannot be null");
 
-            if (index < 0 || index >= data.Count)
+            if (index < 0 || index >= states.Count)
                 throw new IndexOutOfRangeException("Insert method index was out of range");
 
-            data.Insert(index, item);
+            states.Insert(index, item);
             var instance = Instantiate(item);
             Instantiated.Insert(index, instance);
         }
 
         public void RemoveAt(int index) {
-            if (index < 0 || index >= data.Count)
+            if (index < 0 || index >= states.Count)
                 throw new IndexOutOfRangeException("RemoveAt method index was out of range");
 
-            var vm = data[index];
+            var vm = states[index];
             Destroy(vm);
-            data.RemoveAt(index);
+            states.RemoveAt(index);
         }
 
-        public IEnumerator<TModel> GetEnumerator() {
-            return (IEnumerator<TModel>)new ViewListEnumerator<TModel>(data.ToArray());
+        public IEnumerator<TState> GetEnumerator() {
+            return (IEnumerator<TState>)new ViewListEnumerator<TState>(states.ToArray());
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator<TModel>)new ViewListEnumerator<TModel>(data.ToArray());
+            return (IEnumerator<TState>)new ViewListEnumerator<TState>(states.ToArray());
         }
     }
 
     // When you implement IEnumerable, you must also implement IEnumerator.
-    public class ViewListEnumerator<T> : IEnumerator where T : ViewModel {
+    public class ViewListEnumerator<T> : IEnumerator where T : ViewState {
         public T[] array;
 
         // Enumerators are positioned before the first element

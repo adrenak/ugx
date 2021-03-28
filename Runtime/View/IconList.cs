@@ -2,5 +2,5 @@
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class IconList : ViewListBehaviour<IconModel, Icon> { }
+    public class IconList : ViewListBehaviour<IconState, Icon> { }
 }

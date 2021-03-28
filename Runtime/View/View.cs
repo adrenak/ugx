@@ -5,23 +5,23 @@ using System;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public abstract class ViewModel {
+    public abstract class ViewState {
         public string ID = Guid.NewGuid().ToString();
     }
 
     [Serializable]
-    public abstract class View<TViewModel> : View where TViewModel : ViewModel {
-        public event EventHandler<TViewModel> OnViewDataSet;
+    public abstract class View<TViewState> : View where TViewState : ViewState {
+        public event EventHandler<TViewState> OnViewStateSet;
 
         [SerializeField] bool refreshOnStart = false;
 
-        [SerializeField] TViewModel viewData;
-        public TViewModel ViewData {
-            get => viewData;
+        [SerializeField] TViewState myViewState;
+        public TViewState MyViewState {
+            get => myViewState;
             set {
-                viewData = value ?? throw new ArgumentNullException(nameof(ViewData));
-                OnViewDataSet?.Invoke(this, viewData);
-                HandleViewDataSet();
+                myViewState = value ?? throw new ArgumentNullException(nameof(MyViewState));
+                OnViewStateSet?.Invoke(this, myViewState);
+                HandleViewStateSet();
             }
         }
 
@@ -32,12 +32,12 @@ namespace Adrenak.UGX {
         }
 
         [Button]
-        public void Refresh() => HandleViewDataSet();
+        public void Refresh() => HandleViewStateSet();
 
         [Button]
-        public void Clear() => ViewData = default;
+        public void Clear() => MyViewState = default;
 
-        protected abstract void HandleViewDataSet();
+        protected abstract void HandleViewStateSet();
     }
 
     [Serializable]
