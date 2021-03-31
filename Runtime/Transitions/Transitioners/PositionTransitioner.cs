@@ -20,9 +20,6 @@ namespace Adrenak.UGX {
         [Button("Set As Out")]
         public void CaptureOutPosition() => outPosition = RT.localPosition;
 
-        RectTransform rt;
-        public RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
-
         [Button("Move In")]
         async public void MoveIn() => await MoveInAwaitable();
         async public UniTask MoveInAwaitable() {
