@@ -23,7 +23,8 @@ using NaughtyAttributes;
         [BoxGroup("Fullscreen")] [SerializeField] bool changeFullscreen = false;
         [BoxGroup("Fullscreen")] [ShowIf("changeFullscreen")] public bool isFullscreen = false;
 
-        protected void Update() {
+        protected new void Update() {
+            base.Update();
             CheckBackPress();
         }
 

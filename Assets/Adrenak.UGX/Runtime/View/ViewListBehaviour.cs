@@ -8,7 +8,7 @@ namespace Adrenak.UGX {
     public abstract class ViewListBehaviour<TState, TView> : UGXBehaviour where TState : ViewState where TView : View<TState> {
         public Transform container = null;
         public TView template = null;
-        [SerializeField] bool useDefaultData;
+        [SerializeField] bool useDefaultData = false;
         [ShowIf("useDefaultData")] public List<TState> defaultData;
 
         public ViewList<TState, TView> InnerList { get; private set; }

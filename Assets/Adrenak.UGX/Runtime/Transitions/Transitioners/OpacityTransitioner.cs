@@ -7,9 +7,6 @@ namespace Adrenak.UGX {
     public class OpacityTransitioner : TransitionerBase {
         public OpacityTransitionArgs defaultOpacityTween;
 
-        RectTransform rt;
-        public RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
-
         CanvasGroup cg;
         public CanvasGroup CG => cg == null ? cg = GetComponent<CanvasGroup>() : cg;
 
