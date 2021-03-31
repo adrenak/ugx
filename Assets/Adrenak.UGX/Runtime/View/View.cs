@@ -42,7 +42,7 @@ namespace Adrenak.UGX {
 
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
-    public class View : UIBehaviour {
+    public class View : UGXBehaviour {
         public UnityEvent<Visibility> onVisibilityChanged;
         [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
 

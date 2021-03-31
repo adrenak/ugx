@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Adrenak.UGX {
-    public class UIBehaviour : MonoBehaviour {
+    public class UGXBehaviour : MonoBehaviour {
         public View view => GetComponent<View>();
         public Window window => GetComponent<Window>();
         public PositionTransitioner positionTransitioner => GetComponent<PositionTransitioner>();
