@@ -1,3 +1,10 @@
+# [5.13.0](https://github.com/adrenak/ugx/compare/v5.12.0...v5.13.0) (2021-03-31)
+
+
+### Features
+
+* Move visibility monitoring from View to UGXBehaviour. Resolve ([32917c3](https://github.com/adrenak/ugx/commit/32917c3a58f0d71bb7cc940d7a7b3101dc9d0700))
+
 # [5.12.0](https://github.com/adrenak/ugx/compare/v5.11.1...v5.12.0) (2021-03-28)
 
 
