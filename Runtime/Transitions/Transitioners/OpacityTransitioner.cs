@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Adrenak.UGX {
     [RequireComponent(typeof(CanvasGroup))]
-    public class OpacityTransitioner : UGXBehaviour {
+    public class OpacityTransitioner : TransitionerBase {
         public OpacityTransitionArgs defaultOpacityTween;
-
-        readonly ITransitioner tweener = new SurgeTransitioner();
 
         RectTransform rt;
         public RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
@@ -16,8 +14,9 @@ namespace Adrenak.UGX {
         public CanvasGroup CG => cg == null ? cg = GetComponent<CanvasGroup>() : cg;
 
         [Button]
-        async public void FadeInAndForget() => await FadeIn();
-        async public UniTask FadeIn() {
+        async public void FadeIn() => await FadeInAwaitable();
+        
+        async public UniTask FadeInAwaitable() {
             if (!Application.isPlaying) {
                 CG.alpha = 1;
                 CG.blocksRaycasts = true;
@@ -32,8 +31,9 @@ namespace Adrenak.UGX {
         }
 
         [Button]
-        async public void FadeOutAndForget() => await FadeOut();
-        async public UniTask FadeOut() {
+        async public void FadeOut() => await FadeOutAwaitable();
+
+        async public UniTask FadeOutAwaitable() {
             if (!Application.isPlaying) {
                 CG.alpha = 0;
                 CG.blocksRaycasts = false;
@@ -48,6 +48,6 @@ namespace Adrenak.UGX {
         }
 
         async public UniTask TweenOpacity(float endValue, OpacityTransitionArgs tween)
-            => await tweener.TransitionOpacity(CG, endValue, tween);
+            => await Driver.TransitionOpacity(CG, endValue, tween);
     }
 }

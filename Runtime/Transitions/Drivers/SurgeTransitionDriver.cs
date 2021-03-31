@@ -6,7 +6,7 @@ using UnityEngine;
 using Pixelplacement;
 
 namespace Adrenak.UGX {
-    public class SurgeTransitioner : ITransitioner {
+    public class SurgeTransitionDriver : ITransitionDriver {
         public UniTask TransitionPosition(RectTransform rt, Vector3 endValue, PositionTransitionArgs tween) {
             var source = new UniTaskCompletionSource<bool>();
             TransitionPosition(rt, endValue, tween, () => source.TrySetResult(true));

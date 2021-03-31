@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 
 namespace Adrenak.UGX {
-    public class PositionTransitioner : UGXBehaviour {
+    public class PositionTransitioner : TransitionerBase {
         [ReadOnly] [SerializeField] Vector3 inPosition;
         public Vector3 InPosition => inPosition;
 
@@ -23,11 +23,9 @@ namespace Adrenak.UGX {
         RectTransform rt;
         public RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
 
-        readonly ITransitioner tweener = new SurgeTransitioner();
-
         [Button("Move In")]
-        async public void MoveInAndForget() => await MoveIn();
-        async public UniTask MoveIn() {
+        async public void MoveIn() => await MoveInAwaitable();
+        async public UniTask MoveInAwaitable() {
             if (!Application.isPlaying) {
                 RT.localPosition = InPosition;
                 return;
@@ -38,8 +36,8 @@ namespace Adrenak.UGX {
         }
 
         [Button("Move Out")]
-        async public void MoveOutAndForget() => await MoveOut();
-        async public UniTask MoveOut() {
+        async public void MoveOut() => await MoveOutAwaitable();
+        async public UniTask MoveOutAwaitable() {
             if (!Application.isPlaying) {
                 RT.localPosition = OutPosition;
                 return;
@@ -50,7 +48,7 @@ namespace Adrenak.UGX {
         }
 
         async public UniTask TweenPosition(Vector3 endValue, PositionTransitionArgs tween)
-            => await tweener.TransitionPosition(RT, endValue, tween);
+            => await Driver.TransitionPosition(RT, endValue, tween);
 
         public Vector3 GetPositionVector3(PositionType position) {
             switch (position) {
