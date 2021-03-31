@@ -1,3 +1,10 @@
+# [5.12.0](https://github.com/adrenak/ugx/compare/v5.11.1...v5.12.0) (2021-03-28)
+
+
+### Features
+
+* closes [#28](https://github.com/adrenak/ugx/issues/28), closes [#29](https://github.com/adrenak/ugx/issues/29). Orientation and Fullscreen options in Window class added. ([3d67fc6](https://github.com/adrenak/ugx/commit/3d67fc62d8cc4d73f7315132e26d76f6c86283db))
+
 ## [5.11.1](https://github.com/adrenak/ugx/compare/v5.11.0...v5.11.1) (2021-03-28)
 
 
