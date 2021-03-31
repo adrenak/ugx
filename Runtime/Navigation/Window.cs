@@ -5,7 +5,7 @@ using UnityEngine.Events;
 namespace Adrenak.UGX {
 using NaughtyAttributes;
     [DisallowMultipleComponent]
-    public class Window : UIBehaviour {
+    public class Window : UGXBehaviour {
         [SerializeField] bool showEvents;
         [ShowIf("showEvents")] public UnityEvent onWindowOpen;
         [ShowIf("showEvents")] public UnityEvent onWindowClose;

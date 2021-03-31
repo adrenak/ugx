@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public abstract class ViewListBehaviour<TState, TView> : UIBehaviour where TState : ViewState where TView : View<TState> {
+    public abstract class ViewListBehaviour<TState, TView> : UGXBehaviour where TState : ViewState where TView : View<TState> {
         public Transform container = null;
         public TView template = null;
         [SerializeField] bool useDefaultData;
