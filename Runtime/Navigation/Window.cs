@@ -17,10 +17,10 @@ using NaughtyAttributes;
         public Navigator navigator;
         public bool autoPopOnBack;
         
-        [BoxGroup("Orientation")] [SerializeField] bool changeOrientation;
+        [BoxGroup("Orientation")] [SerializeField] bool changeOrientation = false;
         [BoxGroup("Orientation")] [ShowIf("changeOrientation")] public ScreenOrientation orientation = ScreenOrientation.AutoRotation;
 
-        [BoxGroup("Fullscreen")] [SerializeField] bool changeFullscreen;
+        [BoxGroup("Fullscreen")] [SerializeField] bool changeFullscreen = false;
         [BoxGroup("Fullscreen")] [ShowIf("changeFullscreen")] public bool isFullscreen = false;
 
         protected void Update() {

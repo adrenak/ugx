@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Adrenak.UGX {
     [RequireComponent(typeof(CanvasGroup))]
-    public class OpacityTransitioner : MonoBehaviour {
+    public class OpacityTransitioner : UIBehaviour {
         public OpacityTransitionArgs defaultOpacityTween;
 
         readonly ITransitioner tweener = new SurgeTransitioner();

@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 
 namespace Adrenak.UGX {
-    public class PositionTransitioner : MonoBehaviour {
+    public class PositionTransitioner : UIBehaviour {
         [ReadOnly] [SerializeField] Vector3 inPosition;
         public Vector3 InPosition => inPosition;
 
