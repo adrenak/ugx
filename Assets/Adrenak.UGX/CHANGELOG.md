@@ -1,3 +1,11 @@
+# [5.14.0](https://github.com/adrenak/ugx/compare/v5.13.0...v5.14.0) (2021-03-31)
+
+
+### Features
+
+* Add manual refresh to ViewListBehaviour. Resolve [#7](https://github.com/adrenak/ugx/issues/7) ([48197d0](https://github.com/adrenak/ugx/commit/48197d0a13a41057ff949eb7c228650e7152554c))
+* Move visibility monitoring from View to UGXBehaviour. Resolve ([627daa3](https://github.com/adrenak/ugx/commit/627daa36e695c7b847433b3628852a95d980c478))
+
 # [5.13.0](https://github.com/adrenak/ugx/compare/v5.12.0...v5.13.0) (2021-03-31)
 
 
