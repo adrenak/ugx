@@ -10,10 +10,7 @@ namespace Adrenak.UGX {
         CanvasGroup cg;
         public CanvasGroup CG => cg == null ? cg = GetComponent<CanvasGroup>() : cg;
 
-        [Button]
-        async public void FadeIn() => await FadeInAwaitable();
-        
-        async public UniTask FadeInAwaitable() {
+        override async public UniTask TransitionInAsync() {
             if (!Application.isPlaying) {
                 CG.alpha = 1;
                 CG.blocksRaycasts = true;
@@ -27,10 +24,7 @@ namespace Adrenak.UGX {
             CG.interactable = true;
         }
 
-        [Button]
-        async public void FadeOut() => await FadeOutAwaitable();
-
-        async public UniTask FadeOutAwaitable() {
+        override async public UniTask TransitionOutAsync() {
             if (!Application.isPlaying) {
                 CG.alpha = 0;
                 CG.blocksRaycasts = false;
