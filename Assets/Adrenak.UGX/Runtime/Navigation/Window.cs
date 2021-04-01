@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Adrenak.Unex;
+using System.Linq;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
 
@@ -7,6 +7,7 @@ namespace Adrenak.UGX {
 using NaughtyAttributes;
     [DisallowMultipleComponent]
     public class Window : UGXBehaviour {
+        [SerializeField] [ReorderableList] TransitionerBase[] transitioners;
         [SerializeField] bool showEvents;
         [ShowIf("showEvents")] public UnityEvent onWindowOpen;
         [ShowIf("showEvents")] public UnityEvent onWindowClose;
@@ -34,14 +35,10 @@ using NaughtyAttributes;
         }
 
         [Button]
-        public void GoBack() {
-            WindowBackPressed();
-            onWindowBack?.Invoke();
-        }
+        async public void OpenWindow() => await OpenWindowAsync();
 
         bool isOpening;
-        [Button]
-        async public void OpenWindow() {
+        async public UniTask OpenWindowAsync() {
             if (isWindowOpen || isOpening) return;
 
             if (changeOrientation && Screen.orientation != orientation)
@@ -51,6 +48,14 @@ using NaughtyAttributes;
                 Screen.fullScreen = isFullscreen;
 
             isOpening = true;
+
+            // Wait for all transitioners to transition in
+            var transitions = transitioners.Where(x => x.enabled)
+                .Select(x => x.TransitionInAsync())
+                .ToList();
+
+            await UniTask.WhenAll(transitions);
+
             await UniTask.SwitchToMainThread();
             isWindowOpen = true;
             isOpening = false;
@@ -59,18 +64,32 @@ using NaughtyAttributes;
             onWindowOpen?.Invoke();
         }
 
-        bool isClosing;
         [Button]
-        async public void CloseWindow() {
+        async public void CloseWindow() => await CloseWindowAsync();
+
+        bool isClosing;
+        async public UniTask CloseWindowAsync() {
             if (!isWindowOpen || isClosing) return;
 
             isClosing = true;
+            // Wait for all transitioners to transition out
+            var transitions = transitioners.Where(x => x.enabled)
+                .Select(x => x.TransitionOutAsync())
+                .ToList();
+
+            await UniTask.WhenAll(transitions);
             await UniTask.SwitchToMainThread();
             isWindowOpen = false;
             isClosing = false;
             
             WindowClosed();
             onWindowClose?.Invoke();
+        }
+
+        [Button]
+        public void GoBack() {
+            WindowBackPressed();
+            onWindowBack?.Invoke();
         }
 
         protected virtual void WindowOpened() { }
