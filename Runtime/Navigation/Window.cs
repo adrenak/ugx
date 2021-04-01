@@ -7,14 +7,20 @@ namespace Adrenak.UGX {
 using NaughtyAttributes;
     [DisallowMultipleComponent]
     public class Window : UGXBehaviour {
-        [SerializeField] [ReorderableList] TransitionerBase[] transitioners;
+        public enum State {
+            Closed,
+            Closing,
+            Opened,
+            Opening
+        }
+
+        [SerializeField] [ReadOnly] State state;
+        public State CurrentState => state;
+        [SerializeField] [ReorderableList] TransitionerBase[] transitioners = null;
         [SerializeField] bool showEvents;
         [ShowIf("showEvents")] public UnityEvent onWindowOpen;
         [ShowIf("showEvents")] public UnityEvent onWindowClose;
         [ShowIf("showEvents")] public UnityEvent onWindowBack;
-
-        [ReadOnly] [SerializeField] bool isWindowOpen;
-        public bool IsWindowOpen => isWindowOpen;
 
         public bool autoPopOnBack;
         
@@ -30,16 +36,15 @@ using NaughtyAttributes;
         }
 
         void CheckBackPress() {
-            if (Input.GetKeyUp(KeyCode.Escape) && IsWindowOpen && autoPopOnBack)
+            if (Input.GetKeyUp(KeyCode.Escape) && state == State.Opened && autoPopOnBack)
                 GoBack();
         }
 
         [Button]
         async public void OpenWindow() => await OpenWindowAsync();
 
-        bool isOpening;
         async public UniTask OpenWindowAsync() {
-            if (isWindowOpen || isOpening) return;
+            if (state == State.Opened || state == State.Opening) return;
 
             if (changeOrientation && Screen.orientation != orientation)
                 Screen.orientation = orientation;
@@ -47,7 +52,7 @@ using NaughtyAttributes;
             if(changeFullscreen && Screen.fullScreen != isFullscreen)
                 Screen.fullScreen = isFullscreen;
 
-            isOpening = true;
+            state = State.Opening;
 
             // Wait for all transitioners to transition in
             var transitions = transitioners.Where(x => x.enabled)
@@ -55,10 +60,8 @@ using NaughtyAttributes;
                 .ToList();
 
             await UniTask.WhenAll(transitions);
-
             await UniTask.SwitchToMainThread();
-            isWindowOpen = true;
-            isOpening = false;
+            state = State.Opened;
 
             WindowOpened();
             onWindowOpen?.Invoke();
@@ -67,11 +70,10 @@ using NaughtyAttributes;
         [Button]
         async public void CloseWindow() => await CloseWindowAsync();
 
-        bool isClosing;
         async public UniTask CloseWindowAsync() {
-            if (!isWindowOpen || isClosing) return;
+            if (state == State.Closed || state == State.Closing) return;
 
-            isClosing = true;
+            state = State.Closing;
             // Wait for all transitioners to transition out
             var transitions = transitioners.Where(x => x.enabled)
                 .Select(x => x.TransitionOutAsync())
@@ -79,8 +81,7 @@ using NaughtyAttributes;
 
             await UniTask.WhenAll(transitions);
             await UniTask.SwitchToMainThread();
-            isWindowOpen = false;
-            isClosing = false;
+            state = State.Closed;
             
             WindowClosed();
             onWindowClose?.Invoke();
