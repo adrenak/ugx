@@ -13,9 +13,9 @@ namespace Adrenak.UGX {
     public abstract class View<TViewState> : View where TViewState : ViewState {
         public event EventHandler<TViewState> OnViewStateSet;
 
-        public bool updateFromStateOnStart = false;
+        [BoxGroup("View State")] public bool updateFromStateOnStart = false;
 
-        [SerializeField] TViewState currentState;
+        [BoxGroup("View State")] [SerializeField] TViewState currentState;
         public TViewState CurrentState {
             get => currentState;
             set {
@@ -30,7 +30,7 @@ namespace Adrenak.UGX {
                 UpdateFromState();
         }
 
-        [Button]
+        [Button("Update View")]
         public void UpdateFromState() => HandleViewStateSet();
 
         protected abstract void HandleViewStateSet();

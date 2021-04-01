@@ -23,14 +23,15 @@ namespace Adrenak.UGX {
     }
 
     public abstract class Window<T> : View<T> where T : WindowState {
-        [SerializeField] bool showEvents;
-        [ShowIf("showEvents")] public UnityEvent onWindowOpen;
-        [ShowIf("showEvents")] public UnityEvent onWindowClose;
+        [BoxGroup("Window Events")] [SerializeField] bool showEvents;
+        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowOpen;
+        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowClose;
 
         [Button]
         async public void OpenWindow() => await OpenWindowAsync();
 
         async public UniTask OpenWindowAsync() {
+            await UniTask.SwitchToMainThread();
             if (CurrentState.status == WindowStatus.Opened || CurrentState.status == WindowStatus.Opening) return;
 
             CurrentState.status = WindowStatus.Opening;
@@ -50,6 +51,7 @@ namespace Adrenak.UGX {
         async public void CloseWindow() => await CloseWindowAsync();
 
         async public UniTask CloseWindowAsync() {
+            await UniTask.SwitchToMainThread();
             if (CurrentState.status == WindowStatus.Closed || CurrentState.status == WindowStatus.Closing) return;
 
             CurrentState.status = WindowStatus.Closing;

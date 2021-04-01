@@ -14,7 +14,7 @@ namespace Adrenak.UGX {
         [SerializeField] Text title = null;
         [SerializeField] Text description = null;
 
-        async public override UniTask<PopupResponse> WaitForResponse() {              
+        async protected override UniTask<PopupResponse> WaitForResponseImpl() {              
             await UniTask.Delay(CurrentState.delay, DelayType.DeltaTime, PlayerLoopTiming.Update);
             return new PopupResponse();
         }
