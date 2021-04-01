@@ -20,9 +20,7 @@ namespace Adrenak.UGX {
         [Button("Set As Out")]
         public void CaptureOutPosition() => outPosition = RT.localPosition;
 
-        [Button("Move In")]
-        async public void MoveIn() => await MoveInAwaitable();
-        async public UniTask MoveInAwaitable() {
+        override async public UniTask TransitionInAsync() {
             if (!Application.isPlaying) {
                 RT.localPosition = InPosition;
                 return;
@@ -32,9 +30,7 @@ namespace Adrenak.UGX {
             RT.localPosition = InPosition;
         }
 
-        [Button("Move Out")]
-        async public void MoveOut() => await MoveOutAwaitable();
-        async public UniTask MoveOutAwaitable() {
+        override async public UniTask TransitionOutAsync() {
             if (!Application.isPlaying) {
                 RT.localPosition = OutPosition;
                 return;

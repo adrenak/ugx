@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using Cysharp.Threading.Tasks;
+using NaughtyAttributes;
 
 namespace Adrenak.UGX {
-    public class TransitionerBase : UGXBehaviour {
+    public abstract class TransitionerBase : UGXBehaviour {
         static ITransitionDriver driver;
 
         public static bool DriverLocked => driver != null;
@@ -21,5 +23,13 @@ namespace Adrenak.UGX {
                 driver = value;
             }
         }
+
+        [Button]
+        async public void TransitionIn() => await TransitionInAsync();
+        public abstract UniTask TransitionInAsync();
+
+        [Button]
+        async public void TransitionOut() => await TransitionOutAsync();
+        public abstract UniTask TransitionOutAsync();
     }
 }
