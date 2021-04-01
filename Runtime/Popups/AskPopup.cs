@@ -4,7 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UGX {
-    public class AskPopup : Window {
+    [Serializable]
+    public class AskPopupState : PopupState {
+        public string header;
+        public string body;
+        public string positive;
+        public string negative;
+    }
+
+    public class AskPopupResponse : PopupResponse{
+        public bool positive;
+    }
+
+    public class AskPopup : Popup<AskPopupState, AskPopupResponse> {
 #pragma warning disable 0649
         [SerializeField] Text headerDisplay;
         [SerializeField] Text bodyDisplay;
@@ -12,25 +24,21 @@ namespace Adrenak.UGX {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        async public UniTask<bool> Show(string header, string body, string positive, string negative) {
-            OpenWindow();
-            onWindowOpen?.Invoke();
-
-            headerDisplay.text = header;
-            bodyDisplay.text = body;
-            positiveDisplay.text = positive;
-            negativeDisplay.text = negative;
-
+        async public override UniTask<AskPopupResponse> WaitForResponse() {
             // Wait till be get a response
             bool? response = null;
             OnConfirm = () => response = true;
             OnDeny = () => response = false;
             while (response == null)
                 await UniTask.Delay(100);
+            return new AskPopupResponse { positive = response.Value };
+        }
 
-            onWindowClose?.Invoke();
-            CloseWindow();
-            return response.Value;
+        protected override void HandleViewStateSet() {
+            headerDisplay.text = MyViewState.header;
+            bodyDisplay.text = MyViewState.body;
+            positiveDisplay.text = MyViewState.positive;
+            negativeDisplay.text = MyViewState.negative;
         }
 
         Action OnConfirm;
@@ -38,7 +46,6 @@ namespace Adrenak.UGX {
             OnConfirm?.Invoke();
 
         Action OnDeny;
-        public void Deny() =>
-            OnDeny?.Invoke();
+        public void Deny() => OnDeny?.Invoke();
     }
 }

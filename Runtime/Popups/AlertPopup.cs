@@ -4,29 +4,34 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Adrenak.UGX {
-    public class AlertPopup : Window {
-#pragma warning disable 0649
-        [SerializeField] Text headerDisplay;
-        [SerializeField] Text bodyDisplay;
-        [SerializeField] Text ackDisplay;
-#pragma warning restore 0649
+    [Serializable]
+    public class AlertPopupState : PopupState {
+        public string header;
+        public string description;
+        public string ack;
+    }
 
-        async public UniTask Show(string header, string body, string ack) {
-            onWindowOpen?.Invoke();
+    public class AlertPopup : Popup<AlertPopupState, PopupResponse> {
+        [SerializeField] Text headerDisplay = null;
+        [SerializeField] Text bodyDisplay = null;
+        [SerializeField] Text ackDisplay = null;
 
-            headerDisplay.text = header;
-            bodyDisplay.text = body;
-            ackDisplay.text = ack;
+        Action OnAcknowledge;
 
+        async public override UniTask<PopupResponse> WaitForResponse() {
             bool responded = false;
             OnAcknowledge = () => responded = true;
             while (!responded)
                 await UniTask.Delay(100);
-
-            onWindowClose?.Invoke();
+            return new PopupResponse();
         }
 
-        Action OnAcknowledge;
+        protected override void HandleViewStateSet() {
+            headerDisplay.text = MyViewState.header;
+            bodyDisplay.text = MyViewState.description;
+            ackDisplay.text = MyViewState.ack;
+        }
+
         public void Acknowledge() {
             OnAcknowledge?.Invoke();
         }
