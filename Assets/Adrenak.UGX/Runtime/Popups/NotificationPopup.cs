@@ -10,13 +10,13 @@ namespace Adrenak.UGX {
         public int delay = 3;
     }
 
-    public class NotificationPopup : Popup<NotificationPopupState, PopupResult> {
+    public class NotificationPopup : Popup<NotificationPopupState, PopupResponse> {
         [SerializeField] Text title = null;
         [SerializeField] Text description = null;
 
-        async public override UniTask<PopupResult> WaitForResponse() {              
+        async public override UniTask<PopupResponse> WaitForResponse() {              
             await UniTask.Delay(MyViewState.delay, DelayType.DeltaTime, PlayerLoopTiming.Update);
-            return new PopupResult();
+            return new PopupResponse();
         }
 
         protected override void HandleViewStateSet() {
