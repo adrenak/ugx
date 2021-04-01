@@ -14,8 +14,7 @@ namespace Adrenak.UGX {
 
         public ViewList<TState, TView> InnerList { get; private set; }
 
-        new void Awake() {
-            base.Awake();
+        void Start() {
             InnerList = new ViewList<TState, TView>(container, template);
 
             if (useDefaultStates)

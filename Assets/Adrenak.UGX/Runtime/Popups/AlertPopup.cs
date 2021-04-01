@@ -26,10 +26,10 @@ namespace Adrenak.UGX {
             return new PopupResponse();
         }
 
-        protected override void HandleViewStateSet() {
-            headerDisplay.text = MyViewState.header;
-            bodyDisplay.text = MyViewState.description;
-            ackDisplay.text = MyViewState.ack;
+        protected override void HandlePopupStateSet() {
+            headerDisplay.text = CurrentState.header;
+            bodyDisplay.text = CurrentState.description;
+            ackDisplay.text = CurrentState.ack;
         }
 
         public void Acknowledge() {

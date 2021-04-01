@@ -17,7 +17,7 @@ namespace Adrenak.UGX {
             get => states[index];
             set {
                 states[index] = value;
-                Instantiated[index].MyViewState = value;
+                Instantiated[index].CurrentState = value;
             }
         }
 
@@ -47,7 +47,7 @@ namespace Adrenak.UGX {
             if (!instance.gameObject.activeSelf)
                 instance.gameObject.SetActive(true);
             instance.hideFlags = HideFlags.DontSave;
-            instance.MyViewState = t;
+            instance.CurrentState = t;
 
             onInit?.Invoke(instance);
 
@@ -56,7 +56,7 @@ namespace Adrenak.UGX {
 
         void Destroy(TState t) {
             foreach (var instance in Instantiated) {
-                if (instance != null && instance.MyViewState.Equals(t) && instance.gameObject != null) {
+                if (instance != null && instance.CurrentState.Equals(t) && instance.gameObject != null) {
                     onDeinit?.Invoke(instance);
                     Instantiated.Remove(instance);
                     MonoBehaviour.Destroy(instance.gameObject);

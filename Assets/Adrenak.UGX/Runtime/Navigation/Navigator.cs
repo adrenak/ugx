@@ -55,8 +55,8 @@ namespace Adrenak.UGX {
         void CheckBackPress() {
             if (!Input.GetKeyUp(KeyCode.Escape)) return;
             if (navigatorStack.Peek() != this) return;
-            if (!active.autoPopOnBack) return;
-            active.GoBack();
+            if (!active.CurrentState.autoPopOnBack) return;
+            Pop();
         }
 
         protected void SetAsActive(Window window) {
