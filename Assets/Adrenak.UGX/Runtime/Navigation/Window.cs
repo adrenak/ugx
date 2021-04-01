@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Adrenak.Unex;
 using UnityEngine.Events;
+using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
 using NaughtyAttributes;
@@ -14,7 +15,6 @@ using NaughtyAttributes;
         [ReadOnly] [SerializeField] bool isWindowOpen;
         public bool IsWindowOpen => isWindowOpen;
 
-        public Navigator navigator;
         public bool autoPopOnBack;
         
         [BoxGroup("Orientation")] [SerializeField] bool changeOrientation = false;
@@ -35,14 +35,13 @@ using NaughtyAttributes;
 
         [Button]
         public void GoBack() {
-            navigator?.Pop();
-            onWindowBack?.Invoke();
             WindowBackPressed();
+            onWindowBack?.Invoke();
         }
 
         bool isOpening;
         [Button]
-        public void OpenWindow() {
+        async public void OpenWindow() {
             if (isWindowOpen || isOpening) return;
 
             if (changeOrientation && Screen.orientation != orientation)
@@ -52,27 +51,24 @@ using NaughtyAttributes;
                 Screen.fullScreen = isFullscreen;
 
             isOpening = true;
-            Dispatcher.Enqueue(() => {
-                isWindowOpen = true;
-                isOpening = false;
-            });
+            await UniTask.SwitchToMainThread();
+            isWindowOpen = true;
+            isOpening = false;
 
-            navigator?.Push(this);
             WindowOpened();
             onWindowOpen?.Invoke();
         }
 
         bool isClosing;
         [Button]
-        public void CloseWindow() {
+        async public void CloseWindow() {
             if (!isWindowOpen || isClosing) return;
 
             isClosing = true;
-            Dispatcher.Enqueue(() => {
-                isWindowOpen = false;
-                isClosing = false;
-            });
-
+            await UniTask.SwitchToMainThread();
+            isWindowOpen = false;
+            isClosing = false;
+            
             WindowClosed();
             onWindowClose?.Invoke();
         }

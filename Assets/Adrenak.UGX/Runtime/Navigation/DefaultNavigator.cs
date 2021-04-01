@@ -4,14 +4,14 @@ namespace Adrenak.UGX {
     public class DefaultNavigator : Navigator {
         void Awake() {
             if (initialWindow && useInitialWindow)
-                Push(initialWindow);
+                PushImpl(initialWindow);
         }
 
-        public override void Push(Window window) {
+        protected override void PushImpl(Window window) {
             // First push
             if (History.Count == 0) {
                 History.Add(window);
-                SetAsCurrent(window);
+                SetAsActive(window);
                 return;
             }
 
@@ -22,28 +22,23 @@ namespace Adrenak.UGX {
             // Alternate repeat push
             if (History.Count > 1 && History.FromLast(1).gameObject == window.gameObject) {
                 History.RemoveAt(History.Count - 1);
-                SetAsCurrent(History.Last());
+                SetAsActive(History.Last());
                 return;
             }
 
             // All other cases
             History.Add(window);
-            SetAsCurrent(window);
+            SetAsActive(window);
 
             onPush?.Invoke();
         }
 
-        public override void Pop() {
-            if (History.Count > 1) {
+        protected override void PopImpl() {
+            if (History.Count > 0) {
                 History.RemoveAt(History.Count - 1);
-                SetAsCurrent(History.Last());
+                SetAsActive(History.Last());
                 onPop?.Invoke();
             }
-        }
-
-        public override void Clear() {
-            while(History.Count != 0)
-                Pop();
         }
     }
 }
