@@ -26,19 +26,19 @@ namespace Adrenak.UGX {
 #pragma warning disable 0649
 
         protected override void HandleViewStateSet() {
-            gameObject.name = MyViewState.text;
-            text.text = MyViewState.text;
-            picture.source = MyViewState.source;
+            gameObject.name = CurrentState.text;
+            text.text = CurrentState.text;
+            picture.source = CurrentState.source;
 
-            switch (MyViewState.source) {
+            switch (CurrentState.source) {
                 case Picture.Source.Asset:
-                    picture.sprite = MyViewState.spriteAsset;
+                    picture.sprite = CurrentState.spriteAsset;
                     break;
                 case Picture.Source.Resource:
-                    picture.path = MyViewState.spriteResourcePath;
+                    picture.path = CurrentState.spriteResourcePath;
                     break;
                 case Picture.Source.URL:
-                    picture.path = MyViewState.spriteImageURL;
+                    picture.path = CurrentState.spriteImageURL;
                     break;
             }
 

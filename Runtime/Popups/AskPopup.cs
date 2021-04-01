@@ -34,11 +34,11 @@ namespace Adrenak.UGX {
             return new AskPopupResponse { positive = response.Value };
         }
 
-        protected override void HandleViewStateSet() {
-            headerDisplay.text = MyViewState.header;
-            bodyDisplay.text = MyViewState.body;
-            positiveDisplay.text = MyViewState.positive;
-            negativeDisplay.text = MyViewState.negative;
+        protected override void HandlePopupStateSet() {
+            headerDisplay.text = CurrentState.header;
+            bodyDisplay.text = CurrentState.body;
+            positiveDisplay.text = CurrentState.positive;
+            negativeDisplay.text = CurrentState.negative;
         }
 
         Action OnConfirm;
