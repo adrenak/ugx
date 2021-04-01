@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Adrenak.UGX {
     [RequireComponent(typeof(CanvasGroup))]
     public class OpacityTransitioner : TransitionerBase {
-        public OpacityTransitionArgs defaultOpacityTween;
+        [BoxGroup("Config")] public OpacityTransitionArgs args;
 
         CanvasGroup cg;
         public CanvasGroup CG => cg == null ? cg = GetComponent<CanvasGroup>() : cg;
@@ -18,7 +18,7 @@ namespace Adrenak.UGX {
                 return;
             }
             CG.alpha = 0;
-            await TweenOpacity(1, defaultOpacityTween);
+            await TweenOpacity(1, args);
             CG.alpha = 1;
             CG.blocksRaycasts = true;
             CG.interactable = true;
@@ -32,7 +32,7 @@ namespace Adrenak.UGX {
                 return;
             }
             CG.alpha = 1;
-            await TweenOpacity(0, defaultOpacityTween);
+            await TweenOpacity(0, args);
             CG.alpha = 0;
             CG.blocksRaycasts = false;
             CG.interactable = false;

@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace Adrenak.UGX {
     public class PositionTransitioner : TransitionerBase {
-        [ReadOnly] [SerializeField] Vector3 inPosition;
+        [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 inPosition;
         public Vector3 InPosition => inPosition;
 
-        [ReadOnly] [SerializeField] Vector3 outPosition;
+        [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 outPosition;
         public Vector3 OutPosition => outPosition;
 
-        public PositionType defaultPositionForEnter = PositionType.Left;
-        public PositionType defaultPositionForExit = PositionType.Right;
-        public PositionTransitionArgs defaultPositionTween;
+        [BoxGroup("Config")] public PositionTransitionArgs args;
+        [BoxGroup("Config")] public PositionType enterPosition = PositionType.Left;
+        [BoxGroup("Config")] public PositionType exitPosition = PositionType.Right;
 
         [Button("Set As In")]
         public void CaptureInPosition() => inPosition = RT.localPosition;
@@ -26,7 +26,7 @@ namespace Adrenak.UGX {
                 return;
             }
             RT.localPosition = DefaultEnterCordinates;
-            await TweenPosition(inPosition, defaultPositionTween);
+            await TweenPosition(inPosition, args);
             RT.localPosition = InPosition;
         }
 
@@ -36,7 +36,7 @@ namespace Adrenak.UGX {
                 return;
             }
             RT.localPosition = InPosition;
-            await TweenPosition(DefaultExitCordinates, defaultPositionTween);
+            await TweenPosition(DefaultExitCordinates, args);
             RT.localPosition = OutPosition;
         }
 
@@ -54,10 +54,10 @@ namespace Adrenak.UGX {
         }
 
         public Vector3 DefaultExitCordinates
-            => GetPositionVector3(defaultPositionForExit);
+            => GetPositionVector3(exitPosition);
 
         public Vector3 DefaultEnterCordinates
-            => GetPositionVector3(defaultPositionForEnter);
+            => GetPositionVector3(enterPosition);
 
         public Vector3 RightExitCordinates
             => new Vector3(RT.GetRightExit(), inPosition.y, RT.localPosition.z);

@@ -24,8 +24,7 @@ namespace Adrenak.UGX {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        async public override UniTask<AskPopupResponse> WaitForResponse() {
-            // Wait till be get a response
+        async protected override UniTask<AskPopupResponse> WaitForResponseImpl() {
             bool? response = null;
             OnConfirm = () => response = true;
             OnDeny = () => response = false;
