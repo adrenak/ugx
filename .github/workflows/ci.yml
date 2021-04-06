@@ -20,9 +20,11 @@ jobs:
         extra_plugins: |
           @semantic-release/changelog
           @semantic-release/git
+          @semantic-release/npm
         branch: master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
     - name: Create UPM branch
       run: |
