@@ -26,9 +26,19 @@ namespace Adrenak.UGX {
             return response;
         }
 
+        public static void Display(string path, Action<T> cloneState, Action<K> resultCallback){
+            var instance = InstantiateUGXBehaviourResource<Popup<T, K>>(path);
+            instance.Display(cloneState, resultCallback);
+        }
+
         async public void Display(Action<T> cloneState, Action<K> resultCallback) {
             var result = await Display(cloneState);
             resultCallback?.Invoke(result);
+        }
+
+        async public static UniTask<K> Display(string path, Action<T> cloneState){
+            var instance = InstantiateUGXBehaviourResource<Popup<T, K>>(path);
+            return await instance.Display(cloneState);
         }
 
         async public UniTask<K> Display(Action<T> cloneState) {
@@ -38,8 +48,10 @@ namespace Adrenak.UGX {
             activePopup = instance.gameObject;
             cloneState?.Invoke(instance.CurrentState);
 
-            await instance.OpenWindowAsync();
+            await (instance as Window).OpenWindowAsync();
+#pragma warning disable 0618
             var response = await instance.WaitForResponse();
+#pragma warning restore 0618
             await instance.CloseWindowAsync();
 
             activePopup = null;

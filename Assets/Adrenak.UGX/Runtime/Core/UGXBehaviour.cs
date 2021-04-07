@@ -12,6 +12,11 @@ namespace Adrenak.UGX {
             }
         }
 
+        public static T InstantiateUGXBehaviourResource<T>(string path) where T : UGXBehaviour {
+            var resource = Resources.Load<T>(path);
+            return Instantiate(resource);
+        }
+
         public View view => GetComponent<View>();
         public Window window => GetComponent<Window>();
         public TransitionerBase[] transitioners => GetComponents<TransitionerBase>();
