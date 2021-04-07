@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
@@ -11,6 +11,25 @@ namespace Adrenak.UGX {
 
     public abstract class Popup<T, K> : Window<T> where T : PopupState where K : PopupResponse {
         static GameObject activePopup;
+
+        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
+        public new void OpenWindow() => base.OpenWindow();
+
+        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
+        public new UniTask OpenWindowAsync() => base.OpenWindowAsync();
+
+        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
+        async public UniTask<K> WaitForResponse() {
+            await UniTask.SwitchToMainThread();
+            var response = await WaitForResponseImpl();
+            await UniTask.SwitchToMainThread();
+            return response;
+        }
+
+        async public void Display(Action<T> cloneState, Action<K> resultCallback) {
+            var result = await Display(cloneState);
+            resultCallback?.Invoke(result);
+        }
 
         async public UniTask<K> Display(Action<T> cloneState) {
             await UniTask.WaitWhile(() => activePopup != null);
@@ -26,14 +45,6 @@ namespace Adrenak.UGX {
             activePopup = null;
             Destroy(instance.gameObject);
 
-            return response;
-
-        }
-
-        async public UniTask<K> WaitForResponse() {
-            await UniTask.SwitchToMainThread();
-            var response = await WaitForResponseImpl();
-            await UniTask.SwitchToMainThread();
             return response;
         }
 
