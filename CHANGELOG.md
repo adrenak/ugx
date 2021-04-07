@@ -1,3 +1,16 @@
+# [5.15.0](https://github.com/adrenak/ugx/compare/v5.14.0...v5.15.0) (2021-04-06)
+
+
+### Bug Fixes
+
+* Change NODE_AUTH_TOKEN to NPM_TOKEN fo rnpm publishing ([04fb3a5](https://github.com/adrenak/ugx/commit/04fb3a53ca6e7194c688222ba718f52ffe6dfb42))
+* Fix typo in ci.yml ([5ddce39](https://github.com/adrenak/ugx/commit/5ddce399aa23504c68f456e81a4090d590aef4bd))
+
+
+### Features
+
+* Try auto npm publishing in CI ([6e03d16](https://github.com/adrenak/ugx/commit/6e03d16f7ed1959acf19b011eb0a486b9d262ff6))
+
 # [5.14.0](https://github.com/adrenak/ugx/compare/v5.13.0...v5.14.0) (2021-03-31)
 
 
