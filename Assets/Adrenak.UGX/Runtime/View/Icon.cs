@@ -26,7 +26,6 @@ namespace Adrenak.UGX {
 #pragma warning disable 0649
 
         protected override void HandleViewStateSet() {
-            gameObject.name = CurrentState.text;
             text.text = CurrentState.text;
             picture.source = CurrentState.source;
 
