@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Adrenak.UGX {
-    public static class Extensions {
+    public static class UGXExtensions {
         public static void SetColor(this Image image, Color color){
             image.color = color;
         }

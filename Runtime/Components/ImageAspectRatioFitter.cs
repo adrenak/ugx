@@ -16,7 +16,10 @@ namespace Adrenak.UGX {
 
         new void Update() {
             base.Update();
-            if (Image == null || Image.sprite == null) return;
+            if (Image == null || Image.sprite == null) {
+                aspectRatio = 1;
+                return;
+            }
 
             var t = Image.sprite.texture;
             if (t == tex)

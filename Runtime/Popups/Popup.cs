@@ -37,7 +37,7 @@ namespace Adrenak.UGX {
             var instance = GetClone();
             activePopup = instance.gameObject;
             cloneState?.Invoke(instance.CurrentState);
-            
+
             await instance.OpenWindowAsync();
             var response = await instance.WaitForResponse();
             await instance.CloseWindowAsync();
