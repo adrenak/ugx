@@ -5,11 +5,6 @@ using System;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public abstract class ViewState {
-        public string ID = Guid.NewGuid().ToString();
-    }
-
-    [Serializable]
     public abstract class View<TViewState> : View where TViewState : ViewState {
         public event EventHandler<TViewState> OnViewStateSet;
 

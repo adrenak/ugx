@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Adrenak.UGX {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(CanvasGroup))]
     public class OpacityTransitioner : TransitionerBase {
         [BoxGroup("Config")] public OpacityTransitionArgs args;

@@ -5,13 +5,6 @@ using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 
 namespace Adrenak.UGX {
-    public enum WindowStatus {
-        Closed,
-        Closing,
-        Opened,
-        Opening
-    }
-
     public class Window : Window<WindowState> {
         protected override void HandleWindowStateSet() { }
     }
@@ -62,7 +55,7 @@ namespace Adrenak.UGX {
             await UniTask.WhenAll(transitions);
             await UniTask.SwitchToMainThread();
             CurrentState.status = WindowStatus.Closed;
-            
+
             WindowClosed();
             onWindowClose?.Invoke();
         }

@@ -18,8 +18,8 @@ namespace Adrenak.UGX {
         }
 
         public static void Init() {
-            EnsureInstance();
             UnexInitializer.Initialize();
+            EnsureInstance();
         }
     }
 }

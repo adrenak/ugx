@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 
-using UnityEngine;
-
-namespace Adrenak.UGX{
+namespace Adrenak.UGX {
+    [RequireComponent(typeof(Window))]
     public class WindowScreenOrientationAddon : UGXBehaviour {
         public ScreenOrientation orientation;
-        void Start(){
+        void Start() {
             window.onWindowOpen.AddListener(() => Screen.orientation = orientation);
         }
     }

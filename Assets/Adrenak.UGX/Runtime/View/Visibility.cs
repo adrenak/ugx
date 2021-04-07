@@ -1,4 +1,4 @@
-﻿namespace Adrenak.UGX{
+﻿namespace Adrenak.UGX {
     public enum Visibility {
         Full,
         Partial,

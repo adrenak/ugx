@@ -7,7 +7,7 @@ using NaughtyAttributes;
 using UnityEngine.Events;
 
 namespace Adrenak.UGX {
-    public class TabBarVisualizer : MonoBehaviour {
+    public class TabBarView : View {
         [Serializable]
         public class Entry {
             public Window window;
