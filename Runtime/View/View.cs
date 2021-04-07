@@ -31,7 +31,12 @@ namespace Adrenak.UGX {
         }
 
         [Button("Update View")]
-        public void UpdateFromState() => HandleViewStateSet();
+        public void UpdateFromState() {
+#if UNITY_EDITOR
+            UnityEditor.Undo.RecordObject(gameObject, "Update View");
+#endif
+            HandleViewStateSet();
+        }
 
         protected abstract void HandleViewStateSet();
     }
