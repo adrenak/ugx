@@ -5,32 +5,38 @@ using UnityEngine.UI;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class AskPopupState : PopupState {
+    public class AskWithFlagPopupState : PopupState {
         public string header;
         public string body;
+        public bool boolFlag;
         public string positive;
         public string negative;
     }
 
-    public class AskPopupResponse : PopupResponse{
+    public class AskWithFlagPopupResponse : PopupResponse{
+        public bool boolFlag;
         public bool positive;
     }
 
-    public class AskPopup : Popup<AskPopupState, AskPopupResponse> {
+    public class AskWithFlagPopup : Popup<AskWithFlagPopupState, AskWithFlagPopupResponse> {
 #pragma warning disable 0649
         [SerializeField] Text headerDisplay;
         [SerializeField] Text bodyDisplay;
         [SerializeField] Text positiveDisplay;
         [SerializeField] Text negativeDisplay;
+        [SerializeField] Toggle flagDisplay;
 #pragma warning restore 0649
 
-        async protected override UniTask<AskPopupResponse> WaitForResponseImpl() {
+        async protected override UniTask<AskWithFlagPopupResponse> WaitForResponseImpl() {
             bool? response = null;
             OnConfirm = () => response = true;
             OnDeny = () => response = false;
             while (response == null)
                 await UniTask.Delay(100);
-            return new AskPopupResponse { positive = response.Value };
+            return new AskWithFlagPopupResponse { 
+                positive = response.Value,
+                boolFlag = flagDisplay.isOn
+            };
         }
 
         protected override void HandlePopupStateSet() {
@@ -38,6 +44,7 @@ namespace Adrenak.UGX {
             bodyDisplay.text = CurrentState.body;
             positiveDisplay.text = CurrentState.positive;
             negativeDisplay.text = CurrentState.negative;
+            flagDisplay.isOn = CurrentState.boolFlag;
         }
 
         Action OnConfirm;
