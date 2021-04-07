@@ -19,7 +19,7 @@ namespace Adrenak.UGX {
         [ReorderableList] [SerializeField] List<Entry> entries;
 #pragma warning restore 0649
 
-        void Awake() {
+        void Start() {
             foreach (var entry in entries) {
                 entry.window.onWindowOpen.AddListener(() =>
                     entry.onOpen?.Invoke());
