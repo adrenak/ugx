@@ -60,6 +60,14 @@ namespace Adrenak.UGX {
             onWindowClose?.Invoke();
         }
 
+        public virtual UniTask<bool> ApprovePop() {
+            return UniTask.FromResult(true);
+        }
+
+        public virtual UniTask<bool> ApprovePush() {
+            return UniTask.FromResult(true);
+        }
+
         sealed protected override void HandleViewStateSet() {
             // TODO: Make Status is a reactive property and react to changes
             HandleWindowStateSet();

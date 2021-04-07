@@ -2,11 +2,10 @@
 using UnityEngine.Events;
 using System.Collections.Generic;
 using UnityEngine;
+using Adrenak.Unex;
 
 namespace Adrenak.UGX {
     public abstract class Navigator : MonoBehaviour {
-        Stack<Navigator> navigatorStack = new Stack<Navigator>();
-
         static Dictionary<string, Navigator> map = new Dictionary<string, Navigator>();
         public static Navigator Get(string navigatorID = null) {
             if (map.ContainsKey(navigatorID))
@@ -16,7 +15,6 @@ namespace Adrenak.UGX {
 
 #pragma warning disable 0649
         [SerializeField] string navigatorID;
-        [SerializeField] bool clearOnClose;
         [SerializeField] bool canPopAll;
 
         [ReadOnly] [SerializeField] protected Window active = null;
@@ -54,7 +52,6 @@ namespace Adrenak.UGX {
 
         void CheckBackPress() {
             if (!Input.GetKeyUp(KeyCode.Escape)) return;
-            if (navigatorStack.Peek() != this) return;
             if (!active.CurrentState.autoPopOnBack) return;
             Pop();
         }
@@ -66,26 +63,19 @@ namespace Adrenak.UGX {
             active = window;
         }
 
-        public void Push(Window window) {
-            if (navigatorStack.Peek() != this) 
-                navigatorStack.Peek().Clear();
-
-            if (!navigatorStack.Contains(this))
-                navigatorStack.Push(this);
-            
-            PushImpl(window);
+        async public void Push(Window window) {
+            var interrupt = await window.ApprovePush();
+            if(interrupt)
+                PushImpl(window);
         }
 
-        public void Pop() {
-            if (navigatorStack.Peek() != this)
-                return;
-
+        async public void Pop() {
             if (History.Count == 1 && !canPopAll)
                 return;
 
-            PopImpl();
-            if (History.Count == 0)
-                navigatorStack.Pop();
+            var interrupt = await History.Last().ApprovePop();
+            if(interrupt)
+                PopImpl();
         }
 
         public void Clear() {
