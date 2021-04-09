@@ -1,3 +1,10 @@
+# [5.16.0](https://github.com/adrenak/ugx/compare/v5.15.0...v5.16.0) (2021-04-07)
+
+
+### Features
+
+* Resource instancing added. Popup implements it. ([92d9491](https://github.com/adrenak/ugx/commit/92d94916f950dec4309b0bac3c41e190d9ddedb9))
+
 # [5.15.0](https://github.com/adrenak/ugx/compare/v5.14.0...v5.15.0) (2021-04-06)
 
 
