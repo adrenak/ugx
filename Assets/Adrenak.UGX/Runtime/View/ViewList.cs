@@ -2,58 +2,73 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.Events;
+using NaughtyAttributes;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class ViewList<TState, TView> : View, ICollection<TState>, IList<TState> where TState : ViewState where TView : View<TState> {
-        public Transform container = null;
-        public TView template = null;
+    public class ViewList<T> : View, ICollection<T>, IList<T> where T : ViewState {
+        [BoxGroup("Instantiation")] public Transform container = null;
+        [BoxGroup("Instantiation")] public View template = null;
 
-        [SerializeField] List<TState> states = new List<TState>();
+        [BoxGroup("State")] [SerializeField] List<T> statesList = new List<T>();
 
-        public List<TView> Instantiated { get; private set; } = new List<TView>();
-        public int Count => states.Count;
+        List<View<T>> Instantiated { get; } = new List<View<T>>();
+        public int Count => statesList.Count;
         public bool IsReadOnly => false;
-        public TState this[int index] {
-            get => states[index];
+        public T this[int index] {
+            get {
+                if (index < 0 || index > statesList.Count - 1)
+                    throw new Exception("Index out of bounds");
+                return statesList[index];
+            }
             set {
-                states[index] = value;
-                Instantiated[index].CurrentState = value;
+                if (index < 0 || index > statesList.Count)
+                    throw new Exception("Index out of bounds");
+                Insert(index, value);
             }
         }
 
-        Action<TView> onInit, onDeinit;
-        public void Setup(Action<TView> onInit, Action<TView> onDeinit) {
-            this.onInit = onInit;
-            this.onDeinit = onDeinit;
-            Instantiated.ForEach(x => this.onInit(x));
+        void Start() {
+            statesList.ForEach(x => {
+                var instance = Instantiate(x);
+                if (instance != null)
+                    Instantiated.Add(instance);
+            });
         }
 
-        TView Instantiate(TState t) {
-            if (template == null)
-                throw new Exception("No ViewTemplate assigned! Cannot instantiate elements in ViewGroup.");
+        UnityAction<View<T>> subscription;
+        public void SubscribeToChildren(UnityAction<View<T>> subscription) {
+            this.subscription = subscription;
+            Instantiated.ForEach(x => this.subscription(x));
+        }
 
+        View<T> Instantiate(T t) {
             // We don't initialize when the application isn't playing.
             // This sometimes happens with requests that are fullfilled after
             // play mode exits in the editor and end up instantiation in editor mode.
             if (!Application.isPlaying)
                 return null;
 
+            if (template == null)
+                throw new Exception("No ViewTemplate assigned! Cannot instantiate elements in ViewGroup.");
+
+            if (!(template is View<T>))
+                throw new Exception("The template View must be of type View<" + typeof(T) + ">");
+
             var instance = MonoBehaviour.Instantiate(template, container);
-            if (!instance.gameObject.activeSelf)
-                instance.gameObject.SetActive(true);
+            instance.gameObject.SetActive(true);
             instance.hideFlags = HideFlags.DontSave;
-            instance.CurrentState = t;
+            (instance as View<T>).CurrentState = t;
 
-            onInit?.Invoke(instance);
+            subscription?.Invoke(instance as View<T>);
 
-            return instance;
+            return instance as View<T>;
         }
 
-        void Destroy(TState t) {
+        void Destroy(T t) {
             foreach (var instance in Instantiated) {
                 if (instance != null && instance.CurrentState.Equals(t) && instance.gameObject != null) {
-                    onDeinit?.Invoke(instance);
                     Instantiated.Remove(instance);
                     MonoBehaviour.Destroy(instance.gameObject);
                     break;
@@ -62,66 +77,62 @@ namespace Adrenak.UGX {
         }
 
         public void Clear() {
-            foreach (var state in states)
+            foreach (var state in statesList)
                 Destroy(state);
-            states.Clear();
+            statesList.Clear();
         }
 
-        public bool Contains(TState item) {
-            return states.Contains(item);
-        }
+        public bool Contains(T item) => statesList.Contains(item);
 
-        public void Add(TState item) {
-            states.Add(item);
-            var instance = Instantiate(item);
-            if (instance != null)
-                Instantiated.Add(instance);
-        }
+        public void Add(T item) => Insert(statesList.Count, item);
 
-        public void CopyTo(TState[] array, int arrayIndex) {
+        public void CopyTo(T[] array, int arrayIndex) =>
             throw new NotImplementedException("ViewList doesn't support CopyTo yet.");
-        }
 
-        public bool Remove(TState item) {
+        public bool Remove(T item) {
             if (Contains(item)) {
                 Destroy(item);
-                states.Remove(item);
+                statesList.Remove(item);
                 return true;
             }
             return false;
         }
 
-        public int IndexOf(TState item) {
-            return states.IndexOf(item);
+        public int IndexOf(T item) {
+            return statesList.IndexOf(item);
         }
 
-        public void Insert(int index, TState item) {
+        public void Insert(int index, T item) {
             if (item == null)
                 throw new Exception("Inserted item cannot be null");
 
-            if (index < 0 || index >= states.Count)
+            if (index < 0 || index >= statesList.Count)
                 throw new IndexOutOfRangeException("Insert method index was out of range");
 
-            states.Insert(index, item);
             var instance = Instantiate(item);
-            Instantiated.Insert(index, instance);
+            if (instance != null) {
+                statesList.Insert(index, item);
+                Instantiated.Insert(index, instance);
+                if(instance.transform.GetSiblingIndex() != index)
+                    instance.transform.SetSiblingIndex(index);
+            }
         }
 
         public void RemoveAt(int index) {
-            if (index < 0 || index >= states.Count)
+            if (index < 0 || index >= statesList.Count)
                 throw new IndexOutOfRangeException("RemoveAt method index was out of range");
 
-            var vm = states[index];
+            var vm = statesList[index];
             Destroy(vm);
-            states.RemoveAt(index);
+            statesList.RemoveAt(index);
         }
 
-        public IEnumerator<TState> GetEnumerator() {
-            return (IEnumerator<TState>)new ViewListEnumerator<TState>(states.ToArray());
+        public IEnumerator<T> GetEnumerator() {
+            return (IEnumerator<T>)new ViewListEnumerator<T>(statesList.ToArray());
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator<TState>)new ViewListEnumerator<TState>(states.ToArray());
+            return (IEnumerator<T>)new ViewListEnumerator<T>(statesList.ToArray());
         }
     }
 
