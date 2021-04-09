@@ -41,5 +41,12 @@ namespace Adrenak.UGX {
 
         async public UniTask TweenOpacity(float endValue, OpacityTransitionArgs tween)
             => await Driver.TransitionOpacity(CG, endValue, tween);
+        
+
+        protected override void SetProgress(float value) {
+            CG.alpha = value;
+            CG.blocksRaycasts = value != 0f;
+            CG.interactable = value != 0f;
+        }
     }
 }

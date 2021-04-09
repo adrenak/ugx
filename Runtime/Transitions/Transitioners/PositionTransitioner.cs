@@ -1,5 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
+
 using NaughtyAttributes;
+
 using UnityEngine;
 
 namespace Adrenak.UGX {
@@ -52,6 +54,14 @@ namespace Adrenak.UGX {
                 case PositionType.Bottom: return BottomExitCordinates;
                 default: return Vector3.zero;
             }
+        }
+
+        protected override void SetProgress(float value) {
+            RT.localPosition = Vector3.Lerp(OutPosition, InPosition, value);
+            if (value == 0f)
+                RT.localPosition = OutPosition;
+            else if (value == 1f)
+                RT.localPosition = InPosition;
         }
 
         public Vector3 DefaultExitCordinates

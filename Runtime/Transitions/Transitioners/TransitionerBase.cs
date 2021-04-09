@@ -6,7 +6,10 @@ namespace Adrenak.UGX {
     public abstract class TransitionerBase : UGXBehaviour {
         static ITransitionDriver driver;
 
-        public static bool DriverLocked => driver != null;
+        // Ambient context dependency pattern. Set driver
+        // implementation before ever using it. Best to set 
+        // it at the start of the application.
+        public static bool IsDriverLocked => driver != null;
         public static ITransitionDriver Driver {
             get {
                 if (driver == null)
@@ -24,6 +27,15 @@ namespace Adrenak.UGX {
             }
         }
 
+        [SerializeField] [ReadOnly] float progress;
+        public float Progress {
+            get => progress;
+            set {
+                progress = value;
+                SetProgress(value);
+            }
+        }
+
         [Button]
         async public void TransitionIn() => await TransitionInAsync();
         public abstract UniTask TransitionInAsync();
@@ -31,5 +43,7 @@ namespace Adrenak.UGX {
         [Button]
         async public void TransitionOut() => await TransitionOutAsync();
         public abstract UniTask TransitionOutAsync();
+
+        protected abstract void SetProgress(float value);
     }
 }
