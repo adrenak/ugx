@@ -1,3 +1,10 @@
+# [5.17.0](https://github.com/adrenak/ugx/compare/v5.16.1...v5.17.0) (2021-04-09)
+
+
+### Features
+
+* Remove ViewEvent, didn't add  much value. Resolve [#9](https://github.com/adrenak/ugx/issues/9) ([f3571d9](https://github.com/adrenak/ugx/commit/f3571d94a0acee101d0d38f34ae42863b2c3db8a))
+
 ## [5.16.1](https://github.com/adrenak/ugx/compare/v5.16.0...v5.16.1) (2021-04-09)
 
 
