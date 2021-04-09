@@ -15,7 +15,7 @@ namespace Adrenak.UGX {
     }
 
     public class Icon : View<IconState>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
-        public ViewEvent onClick = new ViewEvent();
+        public UnityEvent onClick = new UnityEvent();
 
 #pragma warning disable 0649
         [SerializeField] UnityEvent onPointerEnter;
@@ -46,7 +46,7 @@ namespace Adrenak.UGX {
         }
 
         public void Click() =>
-            onClick.Invoke(this);        
+            onClick?.Invoke();        
         
         public void OnPointerExit(PointerEventData eventData) =>
             onPointerExit.Invoke();
