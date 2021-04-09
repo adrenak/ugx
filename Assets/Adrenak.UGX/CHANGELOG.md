@@ -1,3 +1,10 @@
+## [5.16.1](https://github.com/adrenak/ugx/compare/v5.16.0...v5.16.1) (2021-04-09)
+
+
+### Bug Fixes
+
+* ViewList simplified and refactored. Resolve [#18](https://github.com/adrenak/ugx/issues/18) ([17843fb](https://github.com/adrenak/ugx/commit/17843fb13b7e8d97244fb7d7f6b045b5776c1f9c))
+
 # [5.16.0](https://github.com/adrenak/ugx/compare/v5.15.0...v5.16.0) (2021-04-07)
 
 
