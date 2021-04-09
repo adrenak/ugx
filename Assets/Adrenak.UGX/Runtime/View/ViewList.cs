@@ -5,9 +5,10 @@ using System.Collections;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class ViewList<TState, TView> : ICollection<TState>, IList<TState> where TState : ViewState where TView : View<TState> {
+    public class ViewList<TState, TView> : View, ICollection<TState>, IList<TState> where TState : ViewState where TView : View<TState> {
         public Transform container = null;
         public TView template = null;
+
         [SerializeField] List<TState> states = new List<TState>();
 
         public List<TView> Instantiated { get; private set; } = new List<TView>();
@@ -19,11 +20,6 @@ namespace Adrenak.UGX {
                 states[index] = value;
                 Instantiated[index].CurrentState = value;
             }
-        }
-
-        public ViewList(Transform container, TView template) {
-            this.container = container;
-            this.template = template;
         }
 
         Action<TView> onInit, onDeinit;
