@@ -6,7 +6,7 @@ namespace Adrenak.UGX {
     /// <summary>
     /// This a stateless cache, it just downloads downloads the image every time
     /// </summary>
-    public class PictureStatelessCache : AbstractPictureCache {
+    public class PictureStatelessCache : PictureCacheBase {
         public override UniTask Init(object obj = null) {
             return UniTask.CompletedTask;
         }

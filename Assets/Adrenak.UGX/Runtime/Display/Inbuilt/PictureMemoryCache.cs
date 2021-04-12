@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Adrenak.UGX {
-    public class PictureMemoryCache : AbstractPictureCache {
+    public class PictureMemoryCache : PictureCacheBase {
         class Key {
             public string path;
             public Texture2DCompression compression;

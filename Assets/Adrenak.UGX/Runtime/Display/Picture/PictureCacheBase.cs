@@ -3,7 +3,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
-    public abstract class AbstractPictureCache {
+    public abstract class PictureCacheBase {
         public abstract UniTask Init(object obj = null);
 
         public abstract void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure);
