@@ -52,7 +52,7 @@ namespace Adrenak.UGX {
         RectTransform rt;
         RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
 
-        public Visibility CurrentVisibility { get; private set; } = Visibility.None;
+        public ViewVisibility CurrentVisibility { get; private set; } = ViewVisibility.None;
 
         protected override void Awake() {
             Clear();
@@ -112,9 +112,9 @@ namespace Adrenak.UGX {
 
             var visibility = GetVisibility();
             if (CurrentVisibility != visibility) {
-                if (CurrentVisibility == Visibility.None && visibility != Visibility.None)
+                if (CurrentVisibility == ViewVisibility.None && visibility != ViewVisibility.None)
                     Refresh();
-                else if (CurrentVisibility != Visibility.None && visibility == Visibility.None)
+                else if (CurrentVisibility != ViewVisibility.None && visibility == ViewVisibility.None)
                     Cache.Free(path, compression, this);
 
                 CurrentVisibility = visibility;
@@ -133,11 +133,11 @@ namespace Adrenak.UGX {
             }
         }
 
-        Visibility GetVisibility() {
+        ViewVisibility GetVisibility() {
             if (RT.IsVisible(out bool? fully))
-                return fully.Value ? Visibility.Full : Visibility.Partial;
+                return fully.Value ? ViewVisibility.Full : ViewVisibility.Partial;
             else
-                return Visibility.None;
+                return ViewVisibility.None;
         }
 
         bool destroyed = false;
