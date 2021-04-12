@@ -7,13 +7,20 @@ using UnityEngine;
 namespace Adrenak.UGX {
     [DisallowMultipleComponent]
     public class PositionTransitioner : TransitionerBase {
+        public enum PositionType {
+            Top,
+            Bottom,
+            Left,
+            Right
+        }
+
         [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 inPosition;
         public Vector3 InPosition => inPosition;
 
         [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 outPosition;
         public Vector3 OutPosition => outPosition;
 
-        [BoxGroup("Config")] public PositionTransitionArgs args;
+        [BoxGroup("Config")] public TransitionArgs args;
         [BoxGroup("Config")] public PositionType enterPosition = PositionType.Left;
         [BoxGroup("Config")] public PositionType exitPosition = PositionType.Right;
 
@@ -43,7 +50,7 @@ namespace Adrenak.UGX {
             RT.localPosition = OutPosition;
         }
 
-        async public UniTask TweenPosition(Vector3 endValue, PositionTransitionArgs tween)
+        async public UniTask TweenPosition(Vector3 endValue, TransitionArgs tween)
             => await Driver.TransitionPosition(RT, endValue, tween);
 
         public Vector3 GetPositionVector3(PositionType position) {
