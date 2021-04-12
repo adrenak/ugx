@@ -2,7 +2,7 @@
 
 namespace Adrenak.UGX {
     [System.Serializable]
-    public class PositionTransitionArgs {
+    public class TransitionArgs {
         [SerializeField] float duration;
         public float Duration {
             get => duration;
@@ -27,21 +27,21 @@ namespace Adrenak.UGX {
             private set => loop = value;
         }
 
-        public PositionTransitionArgs(float duration) {
+        public TransitionArgs(float duration) {
             Duration = duration;
         }
 
-        public PositionTransitionArgs SetDelay(float delay) {
+        public TransitionArgs SetDelay(float delay) {
             Delay = delay;
             return this;
         }
 
-        public PositionTransitionArgs SetCurve(CurveType curve) {
+        public TransitionArgs SetCurve(CurveType curve) {
             Curve = curve;
             return this;
         }
 
-        public PositionTransitionArgs SetLoop(LoopType loop) {
+        public TransitionArgs SetLoop(LoopType loop) {
             Loop = loop;
             return this;
         }
