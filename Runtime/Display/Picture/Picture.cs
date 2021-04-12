@@ -11,9 +11,9 @@ namespace Adrenak.UGX {
     [Serializable]
     public class Picture : Image {
         // Ambient context dependency pattern
-        static AbstractPictureCache repo;
+        static PictureCacheBase repo;
         public static bool CacheLocked => repo != null;
-        public static AbstractPictureCache Cache {
+        public static PictureCacheBase Cache {
             get {
                 if (repo == null)
                     repo = new PictureStatelessCache();
