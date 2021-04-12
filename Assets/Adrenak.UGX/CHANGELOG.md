@@ -1,3 +1,10 @@
+# [5.18.0](https://github.com/adrenak/ugx/compare/v5.17.0...v5.18.0) (2021-04-12)
+
+
+### Features
+
+* ViewList rebuilds container. ([74c2643](https://github.com/adrenak/ugx/commit/74c26434a2cf4c20113520d15a360687b3fa46fa))
+
 # [5.17.0](https://github.com/adrenak/ugx/compare/v5.16.1...v5.17.0) (2021-04-09)
 
 
