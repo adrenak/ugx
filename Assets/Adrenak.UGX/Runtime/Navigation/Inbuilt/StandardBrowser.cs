@@ -1,8 +1,8 @@
 ﻿using Adrenak.Unex;
 
 namespace Adrenak.UGX {
-    public class StandardNavigator : Navigator {
-        void Awake() {
+    public class StandardBrowser : Browser {
+        void Start() {
             if (initialWindow && useInitialWindow)
                 PushImpl(initialWindow);
         }
