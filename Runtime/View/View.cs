@@ -2,7 +2,6 @@
 using UnityEngine.Events;
 using NaughtyAttributes;
 using System;
-using System.Collections.Generic;
 
 namespace Adrenak.UGX {
     [Serializable]

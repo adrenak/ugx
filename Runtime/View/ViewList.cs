@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Events;
 using NaughtyAttributes;
+using UnityEngine.UI;
 
 namespace Adrenak.UGX {
     [Serializable]
     public class ViewList<T> : View, ICollection<T>, IList<T> where T : ViewState {
+        int resizingCheckFrameStep = 2;
         [BoxGroup("Instantiation")] public Transform container = null;
         [BoxGroup("Instantiation")] public View template = null;
 
@@ -35,6 +37,34 @@ namespace Adrenak.UGX {
                 if (instance != null)
                     Instantiated.Add(instance);
             });
+        }
+
+        new void Update() {
+            base.Update();
+
+            if(Time.frameCount % resizingCheckFrameStep == 0)
+                ResizeIfRequired();
+        }
+
+        int lastHeight;
+        int lastWidth;
+        RectTransform childRT;
+        int height;
+        int width;
+        void ResizeIfRequired(){
+            height = 0;
+            width = 0;
+            foreach (Transform child in container) {
+                childRT = child.GetComponent<RectTransform>();
+                height += (int)childRT.sizeDelta.y;
+                width += (int)childRT.sizeDelta.x;
+            }
+
+            if (height != lastHeight || width != lastWidth)
+                LayoutRebuilder.MarkLayoutForRebuild(container.GetComponent<RectTransform>());
+
+            lastHeight = height;
+            lastWidth = width;
         }
 
         UnityAction<View<T>> subscription;
@@ -113,7 +143,7 @@ namespace Adrenak.UGX {
             if (instance != null) {
                 statesList.Insert(index, item);
                 Instantiated.Insert(index, instance);
-                if(instance.transform.GetSiblingIndex() != index)
+                if (instance.transform.GetSiblingIndex() != index)
                     instance.transform.SetSiblingIndex(index);
             }
         }
