@@ -17,8 +17,10 @@ namespace Adrenak.UGX {
 
     public abstract class Window<T> : View<T> where T : WindowState {
         [BoxGroup("Window Events")] [SerializeField] bool showEvents;
-        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowOpen;
-        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowClose;
+        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowStartOpening;
+        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowDoneOpening;
+        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowStartClosing;
+        [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowDoneClosing;
 
         [Button]
         async public void OpenWindow() => await OpenWindowAsync();
@@ -26,6 +28,8 @@ namespace Adrenak.UGX {
         async public UniTask OpenWindowAsync() {
             await UniTask.SwitchToMainThread();
             if (CurrentState.status == WindowStatus.Opened || CurrentState.status == WindowStatus.Opening) return;
+
+            onWindowStartOpening?.Invoke();
 
             CurrentState.status = WindowStatus.Opening;
             var transitions = transitioners.Where(x => x.enabled)
@@ -37,7 +41,7 @@ namespace Adrenak.UGX {
             CurrentState.status = WindowStatus.Opened;
 
             WindowOpened();
-            onWindowOpen?.Invoke();
+            onWindowDoneOpening?.Invoke();
         }
 
         [Button]
@@ -46,6 +50,8 @@ namespace Adrenak.UGX {
         async public UniTask CloseWindowAsync() {
             await UniTask.SwitchToMainThread();
             if (CurrentState.status == WindowStatus.Closed || CurrentState.status == WindowStatus.Closing) return;
+
+            onWindowStartClosing?.Invoke();
 
             CurrentState.status = WindowStatus.Closing;
             var transitions = transitioners.Where(x => x.enabled)
@@ -57,7 +63,7 @@ namespace Adrenak.UGX {
             CurrentState.status = WindowStatus.Closed;
 
             WindowClosed();
-            onWindowClose?.Invoke();
+            onWindowDoneClosing?.Invoke();
         }
 
         public virtual UniTask<bool> ApprovePop() {

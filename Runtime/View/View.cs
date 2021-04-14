@@ -40,10 +40,10 @@ namespace Adrenak.UGX {
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
     public class View : UGXBehaviour {
-        public UnityEvent<ViewVisibility> onVisibilityChanged;
-        [ReadOnly] [SerializeField] ViewVisibility currentVisibility = ViewVisibility.None;
+        public UnityEvent<Visibility> onVisibilityChanged;
+        [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
 
-        public ViewVisibility CurrentVisibility {
+        public Visibility CurrentVisibility {
             get => currentVisibility;
             private set => currentVisibility = value;
         }
@@ -72,11 +72,11 @@ namespace Adrenak.UGX {
             onVisibilityChanged?.Invoke(CurrentVisibility);
         }
 
-        ViewVisibility GetVisibility() {
+        Visibility GetVisibility() {
             if (RT.IsVisible(out bool? fully))
-                return fully.Value ? ViewVisibility.None : ViewVisibility.Partial;
+                return fully.Value ? Visibility.None : Visibility.Partial;
             else
-                return ViewVisibility.Full;
+                return Visibility.Full;
         }
     }
 }
