@@ -47,12 +47,11 @@ namespace Adrenak.UGX {
         string oldPath = string.Empty;
         public string path = string.Empty;
 
-        public bool loadOnStart = true;
-
         RectTransform rt;
         RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
 
-        public ViewVisibility CurrentVisibility { get; private set; } = ViewVisibility.None;
+        [ReadOnly] public Visibility currentVisibility = Visibility.None;
+        public Visibility CurrentVisibility => currentVisibility;
 
         protected override void Awake() {
             Clear();
@@ -60,13 +59,12 @@ namespace Adrenak.UGX {
 
         protected override void Start() {
             rt = GetComponent<RectTransform>();
-            if (loadOnStart && Application.isPlaying)
-                Refresh();
         }
 
         [Button("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying) return;
+            if (CurrentVisibility == Visibility.None) return;
 
             Cache.Free(oldPath, oldCompression, this);
 
@@ -91,7 +89,18 @@ namespace Adrenak.UGX {
                     try {
                         Cache.Get(
                             path, compression, this,
-                            result => SetSprite(result.ToSprite()),
+                            result => {
+                                if(sprite == null){
+                                    SetSprite(result.ToSprite());
+                                    return;
+                                }
+                                if(sprite.texture == null){
+                                    SetSprite(result.ToSprite());
+                                    return;
+                                }
+                                if(sprite.texture != result)
+                                    SetSprite(result.ToSprite());
+                            },
                             error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
                         );
                     }
@@ -105,19 +114,25 @@ namespace Adrenak.UGX {
             oldCompression = compression;
         }
 
+        // NOTE: We ignore the first 2 frames because often times Pictures are visible for
+        // a few frames on instantiation when used inside an AutoLayout, but are not 
+        // supposed to be. Unity seems to update layouts in the next frame after they are
+        // enabled.
         int age = 0;
         void Update() {
             age++;
-            if (age <= 1) return;
+            if (age <= 2) return;
 
             var visibility = GetVisibility();
-            if (CurrentVisibility != visibility) {
-                if (CurrentVisibility == ViewVisibility.None && visibility != ViewVisibility.None)
+            if (currentVisibility != visibility) {
+                if (currentVisibility == Visibility.None && visibility != Visibility.None){
+                    currentVisibility = visibility;
                     Refresh();
-                else if (CurrentVisibility != ViewVisibility.None && visibility == ViewVisibility.None)
+                }
+                else if (currentVisibility != Visibility.None && visibility == Visibility.None){
+                    currentVisibility = visibility;
                     Cache.Free(path, compression, this);
-
-                CurrentVisibility = visibility;
+                }
             }
         }
 
@@ -133,11 +148,19 @@ namespace Adrenak.UGX {
             }
         }
 
-        ViewVisibility GetVisibility() {
-            if (RT.IsVisible(out bool? fully))
-                return fully.Value ? ViewVisibility.Full : ViewVisibility.Partial;
+        [ContextMenu("Test")]
+        void Test(){
+            var result = RT.IsVisible(out bool? fully);
+            Debug.Log(result + " " + fully);
+        }
+
+        Visibility GetVisibility() {
+            var result = RT.IsVisible(out bool? fully);
+
+            if (result)
+                return fully.Value ? Visibility.Full : Visibility.Partial;
             else
-                return ViewVisibility.None;
+                return Visibility.None;
         }
 
         bool destroyed = false;

@@ -5,7 +5,7 @@ namespace Adrenak.UGX {
     public class WindowScreenOrientationAddon : UGXBehaviour {
         public ScreenOrientation orientation;
         void Start() {
-            window.onWindowOpen.AddListener(() => Screen.orientation = orientation);
+            window.onWindowDoneOpening.AddListener(() => Screen.orientation = orientation);
         }
     }
 }

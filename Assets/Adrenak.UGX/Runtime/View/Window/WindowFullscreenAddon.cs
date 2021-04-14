@@ -6,7 +6,7 @@ namespace Adrenak.UGX {
         public bool isFullscreen;
 
         void Start() {
-            window.onWindowOpen.AddListener(() => Screen.fullScreen = isFullscreen);
+            window.onWindowDoneOpening.AddListener(() => Screen.fullScreen = isFullscreen);
         }
     }
 }

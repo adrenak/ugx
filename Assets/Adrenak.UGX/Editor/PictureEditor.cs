@@ -13,7 +13,8 @@ namespace Adrenak.UGX {
             image.compression = (Texture2DCompression)EditorGUILayout.EnumPopup("Texture Compression", image.compression);
             image.source = (Picture.Source)EditorGUILayout.EnumPopup("Source Type", image.source);
             image.path = EditorGUILayout.TextField("Source Path", image.path);
-            image.loadOnStart = EditorGUILayout.Toggle("Refresh On Start", image.loadOnStart);
+            image.currentVisibility = (Visibility)EditorGUILayout.EnumPopup("Current Visibility", image.CurrentVisibility);
+
             serializedObject.ApplyModifiedProperties();
 
             if (GUILayout.Button("Refresh"))

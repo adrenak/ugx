@@ -41,8 +41,7 @@ namespace Adrenak.UGX {
                     break;
             }
 
-            if (picture.CurrentVisibility != ViewVisibility.None)
-                picture.Refresh();
+            picture.Refresh();
         }
 
         public void Click() =>

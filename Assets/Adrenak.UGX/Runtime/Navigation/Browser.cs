@@ -7,14 +7,14 @@ using Adrenak.Unex;
 namespace Adrenak.UGX {
     public abstract class Browser : MonoBehaviour {
         static Dictionary<string, Browser> map = new Dictionary<string, Browser>();
-        public static Browser Get(string navigatorID = null) {
-            if (map.ContainsKey(navigatorID))
-                return map[navigatorID];
+        public static Browser Get(string browserID = null) {
+            if (map.ContainsKey(browserID))
+                return map[browserID];
             return null;
         }
 
 #pragma warning disable 0649
-        [SerializeField] string navigatorID;
+        [SerializeField] string browserID;
         [SerializeField] bool canPopAll;
 
         [ReadOnly] [SerializeField] protected Window active = null;
@@ -38,16 +38,16 @@ namespace Adrenak.UGX {
         void OnDestroy() => UnregisterInstance();
 
         void RegisterInstance() {
-            if (map.ContainsKey(navigatorID)) {
-                Debug.LogError("There is already a Navigator with ID " + navigatorID + ". IDs should be unique");
+            if (map.ContainsKey(browserID)) {
+                Debug.LogError("There is already a Browser with ID " + browserID + ". IDs should be unique");
                 return;
             }
-            map.Add(navigatorID, this);
+            map.Add(browserID, this);
         }
 
         void UnregisterInstance() {
-            if (map.ContainsKey(navigatorID))
-                map.Remove(navigatorID);
+            if (map.ContainsKey(browserID))
+                map.Remove(browserID);
         }
 
         void CheckBackPress() {
