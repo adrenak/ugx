@@ -5,17 +5,10 @@ using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 
 namespace Adrenak.UGX {
-    public class Window : Window<WindowState> {
-        protected override void HandleWindowStateSet() { }
-    }
-
-    [System.Serializable]
-    public class WindowState : ViewState {
+    public class Window : UGXBehaviour {
         public WindowStatus status;
         public bool autoPopOnBack = true;
-    }
 
-    public abstract class Window<T> : View<T> where T : WindowState {
         [BoxGroup("Window Events")] [SerializeField] bool showEvents;
         [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowStartOpening;
         [BoxGroup("Window Events")] [ShowIf("showEvents")] public UnityEvent onWindowDoneOpening;
@@ -27,18 +20,18 @@ namespace Adrenak.UGX {
 
         async public UniTask OpenWindowAsync() {
             await UniTask.SwitchToMainThread();
-            if (CurrentState.status == WindowStatus.Opened || CurrentState.status == WindowStatus.Opening) return;
+            if (status == WindowStatus.Opened || status == WindowStatus.Opening) return;
 
             onWindowStartOpening?.Invoke();
 
-            CurrentState.status = WindowStatus.Opening;
+            status = WindowStatus.Opening;
             var transitions = transitioners.Where(x => x.enabled)
                 .Select(x => x.TransitionInAsync())
                 .ToList();
 
             await UniTask.WhenAll(transitions);
             await UniTask.SwitchToMainThread();
-            CurrentState.status = WindowStatus.Opened;
+            status = WindowStatus.Opened;
 
             WindowOpened();
             onWindowDoneOpening?.Invoke();
@@ -49,18 +42,18 @@ namespace Adrenak.UGX {
 
         async public UniTask CloseWindowAsync() {
             await UniTask.SwitchToMainThread();
-            if (CurrentState.status == WindowStatus.Closed || CurrentState.status == WindowStatus.Closing) return;
+            if (status == WindowStatus.Closed || status == WindowStatus.Closing) return;
 
             onWindowStartClosing?.Invoke();
 
-            CurrentState.status = WindowStatus.Closing;
+            status = WindowStatus.Closing;
             var transitions = transitioners.Where(x => x.enabled)
                 .Select(x => x.TransitionOutAsync())
                 .ToList();
 
             await UniTask.WhenAll(transitions);
             await UniTask.SwitchToMainThread();
-            CurrentState.status = WindowStatus.Closed;
+            status = WindowStatus.Closed;
 
             WindowClosed();
             onWindowDoneClosing?.Invoke();
@@ -74,12 +67,6 @@ namespace Adrenak.UGX {
             return UniTask.FromResult(true);
         }
 
-        sealed protected override void HandleViewStateSet() {
-            // TODO: Make Status is a reactive property and react to changes
-            HandleWindowStateSet();
-        }
-
-        protected abstract void HandleWindowStateSet();
         protected virtual void WindowOpened() { }
         protected virtual void WindowClosed() { }
     }

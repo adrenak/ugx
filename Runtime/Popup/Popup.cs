@@ -3,20 +3,14 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
-    [System.Serializable]
-    public class PopupState : WindowState { }
+    public class PopupState : ViewState { }
 
-    [System.Serializable]
+    [Serializable]
     public class PopupResponse { }
 
-    public abstract class Popup<T, K> : Window<T> where T : PopupState where K : PopupResponse {
+    [RequireComponent(typeof(Window))]
+    public abstract class Popup<T, K> : View<T> where T : PopupState where K : PopupResponse {
         static GameObject activePopup;
-
-        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
-        public new void OpenWindow() => base.OpenWindow();
-
-        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
-        public new UniTask OpenWindowAsync() => base.OpenWindowAsync();
 
         [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
         async public UniTask<K> WaitForResponse() {
@@ -52,7 +46,7 @@ namespace Adrenak.UGX {
 #pragma warning disable 0618
             var response = await instance.WaitForResponse();
 #pragma warning restore 0618
-            await instance.CloseWindowAsync();
+            await window.CloseWindowAsync();
 
             activePopup = null;
             Destroy(instance.gameObject);
@@ -60,15 +54,16 @@ namespace Adrenak.UGX {
             return response;
         }
 
-        Popup<T, K> GetClone() {
+        protected override void HandleViewStateSet() => HandlePopupStateSet();
+
+        protected abstract void HandlePopupStateSet();
+
+		Popup<T, K> GetClone() {
             var instance = MonoBehaviour.Instantiate(gameObject).GetComponent<Popup<T, K>>();
             instance.transform.SetParent(transform.parent, false);
             return instance;
         }
 
         protected abstract UniTask<K> WaitForResponseImpl();
-
-        sealed protected override void HandleWindowStateSet() => HandlePopupStateSet();
-        protected abstract void HandlePopupStateSet();
     }
 }

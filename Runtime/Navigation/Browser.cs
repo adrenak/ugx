@@ -52,7 +52,7 @@ namespace Adrenak.UGX {
 
         void CheckBackPress() {
             if (!Input.GetKeyUp(KeyCode.Escape)) return;
-            if (!active.CurrentState.autoPopOnBack) return;
+            if (!active.autoPopOnBack) return;
             Pop();
         }
 
