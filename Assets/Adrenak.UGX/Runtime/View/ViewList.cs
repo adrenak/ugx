@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class ViewList<T> : View, ICollection<T>, IList<T> where T : ViewState {
+    public abstract class ViewList<T> : View, ICollection<T>, IList<T> where T : ViewState {
         int resizingCheckFrameStep = 2;
         [BoxGroup("Instantiation")] public Transform container = null;
         [BoxGroup("Instantiation")] public View template = null;

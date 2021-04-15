@@ -4,49 +4,28 @@ using NaughtyAttributes;
 using System;
 
 namespace Adrenak.UGX {
-    [Serializable]
-    public abstract class View<TViewState> : View where TViewState : ViewState {
-        public event EventHandler<TViewState> OnViewStateSet;
-
-        [BoxGroup("View State")] public bool updateFromStateOnStart = false;
-
-        [BoxGroup("View State")] [SerializeField] TViewState currentState;
-        public TViewState CurrentState {
-            get => currentState;
-            set {
-                currentState = value ?? throw new Exception(nameof(CurrentState));
-                OnViewStateSet?.Invoke(this, currentState);
-                HandleViewStateSet();
-            }
-        }
-
-        void Start() {
-            if (updateFromStateOnStart)
-                UpdateFromState();
-        }
-
-        [Button("Update View")]
-        public void UpdateFromState() {
-#if UNITY_EDITOR
-            UnityEditor.Undo.RecordObject(gameObject, "Update View");
-#endif
-            HandleViewStateSet();
-        }
-
-        protected abstract void HandleViewStateSet();
-    }
-
     [DisallowMultipleComponent]
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
     public class View : UGXBehaviour {
+        public string viewID = Guid.NewGuid().ToString();
         public UnityEvent<Visibility> onVisibilityChanged;
         [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
+
+        public static View operator / (View S1, string childName) {
+            var views = S1.GetComponentsInChildren<View>();
+            foreach (var view in views)
+                if (view.viewID.Equals(childName))
+                    return view;
+            return null;
+        }
 
         public Visibility CurrentVisibility {
             get => currentVisibility;
             private set => currentVisibility = value;
         }
+
+        public T As<T>() where T : View => this as T;
 
         /// <summary>
         /// If you're overriding this, make sure to call base.Awake() first thing
