@@ -6,7 +6,7 @@ using NaughtyAttributes;
 
 namespace Adrenak.UGX {
     public class Window : UGXBehaviour {
-        public WindowStatus status;
+        [ReadOnly] public WindowStatus status;
         public bool autoPopOnBack = true;
 
         [BoxGroup("Window Events")] [SerializeField] bool showEvents;

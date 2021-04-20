@@ -3,13 +3,13 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
-    public class PopupState : ViewState { }
+    public class PopupState : State { }
 
     [Serializable]
     public class PopupResponse { }
 
     [RequireComponent(typeof(Window))]
-    public abstract class Popup<T, K> : View<T> where T : PopupState where K : PopupResponse {
+    public abstract class Popup<T, K> : StatefulView<T> where T : PopupState where K : PopupResponse {
         static GameObject activePopup;
 
         [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
@@ -18,6 +18,13 @@ namespace Adrenak.UGX {
             var response = await WaitForResponseImpl();
             await UniTask.SwitchToMainThread();
             return response;
+        }
+
+        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
+        public Popup<T, K> GetClone() {
+            var instance = MonoBehaviour.Instantiate(gameObject).GetComponent<Popup<T, K>>();
+            instance.transform.SetParent(transform.parent, false);
+            return instance;
         }
 
         public static void Display(string path, Action<T> cloneState, Action<K> resultCallback){
@@ -54,15 +61,9 @@ namespace Adrenak.UGX {
             return response;
         }
 
-        protected override void HandleViewStateSet() => HandlePopupStateSet();
+        protected override void HandleStateSet() => HandlePopupStateSet();
 
         protected abstract void HandlePopupStateSet();
-
-		Popup<T, K> GetClone() {
-            var instance = MonoBehaviour.Instantiate(gameObject).GetComponent<Popup<T, K>>();
-            instance.transform.SetParent(transform.parent, false);
-            return instance;
-        }
 
         protected abstract UniTask<K> WaitForResponseImpl();
     }

@@ -86,5 +86,12 @@ namespace Adrenak.UGX {
         protected abstract void PushImpl(Window window);
 
         protected abstract void PopImpl();
+
+        public void Toggle(Window window) {
+            if (History.Count > 0 && History.Last() == window)
+                Pop();
+            else
+                Push(window);
+		}
     }
 }

@@ -76,10 +76,10 @@ namespace Adrenak.UGX {
 
         public static bool IsVisible(this RectTransform rt, out bool? fully) {
             bool IsPointInside(Vector2 point){
-                return (point.x >= 0 &&
-                    point.x <= Screen.width  &&
-                    point.y >= 0 &&
-                    point.y <= Screen.height );
+                return (point.x >= -1 &&
+                    point.x <= Screen.width + 1 &&
+                    point.y >= -1 &&
+                    point.y <= Screen.height + 1 );
             }
 
             var points = new Vector2[]{

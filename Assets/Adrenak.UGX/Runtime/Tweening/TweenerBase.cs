@@ -3,17 +3,17 @@ using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 
 namespace Adrenak.UGX {
-    public abstract class TransitionerBase : UGXBehaviour {
-        static ITransitionDriver driver;
+    public abstract class TweenerBase : UGXBehaviour {
+        static ITweenDriver driver;
 
         // Ambient context dependency pattern. Set driver
         // implementation before ever using it. Best to set 
         // it at the start of the application.
         public static bool IsDriverLocked => driver != null;
-        public static ITransitionDriver Driver {
+        public static ITweenDriver Driver {
             get {
                 if (driver == null)
-                    driver = new SurgeTransitionDriver();
+                    driver = new SurgeTweenDriver();
                 return driver;
             }
             set {

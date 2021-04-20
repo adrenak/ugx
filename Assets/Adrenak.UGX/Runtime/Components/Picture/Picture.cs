@@ -39,6 +39,8 @@ namespace Adrenak.UGX {
         public UnityEvent onSpriteSet;
         public UnityEvent onSpriteRemoved;
 
+        public bool refreshOnStart;
+
         public Source source = Source.URL;
 
         Texture2DCompression oldCompression = Texture2DCompression.None;
@@ -59,20 +61,20 @@ namespace Adrenak.UGX {
 
         protected override void Start() {
             rt = GetComponent<RectTransform>();
+            if(refreshOnStart)
+                Refresh();
         }
 
         [Button("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying) return;
             if (CurrentVisibility == Visibility.None) return;
+            if (string.IsNullOrWhiteSpace(path)) return;
 
             Cache.Free(oldPath, oldCompression, this);
 
             switch (source) {
                 case Source.Resource:
-                    if (string.IsNullOrWhiteSpace(path))
-                        break;
-
                     var resourceSprite = Resources.Load<Sprite>(path);
                     if (resourceSprite == null) {
                         Debug.LogError($"Not Resource found at {path}");
@@ -83,9 +85,6 @@ namespace Adrenak.UGX {
                     break;
 
                 case Source.URL:
-                    if (string.IsNullOrWhiteSpace(path))
-                        break;
-
                     try {
                         Cache.Get(
                             path, compression, this,
