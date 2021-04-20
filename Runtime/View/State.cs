@@ -2,7 +2,7 @@
 
 namespace Adrenak.UGX{
     [Serializable]
-    public abstract class ViewState {
+    public abstract class State {
         public string ID = Guid.NewGuid().ToString();
     }
 }

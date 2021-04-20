@@ -19,8 +19,8 @@ namespace Adrenak.UGX {
 
         public View view => GetComponent<View>();
         public Window window => GetComponent<Window>();
-        public TransitionerBase[] transitioners => GetComponents<TransitionerBase>();
-        public T Get<T>() where T : TransitionerBase {
+        public TweenerBase[] transitioners => GetComponents<TweenerBase>();
+        public T Get<T>() where T : TweenerBase {
             foreach (var transitioner in transitioners)
                 if (transitioner is T)
                     return transitioner as T;

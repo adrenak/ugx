@@ -10,6 +10,7 @@ namespace Adrenak.UGX {
     public class View : UGXBehaviour {
         public string viewID = Guid.NewGuid().ToString();
         public UnityEvent<Visibility> onVisibilityChanged;
+
         [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
 
         public static View operator / (View S1, string childName) {
@@ -53,9 +54,9 @@ namespace Adrenak.UGX {
 
         Visibility GetVisibility() {
             if (RT.IsVisible(out bool? fully))
-                return fully.Value ? Visibility.None : Visibility.Partial;
+                return fully.Value ? Visibility.Full : Visibility.Partial;
             else
-                return Visibility.Full;
+                return Visibility.None;
         }
     }
 }

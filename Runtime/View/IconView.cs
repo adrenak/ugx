@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class IconViewState : ViewState {
+    public class IconViewState : State {
         public string text;
         public Picture.Source source;
         public string spriteImageURL;
@@ -14,7 +14,7 @@ namespace Adrenak.UGX {
         public Sprite spriteAsset;
     }
 
-    public class IconView : View<IconViewState>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+    public class IconView : StatefulView<IconViewState>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
         public UnityEvent onClick = new UnityEvent();
 
 #pragma warning disable 0649
@@ -25,7 +25,7 @@ namespace Adrenak.UGX {
         [SerializeField] Picture picture;
 #pragma warning disable 0649
 
-        protected override void HandleViewStateSet() {
+        protected override void HandleStateSet() {
             text.text = CurrentState.text;
             picture.source = CurrentState.source;
 

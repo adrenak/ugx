@@ -1,38 +1,38 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
+using System.Collections;
 using NaughtyAttributes;
 using System;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public abstract class View<TViewState> : View where TViewState : ViewState {
-        public event EventHandler<TViewState> OnViewStateSet;
+    public abstract class StatefulView<TState> : View where TState : State {
+        public event EventHandler<TState> OnViewStateSet;
 
         [BoxGroup("View State")] public bool updateFromStateOnStart = false;
 
-        [BoxGroup("View State")] [SerializeField] TViewState currentState;
-        public TViewState CurrentState {
+        [BoxGroup("View State")] [SerializeField] TState currentState;
+        public TState CurrentState {
             get => currentState;
             set {
                 currentState = value ?? throw new Exception(nameof(CurrentState));
                 OnViewStateSet?.Invoke(this, currentState);
-                HandleViewStateSet();
+                HandleStateSet();
             }
         }
 
-        void Start() {
-            if (updateFromStateOnStart)
-                UpdateFromState();
+        protected void Start() {
+            if (updateFromStateOnStart) 
+                UpdateView();
         }
 
         [Button("Update View")]
-        public void UpdateFromState() {
+        public void UpdateView() {
 #if UNITY_EDITOR
             UnityEditor.Undo.RecordObject(gameObject, "Update View");
 #endif
-            HandleViewStateSet();
+            HandleStateSet();
         }
 
-        protected abstract void HandleViewStateSet();
+        protected abstract void HandleStateSet();
     }
 }
