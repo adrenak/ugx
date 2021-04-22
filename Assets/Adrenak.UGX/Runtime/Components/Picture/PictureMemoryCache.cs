@@ -58,7 +58,7 @@ namespace Adrenak.UGX {
 
         public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
             var key = new Key(location, compression);
-
+            
             if (resources.Keys.Contains(key)) {
                 unused.EnsureDoesntExist(key);
                 instances[key].EnsureExists(instance);

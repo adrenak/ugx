@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public abstract class ViewList<T> : View, ICollection<T>, IList<T> where T : State {
+    public abstract class ViewList<T> : View, ICollection<T>, IList<T> where T : ViewState {
         public int resizingCheckFrameStep = 2;
         [BoxGroup("Instantiation")] public Transform container = null;
         [BoxGroup("Instantiation")] public View template = null;
@@ -184,7 +184,7 @@ namespace Adrenak.UGX {
     }
 
     // When you implement IEnumerable, you must also implement IEnumerator.
-    public class ViewListEnumerator<T> : IEnumerator where T : State {
+    public class ViewListEnumerator<T> : IEnumerator where T : ViewState {
         public T[] array;
 
         // Enumerators are positioned before the first element

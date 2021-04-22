@@ -3,7 +3,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
-    public class PopupState : State { }
+    public class PopupState : ViewState { }
 
     [Serializable]
     public class PopupResponse { }

@@ -5,7 +5,7 @@ using System;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public abstract class StatefulView<TState> : View where TState : State {
+    public abstract class StatefulView<TState> : View where TState : ViewState {
         public event EventHandler<TState> OnViewStateSet;
 
         [BoxGroup("View State")] public bool updateFromStateOnStart = false;

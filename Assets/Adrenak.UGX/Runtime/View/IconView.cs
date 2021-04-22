@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     [Serializable]
-    public class IconViewState : State {
+    public class IconViewState : ViewState {
         public string text;
         public Picture.Source source;
         public string spriteImageURL;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
@@ -75,12 +76,11 @@ namespace Adrenak.UGX {
         }
 
         public static bool IsVisible(this RectTransform rt, out bool? fully) {
-            bool IsPointInside(Vector2 point){
-                return (point.x >= -1 &&
-                    point.x <= Screen.width + 1 &&
-                    point.y >= -1 &&
-                    point.y <= Screen.height + 1 );
-            }
+            bool IsInHorizontalBand(Vector2 point) =>
+                point.y >= -1 && point.y <= Screen.height + 1;
+
+            bool IsInVerticalBand(Vector2 point) =>
+                point.x >= -1 && point.x <= Screen.width + 1;
 
             var points = new Vector2[]{
                 rt.GetTopLeft(),
@@ -90,15 +90,44 @@ namespace Adrenak.UGX {
             };
 
             int count = 0;
-            foreach(var  point in points)
-                count += IsPointInside(point) ? 1 : 0;
-            
-            if(count == 0){
-                fully = null;
-                return false;
-            }
+            foreach(var  point in points) 
+                count += IsInHorizontalBand(point) && IsInVerticalBand(point) ? 1 : 0;
 
-            fully = count == 4;
+            if(count == 4) {
+                fully = true;
+                return true;
+			}
+
+            bool IsAboveScreen(Vector2 v) =>
+                v.y > Screen.height + 1;
+
+            bool IsBelowScreen(Vector2 v) =>
+                v.y < -1;
+
+            bool IsLeftOfScreen(Vector2 v) =>
+                v.x < -1;
+
+            bool IsRightOfScreen(Vector2 v) =>
+                v.x > Screen.width + 1;
+
+			List<Func<Vector2, bool>> checks = new List<Func<Vector2, bool>> {
+				IsAboveScreen,
+				IsBelowScreen,
+				IsLeftOfScreen,
+				IsRightOfScreen
+			};
+
+			foreach (var check in checks) {
+                count = 0;
+                foreach(var point in points) 
+                    count += check(point) ? 1 : 0;
+                if(count == 4) {
+                    fully = false;
+                    return false;
+				}			    
+			}
+
+            fully = false;
             return true;
         }
 
