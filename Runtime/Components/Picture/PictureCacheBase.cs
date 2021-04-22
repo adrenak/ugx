@@ -17,7 +17,7 @@ namespace Adrenak.UGX {
         public static Texture2DDownloader Downloader {
             get {
                 if (downloader == null)
-                    downloader = new Texture2DDownloader();
+                    downloader = Texture2DDownloader.New();
                 return downloader;
             }
             set {
