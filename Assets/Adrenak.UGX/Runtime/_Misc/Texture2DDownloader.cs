@@ -5,46 +5,71 @@ using Adrenak.Unex;
 using UnityEngine;
 
 namespace Adrenak.UGX {
-    public class Texture2DDownloader {
+    public class Texture2DDownloader : MonoBehaviour {
         class Request {
             public string path;
-            public Texture2DCompression compression;
             public Action<Texture2D> onSuccess;
             public Action<Exception> onFailure;
 
-            public Request(string _path, Texture2DCompression _compression, Action<Texture2D> _onSuccess, Action<Exception> _onFailure) {
+            public Request(string _path, Action<Texture2D> _onSuccess, Action<Exception> _onFailure) {
                 path = _path;
-                compression = _compression;
                 onSuccess = _onSuccess;
                 onFailure = _onFailure;
             }
         }
 
         int maxConcurrentDownloads;
+        float secondsPerTextureLoad;
         List<Request> pending = new List<Request>();
         List<Request> ongoing = new List<Request>();
+        List<Action> textureLoads = new List<Action>();
 
         bool CanSendNewRequest => ongoing.Count < maxConcurrentDownloads;
+        float loadTimer = 0;
 
-        public Texture2DDownloader(int _maxConcurrentDownloads = 10000) {
-            maxConcurrentDownloads = _maxConcurrentDownloads;
+        Texture2DDownloader() { }
+
+        public static Texture2DDownloader New(int _maxConcurrentDownloads = 5, float _secondsPerTextureLoad = .1f) {
+            var go = new GameObject("Texture2DDownloader");
+            DontDestroyOnLoad(go);
+            go.hideFlags = HideFlags.DontSave;
+            var instance = go.AddComponent<Texture2DDownloader>();
+            instance.maxConcurrentDownloads = _maxConcurrentDownloads;
+            instance.secondsPerTextureLoad = _secondsPerTextureLoad;
+            instance.loadTimer = _secondsPerTextureLoad;
+            return instance;
         }
 
-        public void Download(string path, Texture2DCompression compression, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
-            var req = new Request(path, compression, onSuccess, onFailure);
+		void Update() {
+            DispatchRequests();
+
+            loadTimer += Time.unscaledDeltaTime;
+            if(loadTimer > secondsPerTextureLoad) {
+                loadTimer = 0;
+                DispatchTextureLoads();
+			}
+		}
+
+        void DispatchRequests() {
+            if(ongoing.Count < maxConcurrentDownloads && pending.Count > 0)
+                StartCoroutine(SendRequest(pending[0]));
+        }
+
+        void DispatchTextureLoads() {
+            if(textureLoads.Count > 0) {
+                textureLoads[0]?.Invoke();
+                textureLoads.RemoveAt(0);
+			}
+		}
+
+		public void Download(string path, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
+            var req = new Request(path, onSuccess, onFailure);
             if (CanSendNewRequest) {
                 Runnable.Run(SendRequest(req));
                 return;
             }
             else
                 pending.Add(req);
-        }
-
-        void OnRequestFinished(Request req) {
-            ongoing.Remove(req);
-
-            while (ongoing.Count < maxConcurrentDownloads && pending.Count > 0)
-                Runnable.Run(SendRequest(pending[0]));
         }
 
         IEnumerator SendRequest(Request request) {
@@ -62,19 +87,19 @@ namespace Adrenak.UGX {
 
             if (!string.IsNullOrWhiteSpace(www.error)) {
                 request.onFailure?.Invoke(new Exception(www.error));
-                OnRequestFinished(request);
+                ongoing.Remove(request);
                 yield break;
             }
 
-            var tex = new Texture2D(2, 2);
-            tex.LoadImage(www.bytes);
-            tex.Apply();
-            if (request.compression != Texture2DCompression.None)
-                tex.Compress(request.compression == Texture2DCompression.HighQuality);
+            textureLoads.Add(() => {
+                var tex = new Texture2D(2, 2);
+                tex.LoadImage(www.bytes);
+                tex.Apply();
 
-            request.onSuccess?.Invoke(tex);
-            OnRequestFinished(request);
-            www.Dispose();
+                request.onSuccess?.Invoke(tex);
+                ongoing.Remove(request);
+                www.Dispose();
+            });
         }
     }
 }

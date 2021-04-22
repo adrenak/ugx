@@ -74,9 +74,9 @@ namespace Adrenak.UGX {
             if (requests[key].Count > 1)
                 return;
 
-            Downloader.Download(location, compression,
+            Downloader.Download(location,
                 result => {
-                    if(compression != Texture2DCompression.None)
+                    if (compression != Texture2DCompression.None)
                         result.Compress(compression == Texture2DCompression.HighQuality);
                     freed.EnsureDoesntContain(key);
                     resources.EnsureContains(key, result);
