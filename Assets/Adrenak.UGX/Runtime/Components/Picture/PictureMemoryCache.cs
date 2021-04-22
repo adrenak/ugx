@@ -42,7 +42,7 @@ namespace Adrenak.UGX {
             }
         }
 
-        List<Key> unused = new List<Key>();
+        List<Key> freed = new List<Key>();
         Dictionary<Key, List<Picture>> instances = new Dictionary<Key, List<Picture>>();
         Dictionary<Key, Texture2D> resources = new Dictionary<Key, Texture2D>();
         Dictionary<Key, List<Request>> requests = new Dictionary<Key, List<Request>>();
@@ -55,30 +55,32 @@ namespace Adrenak.UGX {
         public override UniTask Init(object obj = null) {
             return UniTask.CompletedTask;
         }
-
+        
         public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
+            if (string.IsNullOrEmpty(location)) return;
             var key = new Key(location, compression);
             
             if (resources.Keys.Contains(key)) {
-                unused.EnsureDoesntExist(key);
-                instances[key].EnsureExists(instance);
+                freed.EnsureDoesntContain(key);
+                instances[key].EnsureContains(instance);
 
-                var tex = resources[key];
-                onSuccess?.Invoke(tex);
+                onSuccess?.Invoke(resources[key]);
                 return;
             }
 
             var request = new Request(onSuccess, onFailure);
-            requests.EnsureKey(key, new List<Request>());
+			requests.EnsureContains(key, new List<Request>() { });
             requests[key].Add(request);
             if (requests[key].Count > 1)
                 return;
 
             Downloader.Download(location, compression,
                 result => {
-                    unused.EnsureDoesntExist(key);
-                    resources.EnsureKey(key, result);
-                    instances.EnsureKey(key, new List<Picture>());
+                    if(compression != Texture2DCompression.None)
+                        result.Compress(compression == Texture2DCompression.HighQuality);
+                    freed.EnsureDoesntContain(key);
+                    resources.EnsureContains(key, result);
+                    instances.EnsureContains(key, new List<Picture>());
                     instances[key].Add(instance);
 
                     foreach (var req in requests[key])
@@ -111,6 +113,8 @@ namespace Adrenak.UGX {
         }
 
         public override void Free(string location, Texture2DCompression compression, Picture instance, Action onSuccess, Action<Exception> onFailure) {
+            if (string.IsNullOrEmpty(location)) return;
+
             try {
                 var k = new Key(location, compression);
 
@@ -121,17 +125,17 @@ namespace Adrenak.UGX {
                         instances[key].Remove(instance);
 
                         if (instances[key].Count <= 0) {
-                            unused.EnsureExists(key);
+                            freed.EnsureContains(key);
 
                             var unusedKeys = instances.Where(x => x.Value.Count <= 0).Select(x => x.Key).ToList();
                             while (resources.Count > maxResourceCount && unusedKeys.Count > 0) {
-                                var oldestUnused = unused[0];
-                                instances[oldestUnused].Clear();
-                                instances.Remove(oldestUnused);
+                                var oldestFreed = freed[0];
+                                instances[oldestFreed].Clear();
+                                instances.Remove(oldestFreed);
 
-                                MonoBehaviour.Destroy(resources[oldestUnused]);
-                                resources.Remove(oldestUnused);
-                                unused.EnsureDoesntExist(oldestUnused);
+                                MonoBehaviour.Destroy(resources[oldestFreed]);
+                                resources.Remove(oldestFreed);
+                                freed.EnsureDoesntContain(oldestFreed);
                             }
                         }
                     }

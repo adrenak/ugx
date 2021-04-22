@@ -53,10 +53,12 @@ namespace Adrenak.UGX {
         }
 
         Visibility GetVisibility() {
-            if (RT.IsVisible(out bool? fully))
-                return fully.Value ? Visibility.Full : Visibility.Partial;
+            var result = RT.IsVisible(out bool? partially);
+
+            if (!partially.Value)
+                return result ? Visibility.Full : Visibility.None;
             else
-                return Visibility.None;
+                return Visibility.Partial;
         }
     }
 }
