@@ -20,45 +20,5 @@ namespace Adrenak.UGX {
                     return view;
             return null;
         }
-
-        public Visibility CurrentVisibility {
-            get => currentVisibility;
-            private set => currentVisibility = value;
-        }
-
-        public T As<T>() where T : View => this as T;
-
-        /// <summary>
-        /// If you're overriding this, make sure to call base.Awake() first thing
-        /// in the Awake method of your subclass
-        /// By marking this method as protected, it'll warn any inheritors
-        /// </summary>
-        protected void Awake() => CurrentVisibility = GetVisibility();
-
-        /// <summary>
-        /// If you're overriding this, make sure to call base.Update() first thing
-        /// in the Update method of your subclass
-        /// By marking this method as protected, it'll warn any inheritors
-        /// </summary>
-        protected void Update() {
-            UpdateVisibility();
-        }
-
-        void UpdateVisibility() {
-            var visibility = GetVisibility();
-            if (CurrentVisibility == visibility) return;
-
-            CurrentVisibility = visibility;
-            onVisibilityChanged?.Invoke(CurrentVisibility);
-        }
-
-        Visibility GetVisibility() {
-            var result = RT.IsVisible(out bool? partially);
-
-            if (!partially.Value)
-                return result ? Visibility.Full : Visibility.None;
-            else
-                return Visibility.Partial;
-        }
     }
 }

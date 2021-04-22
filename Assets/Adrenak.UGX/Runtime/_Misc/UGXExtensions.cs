@@ -75,6 +75,15 @@ namespace Adrenak.UGX {
             return new Vector2(right, bottom);
         }
 
+        public static Visibility GetVisibility(this RectTransform rt) {
+            var result = rt.IsVisible(out bool? partially);
+
+            if (!partially.Value)
+                return result ? Visibility.Full : Visibility.None;
+            else
+                return Visibility.Partial;
+        }
+
         public static bool IsVisible(this RectTransform rt, out bool? partially) {
             var points = new Vector2[]{
                 rt.GetTopLeft(),

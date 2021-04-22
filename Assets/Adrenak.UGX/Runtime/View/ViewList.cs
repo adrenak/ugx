@@ -32,8 +32,7 @@ namespace Adrenak.UGX {
         }
 
         bool populateOnStart;
-        new void Awake() {
-            base.Awake();
+        void Awake() {
             populateOnStart = !(statesList.Count == 0);
 		}
 
@@ -47,9 +46,7 @@ namespace Adrenak.UGX {
 			}
         }
 
-        new void Update() {
-            base.Update();
-
+        void Update() {
             if(Time.frameCount % resizingCheckFrameStep == 0)
                 ResizeIfRequired();
         }
