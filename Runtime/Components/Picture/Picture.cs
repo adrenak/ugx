@@ -68,8 +68,10 @@ namespace Adrenak.UGX {
         [Button("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying) return;
-            if (CurrentVisibility == Visibility.None) return;
+            if (currentVisibility == Visibility.None) return;   // TODO: Try to remove
             if (string.IsNullOrWhiteSpace(path)) return;
+
+            if (oldPath.Equals(path) && oldCompression == compression) return;
 
             Cache.Free(oldPath, oldCompression, this);
 
@@ -122,16 +124,14 @@ namespace Adrenak.UGX {
             age++;
             if (age <= 2) return;
 
-            var visibility = GetVisibility();
-            if (currentVisibility != visibility) {
-                if (currentVisibility == Visibility.None && visibility != Visibility.None){
-                    currentVisibility = visibility;
+            var oldVisibility = currentVisibility;
+            currentVisibility = GetVisibility();
+            
+            if (currentVisibility != oldVisibility) {
+                if (oldVisibility == Visibility.None && currentVisibility != Visibility.None)
                     Refresh();
-                }
-                else if (currentVisibility != Visibility.None && visibility == Visibility.None){
-                    currentVisibility = visibility;
+                else if (oldVisibility != Visibility.None && currentVisibility == Visibility.None)
                     Cache.Free(path, compression, this);
-                }
             }
         }
 
@@ -145,12 +145,6 @@ namespace Adrenak.UGX {
                 sprite = s;
                 onSpriteSet?.Invoke();
             }
-        }
-
-        [ContextMenu("Test")]
-        void Test(){
-            var result = RT.IsVisible(out bool? fully);
-            Debug.Log(result + " " + fully);
         }
 
         Visibility GetVisibility() {
