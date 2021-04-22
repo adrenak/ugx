@@ -22,11 +22,7 @@ namespace Adrenak.UGX {
             set {
                 if (repo != null)
                     throw new Exception("DynamicImage.Cache can only be set once and before any get calls");
-
-                if (value == null)
-                    throw new Exception("DynamicImage.Cache cannot set Cache to null!");
-
-                repo = value;
+				repo = value ?? throw new Exception("DynamicImage.Cache cannot set Cache to null!");
             }
         }
 
@@ -52,7 +48,7 @@ namespace Adrenak.UGX {
         RectTransform rt;
         RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
 
-        [ReadOnly] public Visibility currentVisibility = Visibility.None;
+        Visibility currentVisibility = Visibility.None;
         public Visibility CurrentVisibility => currentVisibility;
 
         protected override void Awake() {
