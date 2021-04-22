@@ -32,10 +32,12 @@ namespace Adrenak.UGX {
             URL
         }
 
-        public UnityEvent onSpriteSet;
-        public UnityEvent onSpriteRemoved;
+        public UnityEvent onRefreshStart;
+        public UnityEvent onRefreshSuccess;
+        public UnityEvent onRefreshFailure;
 
         public bool refreshOnStart;
+        public bool updateWhenOffScreen;
 
         public Source source = Source.URL;
 
@@ -51,10 +53,6 @@ namespace Adrenak.UGX {
         Visibility currentVisibility = Visibility.None;
         public Visibility CurrentVisibility => currentVisibility;
 
-        protected override void Awake() {
-            Clear();
-        }
-
         protected override void Start() {
             rt = GetComponent<RectTransform>();
             if(refreshOnStart)
@@ -64,39 +62,38 @@ namespace Adrenak.UGX {
         [Button("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying) return;
-            if (currentVisibility == Visibility.None) return;   // TODO: Try to remove
+            if (currentVisibility == Visibility.None && !updateWhenOffScreen) return;   // TODO: Try to remove
             if (string.IsNullOrWhiteSpace(path)) return;
 
             Cache.Free(oldPath, oldCompression, this);
 
             switch (source) {
                 case Source.Resource:
+                    onRefreshStart.Invoke();
                     var resourceSprite = Resources.Load<Sprite>(path);
                     if (resourceSprite == null) {
+                        onRefreshFailure.Invoke();
                         Debug.LogError($"Not Resource found at {path}");
                         break;
                     }
 
+                    onRefreshSuccess.Invoke();
                     SetSprite(resourceSprite);
                     break;
 
                 case Source.URL:
                     try {
+                        onRefreshStart.Invoke();
                         Cache.Get(
                             path, compression, this,
                             result => {
-                                if(sprite == null){
-                                    SetSprite(result.ToSprite());
-                                    return;
-                                }
-                                if(sprite.texture == null){
-                                    SetSprite(result.ToSprite());
-                                    return;
-                                }
-                                if(sprite.texture != result)
-                                    SetSprite(result.ToSprite());
+                                SetSprite(result.ToSprite());
+                                onRefreshSuccess.Invoke();
                             },
-                            error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
+                            error => {
+                                Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error);
+                                onRefreshFailure.Invoke();
+                            }
                         );
                     }
                     catch (Exception e) {
@@ -129,15 +126,10 @@ namespace Adrenak.UGX {
             }
         }
 
-        public void Clear() {
-            sprite = null;
-            onSpriteRemoved?.Invoke();
-        }
-
         void SetSprite(Sprite s) {
             if (s != null && !destroyed) {
                 sprite = s;
-                onSpriteSet?.Invoke();
+                onRefreshSuccess?.Invoke();
             }
         }
 
