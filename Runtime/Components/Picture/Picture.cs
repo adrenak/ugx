@@ -71,8 +71,6 @@ namespace Adrenak.UGX {
             if (currentVisibility == Visibility.None) return;   // TODO: Try to remove
             if (string.IsNullOrWhiteSpace(path)) return;
 
-            if (oldPath.Equals(path) && oldCompression == compression) return;
-
             Cache.Free(oldPath, oldCompression, this);
 
             switch (source) {
@@ -148,17 +146,19 @@ namespace Adrenak.UGX {
         }
 
         Visibility GetVisibility() {
-            var result = RT.IsVisible(out bool? fully);
+            var result = RT.IsVisible(out bool? partially);
 
-            if (result)
-                return fully.Value ? Visibility.Full : Visibility.Partial;
+            if (!partially.Value)
+                return result ? Visibility.Full : Visibility.None;
             else
-                return Visibility.None;
+                return Visibility.Partial;
         }
 
         bool destroyed = false;
         protected override void OnDestroy() {
+            if (destroyed) return;
             destroyed = true;
+
             if (!Application.isPlaying) return;
             Cache.Free(path, compression, this);
         }

@@ -75,13 +75,7 @@ namespace Adrenak.UGX {
             return new Vector2(right, bottom);
         }
 
-        public static bool IsVisible(this RectTransform rt, out bool? fully) {
-            bool IsInHorizontalBand(Vector2 point) =>
-                point.y >= -1 && point.y <= Screen.height + 1;
-
-            bool IsInVerticalBand(Vector2 point) =>
-                point.x >= -1 && point.x <= Screen.width + 1;
-
+        public static bool IsVisible(this RectTransform rt, out bool? partially) {
             var points = new Vector2[]{
                 rt.GetTopLeft(),
                 rt.GetTopRight(),
@@ -89,59 +83,81 @@ namespace Adrenak.UGX {
                 rt.GetBottomLeft()
             };
 
+            // If every point is within the screen bounds,
+            // we return true and false for partially.
+            // Which basically means full visibility
             int count = 0;
-            foreach(var  point in points) 
-                count += IsInHorizontalBand(point) && IsInVerticalBand(point) ? 1 : 0;
+            foreach (var point in points)
+				if (point.y >= -1
+                    && point.y <= Screen.height + 1
+                    && point.x >= -1
+                    && point.x <= Screen.width + 1
+                )
+					count++;
 
             if(count == 4) {
-                fully = true;
+                partially = false;
                 return true;
 			}
 
-            bool IsAboveScreen(Vector2 v) =>
-                v.y > Screen.height + 1;
+            // Check if every point is either above, below,
+            // left of, or right of the screen. In which case
+            // we return invisible and false for partially.
+            // Which basically means full invisibility
 
-            bool IsBelowScreen(Vector2 v) =>
-                v.y < -1;
-
-            bool IsLeftOfScreen(Vector2 v) =>
-                v.x < -1;
-
-            bool IsRightOfScreen(Vector2 v) =>
-                v.x > Screen.width + 1;
-
-			List<Func<Vector2, bool>> checks = new List<Func<Vector2, bool>> {
-				IsAboveScreen,
-				IsBelowScreen,
-				IsLeftOfScreen,
-				IsRightOfScreen
-			};
-
-			foreach (var check in checks) {
-                count = 0;
-                foreach(var point in points) 
-                    count += check(point) ? 1 : 0;
-                if(count == 4) {
-                    fully = false;
-                    return false;
-				}			    
+            // ABOVE
+            count = 0;
+			foreach (var point in points)
+				count += point.y > Screen.height + 1 ? 1 : 0;
+			if (count == 4) {
+				partially = false;
+				return false;
 			}
 
-            fully = false;
+            // BELOW
+            count = 0;
+            foreach (var point in points)
+                count += point.y < -1 ? 1 : 0;
+            if (count == 4) {
+                partially = false;
+                return false;
+            }
+
+            // RIGHT OF
+            count = 0;
+            foreach (var point in points)
+                count += point.x > Screen.width + 1 ? 1 : 0;
+            if (count == 4) {
+                partially = false;
+                return false;
+            }
+
+            // LEFT OF
+            count = 0;
+            foreach (var point in points)
+                count += point.x < -1 ? 1 : 0;
+            if (count == 4) {
+                partially = false;
+                return false;
+            }
+
+            // Else we return true for both.
+            // Means partial visibility/invisibility
+            partially = true;
             return true;
         }
 
-        public static void EnsureKey<T, K>(this IDictionary<T, K> dict, T t, K k){
+        public static void EnsureContains<T, K>(this IDictionary<T, K> dict, T t, K k){
             if (!dict.ContainsKey(t))
                 dict.Add(t, k);
         }
 
-        public static void EnsureExists<T>(this List<T> list, T t){
+        public static void EnsureContains<T>(this List<T> list, T t){
             if (!list.Contains(t))
                 list.Add(t);
         }
 
-        public static void EnsureDoesntExist<T>(this List<T> list, T t){
+        public static void EnsureDoesntContain<T>(this List<T> list, T t){
             if (list.Contains(t))
                 list.Remove(t);
         }

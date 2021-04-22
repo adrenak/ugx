@@ -48,8 +48,8 @@ namespace Adrenak.UGX {
         }
 
         IEnumerator SendRequest(Request request) {
-            pending.EnsureDoesntExist(request);
-            ongoing.EnsureExists(request);
+            pending.EnsureDoesntContain(request);
+            ongoing.EnsureContains(request);
 
             string path = request.path;
             if (!path.StartsWith("http"))
