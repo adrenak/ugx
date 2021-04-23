@@ -22,7 +22,7 @@ namespace Adrenak.UGX {
             set {
                 if (repo != null)
                     throw new Exception("DynamicImage.Cache can only be set once and before any get calls");
-				repo = value ?? throw new Exception("DynamicImage.Cache cannot set Cache to null!");
+                repo = value ?? throw new Exception("DynamicImage.Cache cannot set Cache to null!");
             }
         }
 
@@ -55,15 +55,20 @@ namespace Adrenak.UGX {
 
         protected override void Start() {
             rt = GetComponent<RectTransform>();
-            if(refreshOnStart)
+            if (refreshOnStart)
                 Refresh();
         }
 
         [Button("Refresh")]
         public void Refresh() {
-            if (!Application.isPlaying) return;
-            if (currentVisibility == Visibility.None && !updateWhenOffScreen) return;   // TODO: Try to remove
-            if (string.IsNullOrWhiteSpace(path)) return;
+            if (!Application.isPlaying) 
+                return;
+
+            if (currentVisibility == Visibility.None && !updateWhenOffScreen) 
+                return;
+
+            if (string.IsNullOrWhiteSpace(path)) 
+                return;
 
             Cache.Free(oldPath, oldCompression, this);
 
@@ -87,8 +92,15 @@ namespace Adrenak.UGX {
                         Cache.Get(
                             path, compression, this,
                             result => {
-                                SetSprite(result.ToSprite());
-                                onRefreshSuccess.Invoke();
+                                if (sprite == null || sprite.texture == null) {
+                                    SetSprite(result.ToSprite());
+                                    onRefreshSuccess.Invoke();
+                                    return;
+                                }
+                                if (sprite != null && sprite.texture != null && result != sprite.texture) {
+                                    SetSprite(result.ToSprite());
+                                    onRefreshSuccess.Invoke();
+                                }
                             },
                             error => {
                                 Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error);
@@ -117,7 +129,7 @@ namespace Adrenak.UGX {
 
             var oldVisibility = currentVisibility;
             currentVisibility = GetVisibility();
-            
+
             if (currentVisibility != oldVisibility) {
                 if (oldVisibility == Visibility.None && currentVisibility != Visibility.None)
                     Refresh();
