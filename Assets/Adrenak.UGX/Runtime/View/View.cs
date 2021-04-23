@@ -9,7 +9,6 @@ namespace Adrenak.UGX {
     [RequireComponent(typeof(RectTransform))]
     public class View : UGXBehaviour {
         public string viewID = Guid.NewGuid().ToString();
-        public UnityEvent<Visibility> onVisibilityChanged;
 
         [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
 
