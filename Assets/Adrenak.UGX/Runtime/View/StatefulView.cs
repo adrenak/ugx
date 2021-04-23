@@ -11,10 +11,10 @@ namespace Adrenak.UGX {
         [BoxGroup("View State")] public bool updateFromStateOnStart = false;
 
         [BoxGroup("View State")] [SerializeField] TState currentState;
-        public TState CurrentState {
+        public TState State {
             get => currentState;
             set {
-                currentState = value ?? throw new Exception(nameof(CurrentState));
+                currentState = value ?? throw new Exception(nameof(State));
                 OnViewStateSet?.Invoke(this, currentState);
                 HandleStateSet();
             }

@@ -94,7 +94,7 @@ namespace Adrenak.UGX {
             var instance = MonoBehaviour.Instantiate(template, container);
             instance.gameObject.SetActive(true);
             instance.hideFlags = HideFlags.DontSave;
-            (instance as StatefulView<T>).CurrentState = t;
+            (instance as StatefulView<T>).State = t;
 
             subscription?.Invoke(instance as StatefulView<T>);
 
@@ -103,7 +103,7 @@ namespace Adrenak.UGX {
 
         void Destroy(T t) {
             foreach (var instance in Instantiated) {
-                if (instance != null && instance.CurrentState.Equals(t) && instance.gameObject != null) {
+                if (instance != null && instance.State.Equals(t) && instance.gameObject != null) {
                     Instantiated.Remove(instance);
                     MonoBehaviour.Destroy(instance.gameObject);
                     break;
@@ -158,6 +158,7 @@ namespace Adrenak.UGX {
 				else {
                     statesList.Add(item);
                     Instantiated.Add(instance);
+                    instance.transform.SetSiblingIndex(0);
 				}
             }
         }
