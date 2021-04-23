@@ -5,9 +5,9 @@ using UnityEngine;
 using Adrenak.Unex;
 
 namespace Adrenak.UGX {
-    public abstract class Browser : MonoBehaviour {
-        static Dictionary<string, Browser> map = new Dictionary<string, Browser>();
-        public static Browser Get(string browserID = null) {
+    public abstract class Navigator : MonoBehaviour {
+        static Dictionary<string, Navigator> map = new Dictionary<string, Navigator>();
+        public static Navigator Get(string browserID = null) {
             if (map.ContainsKey(browserID))
                 return map[browserID];
             return null;

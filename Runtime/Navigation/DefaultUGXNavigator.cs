@@ -1,7 +1,7 @@
 ﻿using Adrenak.Unex;
 
 namespace Adrenak.UGX {
-    public class StandardBrowser : Browser {
+    public class DefaultUGXNavigator : Navigator {
         void Start() {
             if (initialWindow && useInitialWindow)
                 PushImpl(initialWindow);
