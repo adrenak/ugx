@@ -1,7 +1,6 @@
 ﻿using UnityEditor;
 using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     [CustomEditor(typeof(Picture))]
@@ -17,21 +16,20 @@ namespace Adrenak.UGX {
             EditorGUILayout.EnumPopup("Current Visibility", image.CurrentVisibility);
             EditorGUI.EndDisabledGroup();
 
-            showEvents = EditorGUILayout.BeginFoldoutHeaderGroup(showEvents, new GUIContent("Events"));
+            showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"));
 			if (showEvents) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onRefreshStart"), new GUIContent("On Refresh Start"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onRefreshSuccess"), new GUIContent("On Refresh Success"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onRefreshFailure"), new GUIContent("On Refresh Failure"));
 			}
-            EditorGUILayout.EndFoldoutHeaderGroup();
 
             image.refreshOnStart = EditorGUILayout.Toggle("Refresh On Start", image.refreshOnStart);
             image.updateWhenOffScreen = EditorGUILayout.Toggle("Update When Off Screen", image.updateWhenOffScreen);
 
-            EditorGUILayout.Space(10);
+            EditorGUILayout.Space();
             EditorGUILayout.HelpBox("Runtime texture compression doesn't work on mobile devices.", MessageType.Info);
             image.compression = (Texture2DCompression)EditorGUILayout.EnumPopup("Texture Compression", image.compression);
-            EditorGUILayout.Space(10);           
+            EditorGUILayout.Space();
 
             image.source = (Picture.Source)EditorGUILayout.EnumPopup("Source Type", image.source);
 

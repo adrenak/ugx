@@ -20,7 +20,6 @@ namespace Adrenak.UGX {
         [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 outPosition;
         public Vector3 OutPosition => outPosition;
 
-        [BoxGroup("Config")] public TweenArgs args;
         [BoxGroup("Config")] public PositionType enterPosition = PositionType.Left;
         [BoxGroup("Config")] public PositionType exitPosition = PositionType.Right;
 
@@ -63,7 +62,7 @@ namespace Adrenak.UGX {
             }
         }
 
-        protected override void SetProgress(float value) {
+        protected override void OnProgressChanged(float value) {
             RT.localPosition = Vector3.Lerp(OutPosition, InPosition, value);
             if (value == 0f)
                 RT.localPosition = OutPosition;

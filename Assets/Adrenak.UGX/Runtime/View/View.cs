@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
-using NaughtyAttributes;
 using System;
 
 namespace Adrenak.UGX {
@@ -9,8 +7,6 @@ namespace Adrenak.UGX {
     [RequireComponent(typeof(RectTransform))]
     public class View : UGXBehaviour {
         public string viewID = Guid.NewGuid().ToString();
-
-        [ReadOnly] [SerializeField] Visibility currentVisibility = Visibility.None;
 
         public static View operator / (View S1, string childName) {
             var views = S1.GetComponentsInChildren<View>();

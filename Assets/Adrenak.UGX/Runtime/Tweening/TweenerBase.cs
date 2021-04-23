@@ -32,9 +32,11 @@ namespace Adrenak.UGX {
             get => progress;
             set {
                 progress = value;
-                SetProgress(value);
+                OnProgressChanged(value);
             }
         }
+
+        public TweenArgs args;
 
         [Button]
         async public void TransitionIn() => await TransitionInAsync();
@@ -44,6 +46,6 @@ namespace Adrenak.UGX {
         async public void TransitionOut() => await TransitionOutAsync();
         public abstract UniTask TransitionOutAsync();
 
-        protected abstract void SetProgress(float value);
+        protected abstract void OnProgressChanged(float value);
     }
 }

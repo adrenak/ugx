@@ -45,7 +45,9 @@ namespace Adrenak.UGX {
         async public UniTask<K> Display(Action<T> cloneState) {
             await UniTask.WaitWhile(() => activePopup != null);
 
+#pragma warning disable 0618
             var instance = GetClone();
+#pragma warning restore 0618
             activePopup = instance.gameObject;
             cloneState?.Invoke(instance.State);
 

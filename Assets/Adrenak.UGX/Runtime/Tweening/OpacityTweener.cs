@@ -6,8 +6,6 @@ namespace Adrenak.UGX {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CanvasGroup))]
     public class OpacityTweener : TweenerBase {
-        [BoxGroup("Config")] public TweenArgs args;
-
         CanvasGroup cg;
         public CanvasGroup CG => cg == null ? cg = GetComponent<CanvasGroup>() : cg;
 
@@ -42,7 +40,7 @@ namespace Adrenak.UGX {
         async public UniTask TweenOpacity(float endValue, TweenArgs tween)
             => await Driver.TransitionOpacity(CG, endValue, tween);        
 
-        protected override void SetProgress(float value) {
+        protected override void OnProgressChanged(float value) {
             CG.alpha = value;
             CG.blocksRaycasts = value != 0f;
             CG.interactable = value != 0f;
