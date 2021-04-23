@@ -40,11 +40,11 @@ namespace Adrenak.UGX {
         }
 
         protected override void HandlePopupStateSet() {
-            headerDisplay.text = CurrentState.header;
-            bodyDisplay.text = CurrentState.body;
-            positiveDisplay.text = CurrentState.positive;
-            negativeDisplay.text = CurrentState.negative;
-            flagDisplay.isOn = CurrentState.boolFlag;
+            headerDisplay.text = State.header;
+            bodyDisplay.text = State.body;
+            positiveDisplay.text = State.positive;
+            negativeDisplay.text = State.negative;
+            flagDisplay.isOn = State.boolFlag;
         }
 
         Action OnConfirm;

@@ -15,13 +15,13 @@ namespace Adrenak.UGX {
         [SerializeField] Text description = null;
 
         async protected override UniTask<PopupResponse> WaitForResponseImpl() {              
-            await UniTask.Delay(CurrentState.delay, DelayType.DeltaTime, PlayerLoopTiming.Update);
+            await UniTask.Delay(State.delay, DelayType.DeltaTime, PlayerLoopTiming.Update);
             return new PopupResponse();
         }
 
         protected override void HandlePopupStateSet() {
-            title.text = CurrentState.title;
-            description.text = CurrentState.description;
+            title.text = State.title;
+            description.text = State.description;
         }
     }
 }

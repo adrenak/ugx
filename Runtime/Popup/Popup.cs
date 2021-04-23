@@ -47,7 +47,7 @@ namespace Adrenak.UGX {
 
             var instance = GetClone();
             activePopup = instance.gameObject;
-            cloneState?.Invoke(instance.CurrentState);
+            cloneState?.Invoke(instance.State);
 
             await (instance as Window).OpenWindowAsync();
 #pragma warning disable 0618
