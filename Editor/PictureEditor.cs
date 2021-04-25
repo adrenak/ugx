@@ -18,9 +18,9 @@ namespace Adrenak.UGX {
 
             showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"));
 			if (showEvents) {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("onRefreshStart"), new GUIContent("On Refresh Start"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("onRefreshSuccess"), new GUIContent("On Refresh Success"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("onRefreshFailure"), new GUIContent("On Refresh Failure"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadStart"), new GUIContent("On Load Start"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadSuccess"), new GUIContent("On Load Success"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadFailure"), new GUIContent("On Load Failure"));
 			}
 
             image.refreshOnStart = EditorGUILayout.Toggle("Refresh On Start", image.refreshOnStart);

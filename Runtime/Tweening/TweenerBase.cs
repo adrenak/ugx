@@ -36,7 +36,10 @@ namespace Adrenak.UGX {
             }
         }
 
-        public TweenArgs args;
+        [BoxGroup("Tweening Args")] [SerializeField] public bool useSameArgsForInAndOut = true;
+        [BoxGroup("Tweening Args")] [ShowIf("useSameArgsForInAndOut")] public TweenArgs args;
+        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs inArgs;
+        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs outArgs;
 
         [Button]
         async public void TransitionIn() => await TransitionInAsync();

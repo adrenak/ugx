@@ -32,9 +32,9 @@ namespace Adrenak.UGX {
             URL
         }
 
-        public UnityEvent onRefreshStart;
-        public UnityEvent onRefreshSuccess;
-        public UnityEvent onRefreshFailure;
+        public UnityEvent onLoadStart;
+        public UnityEvent onLoadSuccess;
+        public UnityEvent onLoadFailure;
 
         public bool refreshOnStart;
         public bool updateWhenOffScreen;
@@ -74,37 +74,37 @@ namespace Adrenak.UGX {
 
             switch (source) {
                 case Source.Resource:
-                    onRefreshStart.Invoke();
+                    onLoadStart.Invoke();
                     var resourceSprite = Resources.Load<Sprite>(path);
                     if (resourceSprite == null) {
-                        onRefreshFailure.Invoke();
+                        onLoadFailure.Invoke();
                         Debug.LogError($"Not Resource found at {path}");
                         break;
                     }
 
-                    onRefreshSuccess.Invoke();
+                    onLoadSuccess.Invoke();
                     SetSprite(resourceSprite);
                     break;
 
                 case Source.URL:
                     try {
-                        onRefreshStart.Invoke();
+                        onLoadStart.Invoke();
                         Cache.Get(
                             path, compression, this,
                             result => {
                                 if (sprite == null || sprite.texture == null) {
                                     SetSprite(result.ToSprite());
-                                    onRefreshSuccess.Invoke();
+                                    onLoadSuccess.Invoke();
                                     return;
                                 }
                                 if (sprite != null && sprite.texture != null && result != sprite.texture) {
                                     SetSprite(result.ToSprite());
-                                    onRefreshSuccess.Invoke();
+                                    onLoadSuccess.Invoke();
                                 }
                             },
                             error => {
                                 Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error);
-                                onRefreshFailure.Invoke();
+                                onLoadFailure.Invoke();
                             }
                         );
                     }
@@ -141,7 +141,7 @@ namespace Adrenak.UGX {
         void SetSprite(Sprite s) {
             if (s != null && !destroyed) {
                 sprite = s;
-                onRefreshSuccess?.Invoke();
+                onLoadSuccess?.Invoke();
             }
         }
 

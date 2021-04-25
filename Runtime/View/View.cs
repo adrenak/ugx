@@ -6,7 +6,7 @@ namespace Adrenak.UGX {
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
     public class View : UGXBehaviour {
-        public string viewID = Guid.NewGuid().ToString();
+        public string viewID;
 
         public static View operator / (View S1, string childName) {
             var views = S1.GetComponentsInChildren<View>();
