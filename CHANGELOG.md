@@ -1,3 +1,18 @@
+## [5.18.1](https://github.com/adrenak/ugx/compare/v5.18.0...v5.18.1) (2021-04-25)
+
+
+### Bug Fixes
+
+* Calculating Rect visibility fixed. ([6bf4fc3](https://github.com/adrenak/ugx/commit/6bf4fc3176e5e4805aced33eebd9813fe2e1f923))
+* Change View<T>.CurrentState to .State (yet again) ([aef7fb8](https://github.com/adrenak/ugx/commit/aef7fb8e374871d39a184c229342760eab893e7b))
+* Fix navigator issue on pop all ([2adfbce](https://github.com/adrenak/ugx/commit/2adfbce1db45c92a6d9cac7967b41c3f6e556f1d))
+* Improved Picture editor further. Add Picture events for refres. Resolve [#42](https://github.com/adrenak/ugx/issues/42)h ([9f9d079](https://github.com/adrenak/ugx/commit/9f9d079e4d24a4ea3d1feb7e18df910eba60a472))
+* Picture only creates and updates sprite when required. ([b25b132](https://github.com/adrenak/ugx/commit/b25b132e6a1a531e4d4abd3b45d9c2e4fa1cf228))
+* Some inspector serialization. ([56ab817](https://github.com/adrenak/ugx/commit/56ab8170909c7a550e5a264ba9290419fbb15d15))
+* Stop calculating View visibility very frame. Improve Picture editor script. ([590a1d4](https://github.com/adrenak/ugx/commit/590a1d457f9918777ccdf75a50d02c088cf2062c))
+* throttle image loading rate in Texture2DDownloader. Move responsibility of texture compression from downloader to cache implementations. Resolve [#41](https://github.com/adrenak/ugx/issues/41). ([56ad16e](https://github.com/adrenak/ugx/commit/56ad16e24ebab3d911429cf9a7a4e5d8b13f613a))
+* Try README copying in Github Actions ([a474620](https://github.com/adrenak/ugx/commit/a47462089bb69c8af90e5c26a930cf8b73337fc5))
+
 # [5.18.0](https://github.com/adrenak/ugx/compare/v5.17.0...v5.18.0) (2021-04-12)
 
 
