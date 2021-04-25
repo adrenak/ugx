@@ -1,3 +1,10 @@
+## [5.18.3](https://github.com/adrenak/ugx/compare/v5.18.2...v5.18.3) (2021-04-25)
+
+
+### Bug Fixes
+
+* Try fix README copy ([adc850c](https://github.com/adrenak/ugx/commit/adc850c39d1699cbdfe42a98edc75bf7222c39b8))
+
 ## [5.18.2](https://github.com/adrenak/ugx/compare/v5.18.1...v5.18.2) (2021-04-25)
 
 
