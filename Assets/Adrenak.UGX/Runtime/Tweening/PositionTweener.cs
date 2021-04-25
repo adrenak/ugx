@@ -35,7 +35,10 @@ namespace Adrenak.UGX {
                 return;
             }
             RT.localPosition = DefaultEnterCordinates;
-            await TweenPosition(inPosition, args);
+            if (useSameArgsForInAndOut)
+                await TweenPosition(inPosition, args);
+            else
+                await TweenPosition(inPosition, inArgs);
             RT.localPosition = InPosition;
         }
 
@@ -45,7 +48,10 @@ namespace Adrenak.UGX {
                 return;
             }
             RT.localPosition = InPosition;
-            await TweenPosition(DefaultExitCordinates, args);
+            if(useSameArgsForInAndOut)
+                await TweenPosition(DefaultExitCordinates, args);
+            else
+                await TweenPosition(DefaultExitCordinates, outArgs);
             RT.localPosition = OutPosition;
         }
 

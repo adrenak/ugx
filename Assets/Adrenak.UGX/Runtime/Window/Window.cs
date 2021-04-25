@@ -63,14 +63,6 @@ namespace Adrenak.UGX {
             onWindowDoneClosing?.Invoke();
         }
 
-        public virtual UniTask<bool> ApprovePop() {
-            return UniTask.FromResult(true);
-        }
-
-        public virtual UniTask<bool> ApprovePush() {
-            return UniTask.FromResult(true);
-        }
-
         protected virtual void WindowOpened() { }
         protected virtual void WindowClosed() { }
     }

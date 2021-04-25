@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 namespace Adrenak.UGX {
+    [System.Serializable]
     [RequireComponent(typeof(RectTransform))]
     public class UGXBehaviour : MonoBehaviour {
         RectTransform rt;

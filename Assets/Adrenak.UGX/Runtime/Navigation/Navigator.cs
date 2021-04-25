@@ -63,19 +63,14 @@ namespace Adrenak.UGX {
             active = window;
         }
 
-        async public void Push(Window window) {
-            var interrupt = await window.ApprovePush();
-            if(interrupt)
-                PushImpl(window);
+        public void Push(Window window) {
+            PushImpl(window);
         }
 
-        async public void Pop() {
+        public void Pop() {
             if (History.Count == 1 && !canPopAll)
                 return;
-
-            var interrupt = await History.Last().ApprovePop();
-            if(interrupt)
-                PopImpl();
+            PopImpl();
         }
 
         public void Clear() {

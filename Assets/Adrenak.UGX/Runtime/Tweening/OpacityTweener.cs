@@ -17,7 +17,11 @@ namespace Adrenak.UGX {
                 return;
             }
             CG.alpha = 0;
-            await TweenOpacity(1, args);
+            if (useSameArgsForInAndOut)
+                await TweenOpacity(1, args);
+            else
+                await TweenOpacity(1, inArgs);
+                
             CG.alpha = 1;
             CG.blocksRaycasts = true;
             CG.interactable = true;
@@ -31,7 +35,10 @@ namespace Adrenak.UGX {
                 return;
             }
             CG.alpha = 1;
-            await TweenOpacity(0, args);
+            if (useSameArgsForInAndOut)
+                await TweenOpacity(0, args);
+            else
+                await TweenOpacity(0, outArgs);
             CG.alpha = 0;
             CG.blocksRaycasts = false;
             CG.interactable = false;
