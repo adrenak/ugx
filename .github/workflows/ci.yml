@@ -39,7 +39,7 @@ jobs:
           git commit -am "fix: Samples => Samples~"
         fi
         git push -f -u origin upm
-        cp README.md $PKG_ROOT/README.md
+        cp /README.md $PKG_ROOT/README.md
       env:
         PKG_ROOT: "Assets/Adrenak.UGX"
 
