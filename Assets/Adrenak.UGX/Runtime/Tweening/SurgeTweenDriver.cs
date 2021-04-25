@@ -6,14 +6,14 @@ using UnityEngine;
 using Pixelplacement;
 
 namespace Adrenak.UGX {
-    public class SurgeTransitionDriver : ITransitionDriver {
-        public UniTask TransitionPosition(RectTransform rt, Vector3 endValue, TransitionArgs tween) {
+    public class SurgeTweenDriver : ITweenDriver {
+        public UniTask TransitionPosition(RectTransform rt, Vector3 endValue, TweenArgs tween) {
             var source = new UniTaskCompletionSource<bool>();
             TransitionPosition(rt, endValue, tween, () => source.TrySetResult(true));
             return source.Task;
         }
 
-        public void TransitionPosition(RectTransform rt,Vector3 endValue, TransitionArgs tween, Action onComplete) {
+        public void TransitionPosition(RectTransform rt,Vector3 endValue, TweenArgs tween, Action onComplete) {
             Tween.Value(
                 rt.localPosition,
                 endValue,
@@ -26,13 +26,13 @@ namespace Adrenak.UGX {
             );
         }
 
-        public UniTask TransitionOpacity(CanvasGroup group, float endValue, TransitionArgs tween) {
+        public UniTask TransitionOpacity(CanvasGroup group, float endValue, TweenArgs tween) {
             var source = new UniTaskCompletionSource<bool>();
             TransitionOpacity(group, endValue, tween, () => source.TrySetResult(true));
             return source.Task;
         }
 
-        public void TransitionOpacity(CanvasGroup group, float endValue, TransitionArgs tween, Action onComplete) {
+        public void TransitionOpacity(CanvasGroup group, float endValue, TweenArgs tween, Action onComplete) {
             Tween.CanvasGroupAlpha(
                 group,
                 endValue,

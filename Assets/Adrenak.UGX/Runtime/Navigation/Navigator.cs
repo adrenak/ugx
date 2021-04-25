@@ -5,9 +5,9 @@ using UnityEngine;
 using Adrenak.Unex;
 
 namespace Adrenak.UGX {
-    public abstract class Browser : MonoBehaviour {
-        static Dictionary<string, Browser> map = new Dictionary<string, Browser>();
-        public static Browser Get(string browserID = null) {
+    public abstract class Navigator : MonoBehaviour {
+        static Dictionary<string, Navigator> map = new Dictionary<string, Navigator>();
+        public static Navigator Get(string browserID = null) {
             if (map.ContainsKey(browserID))
                 return map[browserID];
             return null;
@@ -52,7 +52,7 @@ namespace Adrenak.UGX {
 
         void CheckBackPress() {
             if (!Input.GetKeyUp(KeyCode.Escape)) return;
-            if (!active.CurrentState.autoPopOnBack) return;
+            if (!active.autoPopOnBack) return;
             Pop();
         }
 
@@ -63,19 +63,14 @@ namespace Adrenak.UGX {
             active = window;
         }
 
-        async public void Push(Window window) {
-            var interrupt = await window.ApprovePush();
-            if(interrupt)
-                PushImpl(window);
+        public void Push(Window window) {
+            PushImpl(window);
         }
 
-        async public void Pop() {
+        public void Pop() {
             if (History.Count == 1 && !canPopAll)
                 return;
-
-            var interrupt = await History.Last().ApprovePop();
-            if(interrupt)
-                PopImpl();
+            PopImpl();
         }
 
         public void Clear() {
@@ -86,5 +81,12 @@ namespace Adrenak.UGX {
         protected abstract void PushImpl(Window window);
 
         protected abstract void PopImpl();
+
+        public void Toggle(Window window) {
+            if (History.Count > 0 && History.Last() == window)
+                Pop();
+            else
+                Push(window);
+		}
     }
 }

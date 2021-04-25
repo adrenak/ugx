@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Adrenak.UGX {
     [DisallowMultipleComponent]
-    public class PositionTransitioner : TransitionerBase {
+    public class PositionTweener : TweenerBase {
         public enum PositionType {
             Top,
             Bottom,
@@ -20,7 +20,6 @@ namespace Adrenak.UGX {
         [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 outPosition;
         public Vector3 OutPosition => outPosition;
 
-        [BoxGroup("Config")] public TransitionArgs args;
         [BoxGroup("Config")] public PositionType enterPosition = PositionType.Left;
         [BoxGroup("Config")] public PositionType exitPosition = PositionType.Right;
 
@@ -36,7 +35,10 @@ namespace Adrenak.UGX {
                 return;
             }
             RT.localPosition = DefaultEnterCordinates;
-            await TweenPosition(inPosition, args);
+            if (useSameArgsForInAndOut)
+                await TweenPosition(inPosition, args);
+            else
+                await TweenPosition(inPosition, inArgs);
             RT.localPosition = InPosition;
         }
 
@@ -46,11 +48,14 @@ namespace Adrenak.UGX {
                 return;
             }
             RT.localPosition = InPosition;
-            await TweenPosition(DefaultExitCordinates, args);
+            if(useSameArgsForInAndOut)
+                await TweenPosition(DefaultExitCordinates, args);
+            else
+                await TweenPosition(DefaultExitCordinates, outArgs);
             RT.localPosition = OutPosition;
         }
 
-        async public UniTask TweenPosition(Vector3 endValue, TransitionArgs tween)
+        async public UniTask TweenPosition(Vector3 endValue, TweenArgs tween)
             => await Driver.TransitionPosition(RT, endValue, tween);
 
         public Vector3 GetPositionVector3(PositionType position) {
@@ -63,7 +68,7 @@ namespace Adrenak.UGX {
             }
         }
 
-        protected override void SetProgress(float value) {
+        protected override void OnProgressChanged(float value) {
             RT.localPosition = Vector3.Lerp(OutPosition, InPosition, value);
             if (value == 0f)
                 RT.localPosition = OutPosition;

@@ -5,9 +5,7 @@ using UnityEngine;
 namespace Adrenak.UGX {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CanvasGroup))]
-    public class OpacityTransitioner : TransitionerBase {
-        [BoxGroup("Config")] public TransitionArgs args;
-
+    public class OpacityTweener : TweenerBase {
         CanvasGroup cg;
         public CanvasGroup CG => cg == null ? cg = GetComponent<CanvasGroup>() : cg;
 
@@ -19,7 +17,11 @@ namespace Adrenak.UGX {
                 return;
             }
             CG.alpha = 0;
-            await TweenOpacity(1, args);
+            if (useSameArgsForInAndOut)
+                await TweenOpacity(1, args);
+            else
+                await TweenOpacity(1, inArgs);
+                
             CG.alpha = 1;
             CG.blocksRaycasts = true;
             CG.interactable = true;
@@ -33,16 +35,19 @@ namespace Adrenak.UGX {
                 return;
             }
             CG.alpha = 1;
-            await TweenOpacity(0, args);
+            if (useSameArgsForInAndOut)
+                await TweenOpacity(0, args);
+            else
+                await TweenOpacity(0, outArgs);
             CG.alpha = 0;
             CG.blocksRaycasts = false;
             CG.interactable = false;
         }
 
-        async public UniTask TweenOpacity(float endValue, TransitionArgs tween)
+        async public UniTask TweenOpacity(float endValue, TweenArgs tween)
             => await Driver.TransitionOpacity(CG, endValue, tween);        
 
-        protected override void SetProgress(float value) {
+        protected override void OnProgressChanged(float value) {
             CG.alpha = value;
             CG.blocksRaycasts = value != 0f;
             CG.interactable = value != 0f;

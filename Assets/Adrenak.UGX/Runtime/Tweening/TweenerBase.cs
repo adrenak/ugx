@@ -3,17 +3,17 @@ using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 
 namespace Adrenak.UGX {
-    public abstract class TransitionerBase : UGXBehaviour {
-        static ITransitionDriver driver;
+    public abstract class TweenerBase : UGXBehaviour {
+        static ITweenDriver driver;
 
         // Ambient context dependency pattern. Set driver
         // implementation before ever using it. Best to set 
         // it at the start of the application.
         public static bool IsDriverLocked => driver != null;
-        public static ITransitionDriver Driver {
+        public static ITweenDriver Driver {
             get {
                 if (driver == null)
-                    driver = new SurgeTransitionDriver();
+                    driver = new SurgeTweenDriver();
                 return driver;
             }
             set {
@@ -32,9 +32,14 @@ namespace Adrenak.UGX {
             get => progress;
             set {
                 progress = value;
-                SetProgress(value);
+                OnProgressChanged(value);
             }
         }
+
+        [BoxGroup("Tweening Args")] [SerializeField] public bool useSameArgsForInAndOut = true;
+        [BoxGroup("Tweening Args")] [ShowIf("useSameArgsForInAndOut")] public TweenArgs args;
+        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs inArgs;
+        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs outArgs;
 
         [Button]
         async public void TransitionIn() => await TransitionInAsync();
@@ -44,6 +49,6 @@ namespace Adrenak.UGX {
         async public void TransitionOut() => await TransitionOutAsync();
         public abstract UniTask TransitionOutAsync();
 
-        protected abstract void SetProgress(float value);
+        protected abstract void OnProgressChanged(float value);
     }
 }

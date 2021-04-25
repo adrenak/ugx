@@ -27,9 +27,9 @@ namespace Adrenak.UGX {
         }
 
         protected override void HandlePopupStateSet() {
-            headerDisplay.text = CurrentState.header;
-            bodyDisplay.text = CurrentState.description;
-            ackDisplay.text = CurrentState.ack;
+            headerDisplay.text = State.header;
+            bodyDisplay.text = State.description;
+            ackDisplay.text = State.ack;
         }
 
         public void Acknowledge() {

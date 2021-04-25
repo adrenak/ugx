@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
@@ -74,14 +75,16 @@ namespace Adrenak.UGX {
             return new Vector2(right, bottom);
         }
 
-        public static bool IsVisible(this RectTransform rt, out bool? fully) {
-            bool IsPointInside(Vector2 point){
-                return (point.x >= 0 &&
-                    point.x <= Screen.width  &&
-                    point.y >= 0 &&
-                    point.y <= Screen.height );
-            }
+        public static Visibility GetVisibility(this RectTransform rt) {
+            var result = rt.IsVisible(out bool? partially);
 
+            if (!partially.Value)
+                return result ? Visibility.Full : Visibility.None;
+            else
+                return Visibility.Partial;
+        }
+
+        public static bool IsVisible(this RectTransform rt, out bool? partially) {
             var points = new Vector2[]{
                 rt.GetTopLeft(),
                 rt.GetTopRight(),
@@ -89,30 +92,81 @@ namespace Adrenak.UGX {
                 rt.GetBottomLeft()
             };
 
+            // If every point is within the screen bounds,
+            // we return true and false for partially.
+            // Which basically means full visibility
             int count = 0;
-            foreach(var  point in points)
-                count += IsPointInside(point) ? 1 : 0;
-            
-            if(count == 0){
-                fully = null;
+            foreach (var point in points)
+				if (point.y >= -1
+                    && point.y <= Screen.height + 1
+                    && point.x >= -1
+                    && point.x <= Screen.width + 1
+                )
+					count++;
+
+            if(count == 4) {
+                partially = false;
+                return true;
+			}
+
+            // Check if every point is either above, below,
+            // left of, or right of the screen. In which case
+            // we return invisible and false for partially.
+            // Which basically means full invisibility
+
+            // ABOVE
+            count = 0;
+			foreach (var point in points)
+				count += point.y > Screen.height + 1 ? 1 : 0;
+			if (count == 4) {
+				partially = false;
+				return false;
+			}
+
+            // BELOW
+            count = 0;
+            foreach (var point in points)
+                count += point.y < -1 ? 1 : 0;
+            if (count == 4) {
+                partially = false;
                 return false;
             }
 
-            fully = count == 4;
+            // RIGHT OF
+            count = 0;
+            foreach (var point in points)
+                count += point.x > Screen.width + 1 ? 1 : 0;
+            if (count == 4) {
+                partially = false;
+                return false;
+            }
+
+            // LEFT OF
+            count = 0;
+            foreach (var point in points)
+                count += point.x < -1 ? 1 : 0;
+            if (count == 4) {
+                partially = false;
+                return false;
+            }
+
+            // Else we return true for both.
+            // Means partial visibility/invisibility
+            partially = true;
             return true;
         }
 
-        public static void EnsureKey<T, K>(this IDictionary<T, K> dict, T t, K k){
+        public static void EnsureContains<T, K>(this IDictionary<T, K> dict, T t, K k){
             if (!dict.ContainsKey(t))
                 dict.Add(t, k);
         }
 
-        public static void EnsureExists<T>(this List<T> list, T t){
+        public static void EnsureContains<T>(this List<T> list, T t){
             if (!list.Contains(t))
                 list.Add(t);
         }
 
-        public static void EnsureDoesntExist<T>(this List<T> list, T t){
+        public static void EnsureDoesntContain<T>(this List<T> list, T t){
             if (list.Contains(t))
                 list.Remove(t);
         }

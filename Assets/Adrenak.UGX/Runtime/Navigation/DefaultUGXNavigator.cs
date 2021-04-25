@@ -1,7 +1,7 @@
 ﻿using Adrenak.Unex;
 
 namespace Adrenak.UGX {
-    public class StandardBrowser : Browser {
+    public class DefaultUGXNavigator : Navigator {
         void Start() {
             if (initialWindow && useInitialWindow)
                 PushImpl(initialWindow);
@@ -30,14 +30,20 @@ namespace Adrenak.UGX {
             History.Add(window);
             SetAsActive(window);
 
-            onPush?.Invoke();
+            onPush.Invoke();
         }
 
         protected override void PopImpl() {
-            if (History.Count > 0) {
+            if (History.Count > 1) {
                 History.RemoveAt(History.Count - 1);
                 SetAsActive(History.Last());
-                onPop?.Invoke();
+                onPop.Invoke();
+            }
+            else if(History.Count == 1){
+                History.Last().CloseWindow();
+                History.RemoveAt(0);
+                active = null;
+                onPop.Invoke();
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Adrenak.UGX {
         public Sprite spriteAsset;
     }
 
-    public class IconView : View<IconViewState>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+    public class IconView : StatefulView<IconViewState>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
         public UnityEvent onClick = new UnityEvent();
 
 #pragma warning disable 0649
@@ -25,19 +25,19 @@ namespace Adrenak.UGX {
         [SerializeField] Picture picture;
 #pragma warning disable 0649
 
-        protected override void HandleViewStateSet() {
-            text.text = CurrentState.text;
-            picture.source = CurrentState.source;
+        protected override void HandleStateSet() {
+            text.text = State.text;
+            picture.source = State.source;
 
-            switch (CurrentState.source) {
+            switch (State.source) {
                 case Picture.Source.Asset:
-                    picture.sprite = CurrentState.spriteAsset;
+                    picture.sprite = State.spriteAsset;
                     break;
                 case Picture.Source.Resource:
-                    picture.path = CurrentState.spriteResourcePath;
+                    picture.path = State.spriteResourcePath;
                     break;
                 case Picture.Source.URL:
-                    picture.path = CurrentState.spriteImageURL;
+                    picture.path = State.spriteImageURL;
                     break;
             }
 

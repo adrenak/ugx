@@ -22,11 +22,7 @@ namespace Adrenak.UGX {
             set {
                 if (repo != null)
                     throw new Exception("DynamicImage.Cache can only be set once and before any get calls");
-
-                if (value == null)
-                    throw new Exception("DynamicImage.Cache cannot set Cache to null!");
-
-                repo = value;
+                repo = value ?? throw new Exception("DynamicImage.Cache cannot set Cache to null!");
             }
         }
 
@@ -36,8 +32,12 @@ namespace Adrenak.UGX {
             URL
         }
 
-        public UnityEvent onSpriteSet;
-        public UnityEvent onSpriteRemoved;
+        public UnityEvent onLoadStart;
+        public UnityEvent onLoadSuccess;
+        public UnityEvent onLoadFailure;
+
+        public bool refreshOnStart;
+        public bool updateWhenOffScreen;
 
         public Source source = Source.URL;
 
@@ -50,58 +50,62 @@ namespace Adrenak.UGX {
         RectTransform rt;
         RectTransform RT => rt == null ? rt = GetComponent<RectTransform>() : rt;
 
-        [ReadOnly] public Visibility currentVisibility = Visibility.None;
+        Visibility currentVisibility = Visibility.None;
         public Visibility CurrentVisibility => currentVisibility;
-
-        protected override void Awake() {
-            Clear();
-        }
 
         protected override void Start() {
             rt = GetComponent<RectTransform>();
+            if (refreshOnStart)
+                Refresh();
         }
 
         [Button("Refresh")]
         public void Refresh() {
-            if (!Application.isPlaying) return;
-            if (CurrentVisibility == Visibility.None) return;
+            if (!Application.isPlaying) 
+                return;
+
+            if (currentVisibility == Visibility.None && !updateWhenOffScreen) 
+                return;
+
+            if (string.IsNullOrWhiteSpace(path)) 
+                return;
 
             Cache.Free(oldPath, oldCompression, this);
 
             switch (source) {
                 case Source.Resource:
-                    if (string.IsNullOrWhiteSpace(path))
-                        break;
-
+                    onLoadStart.Invoke();
                     var resourceSprite = Resources.Load<Sprite>(path);
                     if (resourceSprite == null) {
+                        onLoadFailure.Invoke();
                         Debug.LogError($"Not Resource found at {path}");
                         break;
                     }
 
+                    onLoadSuccess.Invoke();
                     SetSprite(resourceSprite);
                     break;
 
                 case Source.URL:
-                    if (string.IsNullOrWhiteSpace(path))
-                        break;
-
                     try {
+                        onLoadStart.Invoke();
                         Cache.Get(
                             path, compression, this,
                             result => {
-                                if(sprite == null){
+                                if (sprite == null || sprite.texture == null) {
                                     SetSprite(result.ToSprite());
+                                    onLoadSuccess.Invoke();
                                     return;
                                 }
-                                if(sprite.texture == null){
+                                if (sprite != null && sprite.texture != null && result != sprite.texture) {
                                     SetSprite(result.ToSprite());
-                                    return;
+                                    onLoadSuccess.Invoke();
                                 }
-                                if(sprite.texture != result)
-                                    SetSprite(result.ToSprite());
                             },
-                            error => Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error)
+                            error => {
+                                Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error);
+                                onLoadFailure.Invoke();
+                            }
                         );
                     }
                     catch (Exception e) {
@@ -123,49 +127,38 @@ namespace Adrenak.UGX {
             age++;
             if (age <= 2) return;
 
-            var visibility = GetVisibility();
-            if (currentVisibility != visibility) {
-                if (currentVisibility == Visibility.None && visibility != Visibility.None){
-                    currentVisibility = visibility;
-                    Refresh();
-                }
-                else if (currentVisibility != Visibility.None && visibility == Visibility.None){
-                    currentVisibility = visibility;
-                    Cache.Free(path, compression, this);
-                }
-            }
-        }
+            var oldVisibility = currentVisibility;
+            currentVisibility = GetVisibility();
 
-        public void Clear() {
-            sprite = null;
-            onSpriteRemoved?.Invoke();
+            if (currentVisibility != oldVisibility) {
+                if (oldVisibility == Visibility.None && currentVisibility != Visibility.None)
+                    Refresh();
+                else if (oldVisibility != Visibility.None && currentVisibility == Visibility.None)
+                    Cache.Free(path, compression, this);
+            }
         }
 
         void SetSprite(Sprite s) {
             if (s != null && !destroyed) {
                 sprite = s;
-                onSpriteSet?.Invoke();
+                onLoadSuccess?.Invoke();
             }
         }
 
-        [ContextMenu("Test")]
-        void Test(){
-            var result = RT.IsVisible(out bool? fully);
-            Debug.Log(result + " " + fully);
-        }
-
         Visibility GetVisibility() {
-            var result = RT.IsVisible(out bool? fully);
+            var result = RT.IsVisible(out bool? partially);
 
-            if (result)
-                return fully.Value ? Visibility.Full : Visibility.Partial;
+            if (!partially.Value)
+                return result ? Visibility.Full : Visibility.None;
             else
-                return Visibility.None;
+                return Visibility.Partial;
         }
 
         bool destroyed = false;
         protected override void OnDestroy() {
+            if (destroyed) return;
             destroyed = true;
+
             if (!Application.isPlaying) return;
             Cache.Free(path, compression, this);
         }

@@ -1,26 +1,45 @@
 ﻿using UnityEditor;
 using UnityEditor.UI;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     [CustomEditor(typeof(Picture))]
     public class PictureEditor : ImageEditor {
+        bool showEvents;
+
         public override void OnInspectorGUI() {
+            base.OnInspectorGUI();
+
             Picture image = (Picture)target;
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onSpriteSet"), new GUIContent("On Sprite Set"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onSpriteRemoved"), new GUIContent("On Sprite Removed"));
+
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.EnumPopup("Current Visibility", image.CurrentVisibility);
+            EditorGUI.EndDisabledGroup();
+
+            showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"));
+			if (showEvents) {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadStart"), new GUIContent("On Load Start"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadSuccess"), new GUIContent("On Load Success"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadFailure"), new GUIContent("On Load Failure"));
+			}
+
+            image.refreshOnStart = EditorGUILayout.Toggle("Refresh On Start", image.refreshOnStart);
+            image.updateWhenOffScreen = EditorGUILayout.Toggle("Update When Off Screen", image.updateWhenOffScreen);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.HelpBox("Runtime texture compression doesn't work on mobile devices.", MessageType.Info);
             image.compression = (Texture2DCompression)EditorGUILayout.EnumPopup("Texture Compression", image.compression);
+            EditorGUILayout.Space();
+
             image.source = (Picture.Source)EditorGUILayout.EnumPopup("Source Type", image.source);
-            image.path = EditorGUILayout.TextField("Source Path", image.path);
-            image.currentVisibility = (Visibility)EditorGUILayout.EnumPopup("Current Visibility", image.CurrentVisibility);
+
+            if(image.source != Picture.Source.Asset)
+                image.path = EditorGUILayout.TextField("Source Path", image.path);
 
             serializedObject.ApplyModifiedProperties();
 
-            if (GUILayout.Button("Refresh"))
-                image.Refresh();
-
-            base.OnInspectorGUI();
+            if (GUILayout.Button("Refresh Picture"))
+                image.Refresh();            
         }
     }
 }

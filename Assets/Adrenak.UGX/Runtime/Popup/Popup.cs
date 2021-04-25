@@ -3,20 +3,14 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
-    [System.Serializable]
-    public class PopupState : WindowState { }
+    public class PopupState : ViewState { }
 
-    [System.Serializable]
+    [Serializable]
     public class PopupResponse { }
 
-    public abstract class Popup<T, K> : Window<T> where T : PopupState where K : PopupResponse {
+    [RequireComponent(typeof(Window))]
+    public abstract class Popup<T, K> : StatefulView<T> where T : PopupState where K : PopupResponse {
         static GameObject activePopup;
-
-        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
-        public new void OpenWindow() => base.OpenWindow();
-
-        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
-        public new UniTask OpenWindowAsync() => base.OpenWindowAsync();
 
         [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
         async public UniTask<K> WaitForResponse() {
@@ -24,6 +18,13 @@ namespace Adrenak.UGX {
             var response = await WaitForResponseImpl();
             await UniTask.SwitchToMainThread();
             return response;
+        }
+
+        [Obsolete("It is recommended that you use Popup.Display instead as it manages popup instancing too.")]
+        public Popup<T, K> GetClone() {
+            var instance = MonoBehaviour.Instantiate(gameObject).GetComponent<Popup<T, K>>();
+            instance.transform.SetParent(transform.parent, false);
+            return instance;
         }
 
         public static void Display(string path, Action<T> cloneState, Action<K> resultCallback){
@@ -44,15 +45,17 @@ namespace Adrenak.UGX {
         async public UniTask<K> Display(Action<T> cloneState) {
             await UniTask.WaitWhile(() => activePopup != null);
 
+#pragma warning disable 0618
             var instance = GetClone();
+#pragma warning restore 0618
             activePopup = instance.gameObject;
-            cloneState?.Invoke(instance.CurrentState);
+            cloneState?.Invoke(instance.State);
 
             await (instance as Window).OpenWindowAsync();
 #pragma warning disable 0618
             var response = await instance.WaitForResponse();
 #pragma warning restore 0618
-            await instance.CloseWindowAsync();
+            await window.CloseWindowAsync();
 
             activePopup = null;
             Destroy(instance.gameObject);
@@ -60,15 +63,10 @@ namespace Adrenak.UGX {
             return response;
         }
 
-        Popup<T, K> GetClone() {
-            var instance = MonoBehaviour.Instantiate(gameObject).GetComponent<Popup<T, K>>();
-            instance.transform.SetParent(transform.parent, false);
-            return instance;
-        }
+        protected override void HandleStateSet() => HandlePopupStateSet();
+
+        protected abstract void HandlePopupStateSet();
 
         protected abstract UniTask<K> WaitForResponseImpl();
-
-        sealed protected override void HandleWindowStateSet() => HandlePopupStateSet();
-        protected abstract void HandlePopupStateSet();
     }
 }

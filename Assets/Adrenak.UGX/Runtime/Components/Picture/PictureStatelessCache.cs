@@ -20,7 +20,10 @@ namespace Adrenak.UGX {
         }
 
         public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
-            Downloader.Download(location, compression, onSuccess, onFailure);
+            Downloader.Download(location, result => {
+                if (compression != Texture2DCompression.None)
+                    result.Compress(compression == Texture2DCompression.HighQuality);
+            }, onFailure);
         }
 
         public override UniTask<Texture2D> Get(string location, Texture2DCompression compression, Picture instance) {
