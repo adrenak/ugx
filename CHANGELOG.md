@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/adrenak/ugx/compare/v5.18.3...v6.0.0) (2021-04-25)
+
+
+### Features
+
+* v6 finished ([0bcab4d](https://github.com/adrenak/ugx/commit/0bcab4dd89b4df38f8a7d9f5998ad71be2b0f044))
+
+
+### BREAKING CHANGES
+
+* Trigger 6.0.0
+
 ## [5.18.3](https://github.com/adrenak/ugx/compare/v5.18.2...v5.18.3) (2021-04-25)
 
 
