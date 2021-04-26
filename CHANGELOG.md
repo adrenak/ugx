@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/adrenak/ugx/compare/v6.0.1...v6.1.0) (2021-04-26)
+
+
+### Features
+
+* Better popup APIs ([f92029d](https://github.com/adrenak/ugx/commit/f92029db403252801345d72b36efb859e6a049da))
+
 ## [6.0.1](https://github.com/adrenak/ugx/compare/v6.0.0...v6.0.1) (2021-04-26)
 
 
