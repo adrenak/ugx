@@ -10,6 +10,8 @@ namespace Adrenak.UGX {
         public string body;
         public string positive;
         public string negative;
+
+
     }
 
     public class AskPopupResponse : PopupResponse{
