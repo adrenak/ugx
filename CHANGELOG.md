@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/adrenak/ugx/compare/v6.1.0...v6.2.0) (2021-04-26)
+
+
+### Features
+
+* Add PopupController with zone IDs ([8f0e381](https://github.com/adrenak/ugx/commit/8f0e381c8b418c45a50b2930654b159887dcd466))
+
 # [6.1.0](https://github.com/adrenak/ugx/compare/v6.0.1...v6.1.0) (2021-04-26)
 
 
