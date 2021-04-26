@@ -3,60 +3,64 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
+    [SerializeField]
     public class PopupState : ViewState { }
 
     [Serializable]
     public class PopupResponse { }
 
     [RequireComponent(typeof(Window))]
-    public abstract class Popup<T, K> : StatefulView<T> where T : PopupState where K : PopupResponse {
-        static View activePopup;
-
-        async public UniTask<K> WaitForResponse() {
+    public abstract class Popup<TState, Response> : StatefulView<TState> where TState : PopupState where Response : PopupResponse {
+        /// <summary>
+        /// Displays the popup and returns the response as a task
+        /// </summary>
+        async public UniTask<Response> Display() {
             await UniTask.SwitchToMainThread();
-            var response = await WaitForResponseImpl();
-            await UniTask.SwitchToMainThread();
-            return response;
-        }
-
-        async public void WaitForResponse(Action<K> responseCallback) =>
-            responseCallback?.Invoke(await WaitForResponse());
-
-        async public UniTask<K> Display() {
-            await UniTask.WaitWhile(() => activePopup != null);
-
-            activePopup = this;
-            await activePopup.window.OpenWindowAsync();
-            var response = await WaitForResponse();
+            await window.OpenWindowAsync();
+            var response = await GetResponse();
             await window.CloseWindowAsync();
-            activePopup = null;
-
+            await UniTask.SwitchToMainThread();
             return response;
         }
 
-        async public void Display(Action<K> responseCallback) =>
+        /// <summary>
+        /// Displays the popup and returns the response as a callback
+        /// </summary>
+        async public void Display(Action<Response> responseCallback) =>
             responseCallback?.Invoke(await Display());
 
-        async public UniTask<K> Display(T state) {
+        /// <summary>
+        /// Displays the popup with a given state and returns the response as a task
+        /// </summary>
+        async public UniTask<Response> SetStateAndDisplay(TState state) {
             State = state;
             return await Display();
         }
 
-        async public void Display(T state, Action<K> responseCallback) =>
-            responseCallback?.Invoke(await Display(state));
+        /// <summary>
+        /// Displays the popup with a given state and returns the response as a callback
+        /// </summary>
+        async public void SetStateAndDisplay(TState state, Action<Response> responseCallback) =>
+            responseCallback?.Invoke(await SetStateAndDisplay(state));
 
-        async public UniTask<K> Display(Action<T> stateModifier) {
+        /// <summary>
+        /// Displays the popup with a given state modifier and returns the response as a task
+        /// </summary>
+        async public UniTask<Response> ModifyStateAndDisplay(Action<TState> stateModifier) {
             stateModifier?.Invoke(State);
             return await Display();
         }
 
-        async public void Display(Action<T> stateModifier, Action<K> responseCallback) =>
-            responseCallback?.Invoke(await Display(stateModifier));
+        /// <summary>
+        /// Displays the popup with a given state modifier and returns the response as a callback
+        /// </summary>
+        async public void ModifyStateAndDisplay(Action<TState> stateModifier, Action<Response> responseCallback) =>
+            responseCallback?.Invoke(await ModifyStateAndDisplay(stateModifier));
 
         protected override void HandleStateSet() => HandlePopupStateSet();
 
         protected abstract void HandlePopupStateSet();
 
-        protected abstract UniTask<K> WaitForResponseImpl();
+        protected abstract UniTask<Response> GetResponse();
     }
 }

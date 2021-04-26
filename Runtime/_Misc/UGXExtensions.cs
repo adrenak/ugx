@@ -6,7 +6,7 @@ using Vector2 = UnityEngine.Vector2;
 
 namespace Adrenak.UGX {
     public static class UGXExtensions {
-        public static void SetColor(this Image image, Color color){
+        public static void SetColor(this Image image, Color color) {
             image.color = color;
         }
 
@@ -97,17 +97,17 @@ namespace Adrenak.UGX {
             // Which basically means full visibility
             int count = 0;
             foreach (var point in points)
-				if (point.y >= -1
+                if (point.y >= -1
                     && point.y <= Screen.height + 1
                     && point.x >= -1
                     && point.x <= Screen.width + 1
                 )
-					count++;
+                    count++;
 
-            if(count == 4) {
+            if (count == 4) {
                 partially = false;
                 return true;
-			}
+            }
 
             // Check if every point is either above, below,
             // left of, or right of the screen. In which case
@@ -116,12 +116,12 @@ namespace Adrenak.UGX {
 
             // ABOVE
             count = 0;
-			foreach (var point in points)
-				count += point.y > Screen.height + 1 ? 1 : 0;
-			if (count == 4) {
-				partially = false;
-				return false;
-			}
+            foreach (var point in points)
+                count += point.y > Screen.height + 1 ? 1 : 0;
+            if (count == 4) {
+                partially = false;
+                return false;
+            }
 
             // BELOW
             count = 0;
@@ -156,17 +156,27 @@ namespace Adrenak.UGX {
             return true;
         }
 
-        public static void EnsureContains<T, K>(this IDictionary<T, K> dict, T t, K k){
-            if (!dict.ContainsKey(t))
-                dict.Add(t, k);
+        public static void SetPair<K, V>(this IDictionary<K, V> dict, K k, V v) {
+            if (!dict.ContainsKey(k))
+                dict.Add(k, v);
+            else
+                dict[k] = v;
         }
 
-        public static void EnsureContains<T>(this List<T> list, T t){
+        public static bool EnsureContains<T, K>(this IDictionary<T, K> dict, T t, K k) {
+            if (!dict.ContainsKey(t)) {
+                dict.Add(t, k);
+                return false;
+            }
+            return true;
+        }
+
+        public static void EnsureContains<T>(this List<T> list, T t) {
             if (!list.Contains(t))
                 list.Add(t);
         }
 
-        public static void EnsureDoesntContain<T>(this List<T> list, T t){
+        public static void EnsureDoesntContain<T>(this List<T> list, T t) {
             if (list.Contains(t))
                 list.Remove(t);
         }
