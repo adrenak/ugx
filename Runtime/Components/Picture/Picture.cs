@@ -16,7 +16,7 @@ namespace Adrenak.UGX {
         public static PictureCacheBase Cache {
             get {
                 if (repo == null)
-                    repo = new PictureStatelessCache();
+                    repo = new PictureMemoryCache(50);
                 return repo;
             }
             set {
@@ -61,13 +61,13 @@ namespace Adrenak.UGX {
 
         [Button("Refresh")]
         public void Refresh() {
-            if (!Application.isPlaying) 
+            if (!Application.isPlaying)
                 return;
 
-            if (currentVisibility == Visibility.None && !updateWhenOffScreen) 
+            if (currentVisibility == Visibility.None && !updateWhenOffScreen)
                 return;
 
-            if (string.IsNullOrWhiteSpace(path)) 
+            if (string.IsNullOrWhiteSpace(path))
                 return;
 
             Cache.Free(oldPath, oldCompression, this);

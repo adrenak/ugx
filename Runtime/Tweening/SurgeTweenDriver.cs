@@ -18,7 +18,7 @@ namespace Adrenak.UGX {
                 rt.localPosition,
                 endValue,
                 v => rt.localPosition = v,
-                tween.Duration,
+                Mathf.Clamp(tween.Duration, 1f / int.MaxValue, Mathf.Infinity), // Make sure duration is not 0 else tweener jumps to final value
                 tween.Delay,
                 loop: Convert(tween.Loop),
                 easeCurve: Convert(tween.Curve),
@@ -36,7 +36,7 @@ namespace Adrenak.UGX {
             Tween.CanvasGroupAlpha(
                 group,
                 endValue,
-                tween.Duration,
+                Mathf.Clamp(tween.Duration, 1f / int.MaxValue, Mathf.Infinity), // Make sure duration is not 0 else tweener jumps to final value
                 tween.Delay,
                 easeCurve: Convert(tween.Curve),
                 loop: Convert(tween.Loop),
