@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/adrenak/ugx/compare/v6.0.0...v6.0.1) (2021-04-26)
+
+
+### Bug Fixes
+
+* Add .meta file for README.md ([4af60c7](https://github.com/adrenak/ugx/commit/4af60c7e5fa58f20b840f8759f780466ff641ae7))
+
 # [6.0.0](https://github.com/adrenak/ugx/compare/v5.18.3...v6.0.0) (2021-04-25)
 
 
