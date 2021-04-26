@@ -18,7 +18,7 @@ namespace Adrenak.UGX {
 
         Action OnAcknowledge;
 
-        async protected override UniTask<PopupResponse> WaitForResponseImpl() {
+        async protected override UniTask<PopupResponse> GetResponse() {
             bool responded = false;
             OnAcknowledge = () => responded = true;
             while (!responded)

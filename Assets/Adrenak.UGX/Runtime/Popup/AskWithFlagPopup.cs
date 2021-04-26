@@ -27,7 +27,7 @@ namespace Adrenak.UGX {
         [SerializeField] Toggle flagDisplay;
 #pragma warning restore 0649
 
-        async protected override UniTask<AskWithFlagPopupResponse> WaitForResponseImpl() {
+        async protected override UniTask<AskWithFlagPopupResponse> GetResponse() {
             bool? response = null;
             OnConfirm = () => response = true;
             OnDeny = () => response = false;

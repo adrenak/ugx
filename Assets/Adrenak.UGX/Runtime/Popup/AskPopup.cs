@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Cysharp.Threading.Tasks;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +12,9 @@ namespace Adrenak.UGX {
         public string body;
         public string positive;
         public string negative;
-
-
     }
 
-    public class AskPopupResponse : PopupResponse{
+    public class AskPopupResponse : PopupResponse {
         public bool positive;
     }
 
@@ -26,7 +26,7 @@ namespace Adrenak.UGX {
         [SerializeField] Text negativeDisplay;
 #pragma warning restore 0649
 
-        async protected override UniTask<AskPopupResponse> WaitForResponseImpl() {
+        async protected override UniTask<AskPopupResponse> GetResponse() {
             bool? response = null;
             OnConfirm = () => response = true;
             OnDeny = () => response = false;
