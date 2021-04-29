@@ -70,8 +70,6 @@ namespace Adrenak.UGX {
             if (string.IsNullOrWhiteSpace(path))
                 return;
 
-            Cache.Free(oldPath, oldCompression, this);
-
             switch (source) {
                 case Source.Resource:
                     onLoadStart.Invoke();
@@ -88,17 +86,18 @@ namespace Adrenak.UGX {
 
                 case Source.URL:
                     try {
+                        Cache.Free(oldPath, oldCompression, this);
                         onLoadStart.Invoke();
                         Cache.Get(
                             path, compression, this,
                             result => {
                                 if (sprite == null || sprite.texture == null) {
-                                    SetSprite(result.ToSprite());
+                                    SetSprite(result);
                                     onLoadSuccess.Invoke();
                                     return;
                                 }
                                 if (sprite != null && sprite.texture != null && result != sprite.texture) {
-                                    SetSprite(result.ToSprite());
+                                    SetSprite(result);
                                     onLoadSuccess.Invoke();
                                 }
                             },

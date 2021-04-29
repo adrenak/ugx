@@ -5,6 +5,7 @@ using UnityEngine;
 
 using System.Collections.Generic;
 using System.Linq;
+using Adrenak.Unex;
 
 namespace Adrenak.UGX {
     public class PictureMemoryCache : PictureCacheBase {
@@ -33,10 +34,10 @@ namespace Adrenak.UGX {
         }
 
         class Request {
-            public Action<Texture2D> onSuccess;
+            public Action<Sprite> onSuccess;
             public Action<Exception> onFailure;
 
-            public Request(Action<Texture2D> _onSuccess, Action<Exception> _onFailure) {
+            public Request(Action<Sprite> _onSuccess, Action<Exception> _onFailure) {
                 onSuccess = _onSuccess;
                 onFailure = _onFailure;
             }
@@ -44,7 +45,7 @@ namespace Adrenak.UGX {
 
         List<Key> freed = new List<Key>();
         Dictionary<Key, List<Picture>> instances = new Dictionary<Key, List<Picture>>();
-        Dictionary<Key, Texture2D> resources = new Dictionary<Key, Texture2D>();
+        Dictionary<Key, Sprite> resources = new Dictionary<Key, Sprite>();
         Dictionary<Key, List<Request>> requests = new Dictionary<Key, List<Request>>();
         int maxResourceCount;
 
@@ -56,7 +57,7 @@ namespace Adrenak.UGX {
             return UniTask.CompletedTask;
         }
         
-        public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
+        public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Sprite> onSuccess, Action<Exception> onFailure) {
             if (string.IsNullOrEmpty(location)) return;
             var key = new Key(location, compression);
             
@@ -78,19 +79,21 @@ namespace Adrenak.UGX {
                 result => {
                     if (compression != Texture2DCompression.None)
                         result.Compress(compression == Texture2DCompression.HighQuality);
+                    var resultSprite = result.ToSprite();
+
                     freed.EnsureDoesntContain(key);
-                    resources.EnsureContains(key, result);
+                    resources.EnsureContains(key, resultSprite);
                     instances.EnsureContains(key, new List<Picture>());
                     instances[key].Add(instance);
 
                     foreach (var req in requests[key])
-                        req.onSuccess?.Invoke(result);
+                        req.onSuccess?.Invoke(resultSprite);
 
                     requests[key].Clear();
                     requests.Remove(key);
 
                     if (instance != null)
-                        onSuccess?.Invoke(result);
+                        onSuccess?.Invoke(resultSprite);
                 },
                 error => {
                     requests[key].ForEach(x => x.onFailure?.Invoke(error));
@@ -103,8 +106,8 @@ namespace Adrenak.UGX {
             );
         }
 
-        public override UniTask<Texture2D> Get(string location, Texture2DCompression compression, Picture instance) {
-            var source = new UniTaskCompletionSource<Texture2D>();
+        public override UniTask<Sprite> Get(string location, Texture2DCompression compression, Picture instance) {
+            var source = new UniTaskCompletionSource<Sprite>();
             Get(location, compression, instance,
                 result => source.TrySetResult(result),
                 exception => source.TrySetException(exception)
