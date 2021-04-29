@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/adrenak/ugx/compare/v6.2.0...v6.3.0) (2021-04-29)
+
+
+### Features
+
+* Picture Cache now manage Texture2D to Sprite creation. Creating ([b7966fa](https://github.com/adrenak/ugx/commit/b7966fa40b8d7c716b4a7156702617e3baefc7ed))
+
 # [6.2.0](https://github.com/adrenak/ugx/compare/v6.1.0...v6.2.0) (2021-04-26)
 
 
