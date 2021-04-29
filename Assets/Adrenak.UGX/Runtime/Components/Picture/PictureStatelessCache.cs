@@ -19,15 +19,15 @@ namespace Adrenak.UGX {
             return UniTask.CompletedTask;
         }
 
-        public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
+        public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Sprite> onSuccess, Action<Exception> onFailure) {
             Downloader.Download(location, result => {
                 if (compression != Texture2DCompression.None)
                     result.Compress(compression == Texture2DCompression.HighQuality);
             }, onFailure);
         }
 
-        public override UniTask<Texture2D> Get(string location, Texture2DCompression compression, Picture instance) {
-            var source = new UniTaskCompletionSource<Texture2D>();
+        public override UniTask<Sprite> Get(string location, Texture2DCompression compression, Picture instance) {
+            var source = new UniTaskCompletionSource<Sprite>();
             Get(location, compression, instance,
                 result => source.TrySetResult(result),
                 exception => source.TrySetException(exception)
