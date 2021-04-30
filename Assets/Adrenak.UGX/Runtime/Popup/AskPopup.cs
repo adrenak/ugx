@@ -35,7 +35,7 @@ namespace Adrenak.UGX {
             return new AskPopupResponse { positive = response.Value };
         }
 
-        protected override void HandlePopupStateSet() {
+        protected override void OnStateSet() {
             headerDisplay.text = State.header;
             bodyDisplay.text = State.body;
             positiveDisplay.text = State.positive;
@@ -47,5 +47,7 @@ namespace Adrenak.UGX {
 
         Action OnDeny;
         public void Deny() => OnDeny?.Invoke();
+
+        protected override void OnStart() { }
     }
 }

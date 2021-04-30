@@ -19,9 +19,11 @@ namespace Adrenak.UGX {
             return new PopupResponse();
         }
 
-        protected override void HandlePopupStateSet() {
+        protected override void OnStateSet() {
             title.text = State.title;
             description.text = State.description;
         }
+
+        protected override void OnStart() { }
     }
 }

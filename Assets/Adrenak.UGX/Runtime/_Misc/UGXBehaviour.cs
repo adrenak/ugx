@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Adrenak.UGX {
     [System.Serializable]
     [RequireComponent(typeof(RectTransform))]
     public class UGXBehaviour : MonoBehaviour {
         RectTransform rt;
+        /// <summary>
+        /// Returns the RectTransform of the GameObject.
+        /// </summary>
         public RectTransform RT {
             get {
                 if (rt == null)
@@ -13,19 +17,22 @@ namespace Adrenak.UGX {
             }
         }
 
-        public static T InstantiateUGXBehaviourResource<T>(string path) where T : UGXBehaviour {
-            var resource = Resources.Load<T>(path);
-            return Instantiate(resource);
-        }
-
+        /// <summary>
+        /// Returns the View on this GameObject, if any
+        /// </summary>
         public View view => GetComponent<View>();
+
+        /// <summary>
+        /// Returns the Window on this GameObject, if any
+        /// </summary>
         public Window window => GetComponent<Window>();
-        public TweenerBase[] transitioners => GetComponents<TweenerBase>();
-        public T Get<T>() where T : TweenerBase {
-            foreach (var transitioner in transitioners)
-                if (transitioner is T)
-                    return transitioner as T;
-            return null;
-        }
+
+        /// <summary>
+        /// Returns all the Tweeners on this GameObject, if any
+        /// </summary>
+        public TweenerBase[] tweeners => GetComponents<TweenerBase>();
+
+        [Obsolete("Use .tweeners instead")]
+        public TweenerBase[] transitioners => tweeners;
     }
 }

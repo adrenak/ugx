@@ -6,6 +6,9 @@ using Adrenak.Unex;
 
 namespace Adrenak.UGX {
     public abstract class Navigator : MonoBehaviour {
+        [System.Serializable]
+        public class WindowUnityEvent : UnityEvent<Window> { }
+
         static Dictionary<string, Navigator> map = new Dictionary<string, Navigator>();
         public static Navigator Get(string browserID = null) {
             if (map.ContainsKey(browserID))
@@ -13,18 +16,18 @@ namespace Adrenak.UGX {
             return null;
         }
 
+        public WindowUnityEvent onPush = new WindowUnityEvent();
+        public WindowUnityEvent onPop = new WindowUnityEvent();
+
 #pragma warning disable 0649
         [SerializeField] string browserID;
         [SerializeField] bool canPopAll;
 
-        [ReadOnly] [SerializeField] protected Window active = null;
-        public Window Current => active;
+        [ReadOnly] [SerializeField] protected Window current = null;
+        public Window Current => current;
 
         [ReadOnly] [ReorderableList] [SerializeField] protected List<Window> history = new List<Window>();
         public List<Window> History => history;
-
-        public UnityEvent onPush;
-        public UnityEvent onPop;
 
         [SerializeField] protected bool useInitialWindow;
         [ShowIf("useInitialWindow")] [SerializeField] protected Window initialWindow;
@@ -52,41 +55,66 @@ namespace Adrenak.UGX {
 
         void CheckBackPress() {
             if (!Input.GetKeyUp(KeyCode.Escape)) return;
-            if (!active.autoPopOnBack) return;
             Pop();
         }
 
-        protected void SetAsActive(Window window) {
-            window.OpenWindow();
-            if (active != null)
-                active.CloseWindow();
-            active = window;
-        }
-
+        // ================================================
+        // API / PUBLIC
+        // ================================================
+        /// <summary>
+        /// Push a Window to the navigation and open it.
+        /// </summary>
         public void Push(Window window) {
             PushImpl(window);
         }
 
+        /// <summary>
+        /// Pops a Window from the navigation and closes it
+        /// </summary>
         public void Pop() {
             if (History.Count == 1 && !canPopAll)
                 return;
             PopImpl();
         }
 
+        /// <summary>
+        /// Pops all Windows
+        /// </summary>
         public void Clear() {
             while (History.Count > 0)
                 PopImpl();
         }
 
-        protected abstract void PushImpl(Window window);
-
-        protected abstract void PopImpl();
-
+        /// <summary>
+        /// Pops a Window if it's active, Push it if it's not.
+        /// </summary>
         public void Toggle(Window window) {
             if (History.Count > 0 && History.Last() == window)
                 Pop();
             else
                 Push(window);
-		}
+        }
+
+        // ================================================
+        // CONTRACT
+        // ================================================
+        /// <summary>
+        /// Actual Push logic to be implemented by subclass
+        /// </summary>
+        /// <param name="window"></param>
+        protected abstract void PushImpl(Window window);
+
+        /// <summary>
+        /// Actual Pop logic to be implemented by subclass
+        /// </summary>
+        protected abstract void PopImpl();
+
+        // ================================================
+        protected void SetAsCurrent(Window window) {
+            window.OpenWindow();
+            if (current != null)
+                current.CloseWindow();
+            current = window;
+        }
     }
 }

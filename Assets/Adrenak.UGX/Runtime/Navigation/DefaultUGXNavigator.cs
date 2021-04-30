@@ -11,7 +11,7 @@ namespace Adrenak.UGX {
             // First push
             if (History.Count == 0) {
                 History.Add(window);
-                SetAsActive(window);
+                SetAsCurrent(window);
                 return;
             }
 
@@ -22,28 +22,30 @@ namespace Adrenak.UGX {
             // Alternate repeat push
             if (History.Count > 1 && History.FromLast(1).gameObject == window.gameObject) {
                 History.RemoveAt(History.Count - 1);
-                SetAsActive(History.Last());
+                SetAsCurrent(History.Last());
                 return;
             }
 
             // All other cases
             History.Add(window);
-            SetAsActive(window);
+            SetAsCurrent(window);
 
-            onPush.Invoke();
+            onPush.Invoke(window);
         }
 
         protected override void PopImpl() {
             if (History.Count > 1) {
-                History.RemoveAt(History.Count - 1);
-                SetAsActive(History.Last());
-                onPop.Invoke();
+                var last = History.Last();
+                History.RemoveLast();
+                SetAsCurrent(History.Last());
+                onPop.Invoke(last);
             }
             else if(History.Count == 1){
                 History.Last().CloseWindow();
-                History.RemoveAt(0);
-                active = null;
-                onPop.Invoke();
+                var first = History[0];
+                History.Remove(first);
+                current = null;
+                onPop.Invoke(first);
             }
         }
     }
