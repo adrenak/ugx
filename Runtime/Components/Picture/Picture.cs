@@ -34,7 +34,7 @@ namespace Adrenak.UGX {
             URL
         }
         [Obsolete("This does nothing and will soon be removed")]
-        public Source source = Source.URL;
+        [HideInInspector] public Source source = Source.URL;
         #endregion
 
         public UnityEvent onLoadStart;
