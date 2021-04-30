@@ -73,7 +73,7 @@ namespace Adrenak.UGX {
             }
 
             var request = new Request(onSuccess, onFailure);
-			requests.EnsureContains(key, new List<Request>() { });
+			requests.EnsureKey(key, new List<Request>() { });
             requests[key].Add(request);
             if (requests[key].Count > 1)
                 return;
@@ -85,8 +85,8 @@ namespace Adrenak.UGX {
                     var resultSprite = result.ToSprite();
 
                     freed.EnsureDoesntContain(key);
-                    resources.EnsureContains(key, resultSprite);
-                    instances.EnsureContains(key, new List<Picture>());
+                    resources.EnsureKey(key, resultSprite);
+                    instances.EnsureKey(key, new List<Picture>());
                     instances[key].Add(instance);
 
                     foreach (var req in requests[key])

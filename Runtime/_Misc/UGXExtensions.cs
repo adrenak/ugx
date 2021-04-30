@@ -1,80 +1,115 @@
 ﻿using System.Collections.Generic;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Adrenak.UGX {
     public static class UGXExtensions {
-        public static void SetColor(this Image image, Color color) {
-            image.color = color;
-        }
-
-        public static void AddRange<T>(this IList<T> destination, IList<T> source) {
-            foreach (var element in source)
-                destination.Add(element);
-        }
-
+        /// <summary>
+        /// Returns the minimum distance RectTransform should move to the left
+        /// to get out of the bounds of the parent RectTransform.
+        /// </summary>
         public static float GetLeftExit(this RectTransform rt) {
             var parentRect = rt.parent.GetComponent<RectTransform>().rect;
             return -parentRect.width / 2 - rt.rect.width / 2;
         }
 
+        /// <summary>
+        /// Returns the minimum distance RectTransform should move to the right
+        /// to get out of the bounds of the parent RectTransform.
+        /// </summary>
         public static float GetRightExit(this RectTransform rt) {
             var parentRect = rt.parent.GetComponent<RectTransform>().rect;
             return parentRect.width / 2 + rt.rect.width / 2;
         }
 
+        /// <summary>
+        /// Returns the minimum distance RectTransform should move to the top
+        /// to get out of the bounds of the parent RectTransform.
+        /// </summary>
         public static float GetTopExit(this RectTransform rt) {
             var parentRect = rt.parent.GetComponent<RectTransform>().rect;
             return parentRect.height / 2 + rt.rect.height / 2;
         }
 
-        public static float GetBottomExit(this RectTransform rt) {
-            var parentRect = rt.parent.GetComponent<RectTransform>().rect;
+        /// <summary>
+        /// Returns the minimum distance RectTransform should move to the bottom
+        /// to get out of the bounds of the parent RectTransform.
+        /// </summary>
+        public static float GetBottomExit(this RectTransform rt, bool screen = false) {
+            Rect parentRect = rt.parent.GetComponent<RectTransform>().rect;
             return -parentRect.width / 2 - rt.rect.height / 2;
         }
 
+        /// <summary>
+        /// Returns the x coordinate of the left edge of the RectTransform
+        /// </summary>
         public static float GetLeft(this RectTransform rt) {
             return rt.position.x - rt.rect.width * rt.lossyScale.x / 2;
         }
 
+        /// <summary>
+        /// Returns the x coordinate of the right edge of the RectTransform
+        /// </summary>
         public static float GetRight(this RectTransform rt) {
             return rt.position.x + rt.rect.width * rt.lossyScale.x / 2;
         }
 
+        /// <summary>
+        /// Returns the y coordinate of the top edge of the RectTransform
+        /// </summary>
         public static float GetTop(this RectTransform rt) {
             return rt.position.y + rt.rect.height * rt.lossyScale.y / 2;
         }
 
+        /// <summary>
+        /// Returns the y coordinate of the left edge of the RectTransform
+        /// </summary>
         public static float GetBottom(this RectTransform rt) {
             return rt.position.y - rt.rect.height * rt.lossyScale.y / 2;
         }
 
+        /// <summary>
+        /// Returns the coordinate of the top left corner of the RectTransform
+        /// </summary>
         public static Vector2 GetTopLeft(this RectTransform rt) {
             var left = rt.GetLeft();
             var top = rt.GetTop();
             return new Vector2(left, top);
         }
 
+        /// <summary>
+        /// Returns the coordinate of the top right corner of the RectTransform
+        /// </summary>
         public static Vector2 GetTopRight(this RectTransform rt) {
             var right = rt.GetRight();
             var top = rt.GetTop();
             return new Vector2(right, top);
         }
 
+        /// <summary>
+        /// Returns the coordinate of the bottom left corner of the RectTransform
+        /// </summary>
         public static Vector2 GetBottomLeft(this RectTransform rt) {
             var left = rt.GetLeft();
             var bottom = rt.GetBottom();
             return new Vector2(left, bottom);
         }
 
+        /// <summary>
+        /// Returns the coordinate of the bottom right corner of the RectTransform
+        /// </summary>
         public static Vector2 GetBottomRight(this RectTransform rt) {
             var right = rt.GetRight();
             var bottom = rt.GetBottom();
             return new Vector2(right, bottom);
         }
 
+        /// <summary>
+        /// Returns the visibility of the RectTransform
+        /// </summary>
+        /// <param name="rt"></param>
+        /// <returns></returns>
         public static Visibility GetVisibility(this RectTransform rt) {
             var result = rt.IsVisible(out bool? partially);
 
@@ -84,6 +119,10 @@ namespace Adrenak.UGX {
                 return Visibility.Partial;
         }
 
+        /// <summary>
+        /// Returns if the RectTransform is visible 
+        /// </summary>
+        /// <param name="partially">If true, the RT is partially visible</param>
         public static bool IsVisible(this RectTransform rt, out bool? partially) {
             var points = new Vector2[]{
                 rt.GetTopLeft(),
@@ -156,6 +195,10 @@ namespace Adrenak.UGX {
             return true;
         }
 
+        /// <summary>
+        /// Set a KeyValuePair entry in the Dictionary. If the key exists, 
+        /// the value is change. If not, the pair is added.
+        /// </summary>
         public static void SetPair<K, V>(this IDictionary<K, V> dict, K k, V v) {
             if (!dict.ContainsKey(k))
                 dict.Add(k, v);
@@ -163,7 +206,12 @@ namespace Adrenak.UGX {
                 dict[k] = v;
         }
 
-        public static bool EnsureContains<T, K>(this IDictionary<T, K> dict, T t, K k) {
+        /// <summary>
+        /// Ensures the key is present in the dictionary. If it isn't, the provided
+        /// value is added along with the key.
+        /// </summary>
+        /// <returns>If the key was already present</returns>
+        public static bool EnsureKey<T, K>(this IDictionary<T, K> dict, T t, K k) {
             if (!dict.ContainsKey(t)) {
                 dict.Add(t, k);
                 return false;
@@ -171,14 +219,28 @@ namespace Adrenak.UGX {
             return true;
         }
 
-        public static void EnsureContains<T>(this List<T> list, T t) {
-            if (!list.Contains(t))
+        /// <summary>
+        /// Ensures the list contains the element.
+        /// </summary>
+        /// <returns>If the element was already present</returns>
+        public static bool EnsureContains<T>(this List<T> list, T t) {
+            if (!list.Contains(t)){
                 list.Add(t);
+                return false;
+            }
+            return true;
         }
 
-        public static void EnsureDoesntContain<T>(this List<T> list, T t) {
-            if (list.Contains(t))
+        /// <summary>
+        /// Ensures that the list doesn't contain the element
+        /// </summary>
+        /// <returns>Returns true if the list DID contain the element</returns>
+        public static bool EnsureDoesntContain<T>(this List<T> list, T t) {
+            if (list.Contains(t)){
                 list.Remove(t);
+                return true;
+            }
+            return false;
         }
     }
 }

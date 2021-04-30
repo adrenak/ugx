@@ -3,12 +3,23 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// Base class for states of popup implementations
+    /// </summary>
     [SerializeField]
     public class PopupState : ViewState { }
 
+    /// <summary>
+    /// Base class for response of popup implementation
+    /// </summary>
     [Serializable]
     public class PopupResponse { }
 
+    /// <summary>
+    /// Base class for popups. Inherit from this class to implement different kinds of popups
+    /// </summary>
+    /// <typeparam name="TState"></typeparam>
+    /// <typeparam name="Response"></typeparam>
     [RequireComponent(typeof(Window))]
     public abstract class Popup<TState, Response> : StatefulView<TState> where TState : PopupState where Response : PopupResponse {
         /// <summary>
@@ -44,7 +55,7 @@ namespace Adrenak.UGX {
             responseCallback?.Invoke(await SetStateAndDisplay(state));
 
         /// <summary>
-        /// Displays the popup with a given state modifier and returns the response as a task
+        /// Displays the popup with a given state modifier action and returns the response as a task
         /// </summary>
         async public UniTask<Response> ModifyStateAndDisplay(Action<TState> stateModifier) {
             stateModifier?.Invoke(State);
@@ -52,15 +63,14 @@ namespace Adrenak.UGX {
         }
 
         /// <summary>
-        /// Displays the popup with a given state modifier and returns the response as a callback
+        /// Displays the popup with a given state modifier action and returns the response as a callback
         /// </summary>
         async public void ModifyStateAndDisplay(Action<TState> stateModifier, Action<Response> responseCallback) =>
             responseCallback?.Invoke(await ModifyStateAndDisplay(stateModifier));
 
-        protected override void HandleStateSet() => HandlePopupStateSet();
-
-        protected abstract void HandlePopupStateSet();
-
         protected abstract UniTask<Response> GetResponse();
+
+        [Obsolete(".HandleStateSet instead")]
+        protected virtual void HandlePopupStateSet() => OnStateSet();
     }
 }

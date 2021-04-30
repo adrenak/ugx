@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEditor.UI;
+
 using UnityEngine;
 
 namespace Adrenak.UGX {
@@ -17,11 +18,11 @@ namespace Adrenak.UGX {
             EditorGUI.EndDisabledGroup();
 
             showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"));
-			if (showEvents) {
+            if (showEvents) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadStart"), new GUIContent("On Load Start"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadSuccess"), new GUIContent("On Load Success"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadFailure"), new GUIContent("On Load Failure"));
-			}
+            }
 
             image.refreshOnStart = EditorGUILayout.Toggle("Refresh On Start", image.refreshOnStart);
             image.updateWhenOffScreen = EditorGUILayout.Toggle("Update When Off Screen", image.updateWhenOffScreen);
@@ -31,15 +32,12 @@ namespace Adrenak.UGX {
             image.compression = (Texture2DCompression)EditorGUILayout.EnumPopup("Texture Compression", image.compression);
             EditorGUILayout.Space();
 
-            image.source = (Picture.Source)EditorGUILayout.EnumPopup("Source Type", image.source);
-
-            if(image.source != Picture.Source.Asset)
-                image.path = EditorGUILayout.TextField("Source Path", image.path);
+            image.path = EditorGUILayout.TextField("Source Path", image.path);
 
             serializedObject.ApplyModifiedProperties();
 
             if (GUILayout.Button("Refresh Picture"))
-                image.Refresh();            
+                image.Refresh();
         }
     }
 }

@@ -2,16 +2,26 @@
 using System;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// The fundamental class used to define anything that is visible
+    /// to the user. 
+    /// </summary>
     [DisallowMultipleComponent]
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
     public class View : UGXBehaviour {
-        public string viewID;
+        /// <summary>
+        /// ID that can be used to identify the View
+        /// </summary>
+        public string ID;
 
-        public static View operator / (View S1, string childName) {
-            var views = S1.GetComponentsInChildren<View>();
+        /// <summary>
+        /// Returns a child View with the given ID. 
+        /// </summary>
+        public static View operator /(View me, string childID) {
+            var views = me.GetComponentsInChildren<View>();
             foreach (var view in views)
-                if (view.viewID.Equals(childName))
+                if (view.ID.Equals(childID))
                     return view;
             return null;
         }

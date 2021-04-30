@@ -17,8 +17,6 @@ namespace Adrenak.UGX {
             EditorGUILayout.EnumPopup("Status", window.Status);
             EditorGUI.EndDisabledGroup();
 
-            window.autoPopOnBack = EditorGUILayout.Toggle("Auto-Pop on back", window.autoPopOnBack);
-
             showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"));
             if (showEvents) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onWindowStartOpening"), new GUIContent("On Window Start Opening"));

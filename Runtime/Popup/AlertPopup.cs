@@ -26,7 +26,7 @@ namespace Adrenak.UGX {
             return new PopupResponse();
         }
 
-        protected override void HandlePopupStateSet() {
+        protected override void OnStateSet() {
             headerDisplay.text = State.header;
             bodyDisplay.text = State.description;
             ackDisplay.text = State.ack;
@@ -35,5 +35,7 @@ namespace Adrenak.UGX {
         public void Acknowledge() {
             OnAcknowledge?.Invoke();
         }
+
+        protected override void OnStart() { }
     }
 }

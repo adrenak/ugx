@@ -3,8 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Adrenak.Unex;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// A coroutine based image downloader that returns the result as a Texture2D.
+    /// </summary>
     public class Texture2DDownloader : MonoBehaviour {
         class Request {
             public string path;
@@ -19,7 +23,7 @@ namespace Adrenak.UGX {
         }
 
         int maxConcurrentDownloads;
-        float secondsPerTextureLoad;
+        float textureLoadPeriod;
         List<Request> pending = new List<Request>();
         List<Request> ongoing = new List<Request>();
         List<Action> textureLoads = new List<Action>();
@@ -27,16 +31,25 @@ namespace Adrenak.UGX {
         bool CanSendNewRequest => ongoing.Count < maxConcurrentDownloads;
         float loadTimer = 0;
 
+        /// <summary>
+        /// Cannot construct using 'new' keyword. Use .New method.
+        /// </summary>
         Texture2DDownloader() { }
 
-        public static Texture2DDownloader New(int _maxConcurrentDownloads = 5, float _secondsPerTextureLoad = .1f) {
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="_maxConcurrentDownloads">The maximum number of cocurrent downloads possible.</param>
+        /// <param name="_textureLoadPeriod">The minimum time between loading consecutive Texture2D objects from byte[]</param>
+        /// <returns></returns>
+        public static Texture2DDownloader New(int _maxConcurrentDownloads = 5, float _textureLoadPeriod = .1f) {
             var go = new GameObject("Texture2DDownloader");
             DontDestroyOnLoad(go);
             go.hideFlags = HideFlags.DontSave;
             var instance = go.AddComponent<Texture2DDownloader>();
             instance.maxConcurrentDownloads = _maxConcurrentDownloads;
-            instance.secondsPerTextureLoad = _secondsPerTextureLoad;
-            instance.loadTimer = _secondsPerTextureLoad;
+            instance.textureLoadPeriod = _textureLoadPeriod;
+            instance.loadTimer = _textureLoadPeriod;
             return instance;
         }
 
@@ -44,7 +57,7 @@ namespace Adrenak.UGX {
             DispatchRequests();
 
             loadTimer += Time.unscaledDeltaTime;
-            if(loadTimer > secondsPerTextureLoad) {
+            if(loadTimer > textureLoadPeriod) {
                 loadTimer = 0;
                 DispatchTextureLoads();
 			}
@@ -62,6 +75,12 @@ namespace Adrenak.UGX {
 			}
 		}
 
+        /// <summary>
+        /// Downloads an image from the URL and returns the results as callbacks
+        /// </summary>
+        /// <param name="path">The URL/path</param>
+        /// <param name="onSuccess">Callback when the download is successful</param>
+        /// <param name="onFailure">Callback for when the download is unsuccessful</param>
 		public void Download(string path, Action<Texture2D> onSuccess, Action<Exception> onFailure) {
             var req = new Request(path, onSuccess, onFailure);
             if (CanSendNewRequest) {
@@ -70,6 +89,20 @@ namespace Adrenak.UGX {
             }
             else
                 pending.Add(req);
+        }
+
+        /// <summary>
+        /// Downloads an image form the URL and returns the results using UniTask
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns>A UniTask<Texture2D> instance</Texture2D></returns>
+        public UniTask<Texture2D> Download(string path){
+            var source = new UniTaskCompletionSource<Texture2D>();
+            Download(path,
+                result => source.TrySetResult(result),
+                exception => source.TrySetException(exception)
+            );
+            return source.Task;
         }
 
         IEnumerator SendRequest(Request request) {
