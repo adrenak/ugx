@@ -26,11 +26,16 @@ namespace Adrenak.UGX {
             }
         }
 
+        #region OBSOLETE
+        [Obsolete("This enum does nothing and will soon be removed.")]
         public enum Source {
             Asset,
             Resource,
             URL
         }
+        [Obsolete("This does nothing and will soon be removed")]
+        public Source source = Source.URL;
+        #endregion
 
         public UnityEvent onLoadStart;
         public UnityEvent onLoadSuccess;
@@ -39,7 +44,6 @@ namespace Adrenak.UGX {
         public bool refreshOnStart;
         public bool updateWhenOffScreen;
 
-        public Source source = Source.URL;
 
         Texture2DCompression oldCompression = Texture2DCompression.None;
         public Texture2DCompression compression = Texture2DCompression.LowQuality;
@@ -67,52 +71,34 @@ namespace Adrenak.UGX {
             if (currentVisibility == Visibility.None && !updateWhenOffScreen)
                 return;
 
-            if (string.IsNullOrWhiteSpace(path))
+            if (compression == oldCompression && path == oldPath)
                 return;
 
-            switch (source) {
-                case Source.Resource:
-                    onLoadStart.Invoke();
-                    var resourceSprite = Resources.Load<Sprite>(path);
-                    if (resourceSprite == null) {
+            try {
+                Cache.Free(oldPath, oldCompression, this);
+                onLoadStart.Invoke();
+                Cache.Get(
+                    path, compression, this,
+                    result => {
+                        if (sprite == null || sprite.texture == null) {
+                            SetSprite(result);
+                            onLoadSuccess.Invoke();
+                            return;
+                        }
+                        if (sprite != null && sprite.texture != null && result.texture != sprite.texture) {
+                            SetSprite(result);
+                            onLoadSuccess.Invoke();
+                        }
+                    },
+                    error => {
+                        Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error);
                         onLoadFailure.Invoke();
-                        Debug.LogError($"Not Resource found at {path}");
-                        break;
                     }
-
-                    onLoadSuccess.Invoke();
-                    SetSprite(resourceSprite);
-                    break;
-
-                case Source.URL:
-                    try {
-                        Cache.Free(oldPath, oldCompression, this);
-                        onLoadStart.Invoke();
-                        Cache.Get(
-                            path, compression, this,
-                            result => {
-                                if (sprite == null || sprite.texture == null) {
-                                    SetSprite(result);
-                                    onLoadSuccess.Invoke();
-                                    return;
-                                }
-                                if (sprite != null && sprite.texture != null && result != sprite.texture) {
-                                    SetSprite(result);
-                                    onLoadSuccess.Invoke();
-                                }
-                            },
-                            error => {
-                                Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error);
-                                onLoadFailure.Invoke();
-                            }
-                        );
-                    }
-                    catch (Exception e) {
-                        Debug.LogError(e);
-                    }
-                    break;
+                );
             }
-
+            catch (Exception e) {
+                Debug.LogError(e);
+            }
             oldPath = path;
             oldCompression = compression;
         }
@@ -127,7 +113,7 @@ namespace Adrenak.UGX {
             if (age <= 2) return;
 
             var oldVisibility = currentVisibility;
-            currentVisibility = GetVisibility();
+            currentVisibility = RT.GetVisibility();
 
             if (currentVisibility != oldVisibility) {
                 if (oldVisibility == Visibility.None && currentVisibility != Visibility.None)
@@ -144,17 +130,9 @@ namespace Adrenak.UGX {
             }
         }
 
-        Visibility GetVisibility() {
-            var result = RT.IsVisible(out bool? partially);
-
-            if (!partially.Value)
-                return result ? Visibility.Full : Visibility.None;
-            else
-                return Visibility.Partial;
-        }
-
         bool destroyed = false;
         protected override void OnDestroy() {
+            base.OnDestroy();
             if (destroyed) return;
             destroyed = true;
 

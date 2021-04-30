@@ -58,7 +58,10 @@ namespace Adrenak.UGX {
         }
         
         public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Sprite> onSuccess, Action<Exception> onFailure) {
-            if (string.IsNullOrEmpty(location)) return;
+            if (string.IsNullOrEmpty(location)) {
+                onFailure?.Invoke(new ArgumentException("location cannot be null or empty", "location"));
+                return;
+            }
             var key = new Key(location, compression);
             
             if (resources.Keys.Contains(key)) {
