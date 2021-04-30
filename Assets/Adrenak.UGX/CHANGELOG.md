@@ -1,3 +1,11 @@
+# [6.4.0](https://github.com/adrenak/ugx/compare/v6.3.0...v6.4.0) (2021-04-30)
+
+
+### Features
+
+* Picture.Source enum discontinued. ([af5ad47](https://github.com/adrenak/ugx/commit/af5ad47af43b8fd0dfb3e7ae57853946cf98bece))
+* Several ([150db89](https://github.com/adrenak/ugx/commit/150db89fbe621fb9b17bea9cc7f4692d8e9ce402))
+
 # [6.3.0](https://github.com/adrenak/ugx/compare/v6.2.0...v6.3.0) (2021-04-29)
 
 
