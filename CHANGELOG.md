@@ -1,3 +1,10 @@
+## [6.4.1](https://github.com/adrenak/ugx/compare/v6.4.0...v6.4.1) (2021-05-09)
+
+
+### Bug Fixes
+
+* Update View on Popup Modify State method. ([342c6de](https://github.com/adrenak/ugx/commit/342c6de354d353d5d72f92d61ae11bfcf2a86bc0))
+
 # [6.4.0](https://github.com/adrenak/ugx/compare/v6.3.0...v6.4.0) (2021-04-30)
 
 
