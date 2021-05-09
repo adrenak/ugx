@@ -59,6 +59,7 @@ namespace Adrenak.UGX {
         /// </summary>
         async public UniTask<Response> ModifyStateAndDisplay(Action<TState> stateModifier) {
             stateModifier?.Invoke(State);
+            UpdateView();
             return await Display();
         }
 
