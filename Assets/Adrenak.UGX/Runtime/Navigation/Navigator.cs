@@ -1,120 +1,48 @@
-﻿using NaughtyAttributes;
-using UnityEngine.Events;
+﻿using System;
 using System.Collections.Generic;
+
 using UnityEngine;
-using Adrenak.Unex;
 
 namespace Adrenak.UGX {
-    public abstract class Navigator : MonoBehaviour {
-        [System.Serializable]
-        public class WindowUnityEvent : UnityEvent<Window> { }
+    abstract public class Navigator : MonoBehaviour {
+        public event Action<Window> OnOpen;
+        public event Action<Window> OnBack;
+        public event Action OnOver;
 
-        static Dictionary<string, Navigator> map = new Dictionary<string, Navigator>();
-        public static Navigator Get(string browserID = null) {
-            if (map.ContainsKey(browserID))
-                return map[browserID];
-            return null;
+        [SerializeField] Window currentWindow;
+        public Window CurrentWindow => currentWindow;
+
+        [SerializeField] protected List<Window> windows;
+
+        public void RegisterWindow(Window window) {
+            window.onWindowStartOpening.AddListener(() => {
+                if (currentWindow != null)
+                    currentWindow.CloseWindow();
+
+                currentWindow = window;
+                OnOpen?.Invoke(window);
+
+                OnWindowOpen(window);
+            });
+            windows.Add(window);
         }
 
-        public WindowUnityEvent onPush = new WindowUnityEvent();
-        public WindowUnityEvent onPop = new WindowUnityEvent();
+        void Update() {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Back();
+        }
 
-#pragma warning disable 0649
-        [SerializeField] string browserID;
-        [SerializeField] bool canPopAll;
-
-        [ReadOnly] [SerializeField] protected Window current = null;
-        public Window Current => current;
-
-        [ReadOnly] [ReorderableList] [SerializeField] protected List<Window> history = new List<Window>();
-        public List<Window> History => history;
-
-        [SerializeField] protected bool useInitialWindow;
-        [ShowIf("useInitialWindow")] [SerializeField] protected Window initialWindow;
-#pragma warning restore 0649
-
-        // ================================================
-        // UNITY LIFECYCLE
-        // ================================================
-        void Awake() => RegisterInstance();
-        void Update() => CheckBackPress();
-        void OnDestroy() => UnregisterInstance();
-
-        void RegisterInstance() {
-            if (map.ContainsKey(browserID)) {
-                Debug.LogError("There is already a Browser with ID " + browserID + ". IDs should be unique");
-                return;
+        public void Back() {
+            var toOpen = OnPressBack();
+            if (toOpen != null) {
+                toOpen.OpenWindow();
+                OnBack?.Invoke(toOpen);
             }
-            map.Add(browserID, this);
-        }
-
-        void UnregisterInstance() {
-            if (map.ContainsKey(browserID))
-                map.Remove(browserID);
-        }
-
-        void CheckBackPress() {
-            if (!Input.GetKeyUp(KeyCode.Escape)) return;
-            Pop();
-        }
-
-        // ================================================
-        // API / PUBLIC
-        // ================================================
-        /// <summary>
-        /// Push a Window to the navigation and open it.
-        /// </summary>
-        public void Push(Window window) {
-            PushImpl(window);
-        }
-
-        /// <summary>
-        /// Pops a Window from the navigation and closes it
-        /// </summary>
-        public void Pop() {
-            if (History.Count == 1 && !canPopAll)
-                return;
-            PopImpl();
-        }
-
-        /// <summary>
-        /// Pops all Windows
-        /// </summary>
-        public void Clear() {
-            while (History.Count > 0)
-                PopImpl();
-        }
-
-        /// <summary>
-        /// Pops a Window if it's active, Push it if it's not.
-        /// </summary>
-        public void Toggle(Window window) {
-            if (History.Count > 0 && History.Last() == window)
-                Pop();
             else
-                Push(window);
+                OnOver?.Invoke();
         }
 
-        // ================================================
-        // CONTRACT
-        // ================================================
-        /// <summary>
-        /// Actual Push logic to be implemented by subclass
-        /// </summary>
-        /// <param name="window"></param>
-        protected abstract void PushImpl(Window window);
-
-        /// <summary>
-        /// Actual Pop logic to be implemented by subclass
-        /// </summary>
-        protected abstract void PopImpl();
-
-        // ================================================
-        protected void SetAsCurrent(Window window) {
-            window.OpenWindow();
-            if (current != null)
-                current.CloseWindow();
-            current = window;
-        }
+        protected abstract void OnWindowOpen(Window window);
+        protected abstract Window OnPressBack();
     }
 }

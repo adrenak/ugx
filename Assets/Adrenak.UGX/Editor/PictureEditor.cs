@@ -3,10 +3,11 @@ using UnityEditor.UI;
 
 using UnityEngine;
 
-namespace Adrenak.UGX {
+namespace Adrenak.UGX.Editor {
     [CustomEditor(typeof(Picture))]
     public class PictureEditor : ImageEditor {
         bool showEvents;
+        bool showStatusEvents;
 
         public override void OnInspectorGUI() {
             base.OnInspectorGUI();
@@ -17,12 +18,23 @@ namespace Adrenak.UGX {
             EditorGUILayout.EnumPopup("Current Visibility", image.CurrentVisibility);
             EditorGUI.EndDisabledGroup();
 
-            showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"));
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            showStatusEvents = EditorGUILayout.Foldout(showStatusEvents, new GUIContent("Status Objects"), true);
+            if (showStatusEvents) {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("statusRootObj"), new GUIContent("Root Object"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("loaderObj"), new GUIContent("Loader Object"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("errorObj"), new GUIContent("Error Object"));
+            }
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"), true);
             if (showEvents) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadStart"), new GUIContent("On Load Start"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadSuccess"), new GUIContent("On Load Success"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("onLoadFailure"), new GUIContent("On Load Failure"));
             }
+            EditorGUILayout.EndVertical();
 
             image.refreshOnStart = EditorGUILayout.Toggle("Refresh On Start", image.refreshOnStart);
             image.updateWhenOffScreen = EditorGUILayout.Toggle("Update When Off Screen", image.updateWhenOffScreen);

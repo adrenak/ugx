@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
-using NaughtyAttributes;
 
 namespace Adrenak.UGX {
     public abstract class TweenerBase : UGXBehaviour {
@@ -18,16 +17,16 @@ namespace Adrenak.UGX {
             }
             set {
                 if (driver != null)
-                    Debug.LogError("BaseTransitioner.Driver can only be set once and before any get calls");
+                    Debug.LogError("Driver can only be set once and before any get calls");
 
                 if (value == null)
-                    Debug.LogError("BaseTransitioner.Driver cannot set Driver to null!");
+                    Debug.LogError("Cannot set driver to null!");
 
                 driver = value;
             }
         }
 
-        [SerializeField] [ReadOnly] float progress;
+        [SerializeField] float progress;
         public float Progress {
             get => progress;
             set {
@@ -36,18 +35,16 @@ namespace Adrenak.UGX {
             }
         }
 
-        [BoxGroup("Tweening Args")] [SerializeField] public bool useSameArgsForInAndOut = true;
-        [BoxGroup("Tweening Args")] [ShowIf("useSameArgsForInAndOut")] public TweenArgs args;
-        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs inArgs;
-        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs outArgs;
+        [SerializeField] public bool useSameArgsForInAndOut = true;
+        public TweenArgs args;
+        public TweenArgs inArgs;
+        public TweenArgs outArgs;
 
-        [Button]
-        async public void TransitionIn() => await TransitionInAsync();
-        public abstract UniTask TransitionInAsync();
+        async public void TweenIn() => await TweenInAsync();
+        public abstract UniTask TweenInAsync();
 
-        [Button]
-        async public void TransitionOut() => await TransitionOutAsync();
-        public abstract UniTask TransitionOutAsync();
+        async public void TweenOut() => await TweenOutAsync();
+        public abstract UniTask TweenOutAsync();
 
         protected abstract void OnProgressChanged(float value);
     }

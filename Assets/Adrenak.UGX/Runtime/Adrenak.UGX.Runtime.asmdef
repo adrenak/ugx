@@ -1,9 +1,6 @@
 {
     "name": "Adrenak.UGX.Runtime",
     "references": [
-        "Adrenak.Unex.Runtime",
-        "NaughtyAttributes.Core",
-        "Surge.Tween.Runtime",
         "UniTask"
     ],
     "optionalUnityReferences": [],

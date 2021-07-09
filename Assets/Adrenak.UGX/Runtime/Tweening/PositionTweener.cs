@@ -1,97 +1,93 @@
 ﻿using Cysharp.Threading.Tasks;
 
-using NaughtyAttributes;
-
 using UnityEngine;
 
 namespace Adrenak.UGX {
     [DisallowMultipleComponent]
     public class PositionTweener : TweenerBase {
-        public enum PositionType {
+        public enum Edge {
             Top,
             Bottom,
             Left,
             Right
         }
 
-        [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 inPosition;
-        public Vector3 InPosition => inPosition;
+        [SerializeField] Vector2 inPosition;
+        public Vector2 InPosition => inPosition;
 
-        [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 outPosition;
-        public Vector3 OutPosition => outPosition;
+        [SerializeField] Vector2 outPosition;
+        public Vector2 OutPosition => outPosition;
 
-        [BoxGroup("Config")] public PositionType enterPosition = PositionType.Left;
-        [BoxGroup("Config")] public PositionType exitPosition = PositionType.Right;
+        public Edge enterEdge = Edge.Left;
+        public Edge exitEdge = Edge.Right;
 
-        [Button("Set As In")]
-        public void CaptureInPosition() => inPosition = RT.localPosition;
+        public void CaptureInPosition() => inPosition = RT.anchoredPosition;
 
-        [Button("Set As Out")]
-        public void CaptureOutPosition() => outPosition = RT.localPosition;
+        public void CaptureOutPosition() => outPosition = RT.anchoredPosition;
 
-        override async public UniTask TransitionInAsync() {
+        override async public UniTask TweenInAsync() {
             if (!Application.isPlaying) {
-                RT.localPosition = InPosition;
+                RT.anchoredPosition = InPosition;
                 return;
             }
-            RT.localPosition = DefaultEnterCordinates;
+            RT.anchoredPosition = DefaultEnterCordinates;
             if (useSameArgsForInAndOut)
                 await TweenPosition(inPosition, args);
             else
                 await TweenPosition(inPosition, inArgs);
-            RT.localPosition = InPosition;
+            RT.anchoredPosition = InPosition;
         }
 
-        override async public UniTask TransitionOutAsync() {
+        override async public UniTask TweenOutAsync() {
             if (!Application.isPlaying) {
-                RT.localPosition = OutPosition;
+                RT.anchoredPosition = OutPosition;
                 return;
             }
-            RT.localPosition = InPosition;
+            RT.anchoredPosition = InPosition;
             if(useSameArgsForInAndOut)
                 await TweenPosition(DefaultExitCordinates, args);
             else
                 await TweenPosition(DefaultExitCordinates, outArgs);
-            RT.localPosition = OutPosition;
+            RT.anchoredPosition = OutPosition;
         }
 
-        async public UniTask TweenPosition(Vector3 endValue, TweenArgs tween)
+        async public UniTask TweenPosition(Vector2 endValue, TweenArgs tween)
             => await Driver.TransitionPosition(RT, endValue, tween);
 
-        public Vector3 GetPositionVector3(PositionType position) {
+        public Vector2 GetPositionVector2(Edge position) {
             switch (position) {
-                case PositionType.Left: return LeftExitCordinates;
-                case PositionType.Right: return RightExitCordinates;
-                case PositionType.Top: return TopExitCordinates;
-                case PositionType.Bottom: return BottomExitCordinates;
-                default: return Vector3.zero;
+                case Edge.Left: return LeftExitCordinates;
+                case Edge.Right: return RightExitCordinates;
+                case Edge.Top: return TopExitCordinates;
+                case Edge.Bottom: return BottomExitCordinates;
+                default: return Vector2.zero;
             }
         }
 
         protected override void OnProgressChanged(float value) {
-            RT.localPosition = Vector3.Lerp(OutPosition, InPosition, value);
+            RT.localPosition = Vector2.Lerp(OutPosition, InPosition, value);
             if (value == 0f)
                 RT.localPosition = OutPosition;
             else if (value == 1f)
                 RT.localPosition = InPosition;
         }
 
-        public Vector3 DefaultExitCordinates
-            => GetPositionVector3(exitPosition);
+        public Vector2 DefaultExitCordinates
+            => GetPositionVector2(exitEdge);
 
-        public Vector3 DefaultEnterCordinates
-            => GetPositionVector3(enterPosition);
+        public Vector2 DefaultEnterCordinates
+            => GetPositionVector2(enterEdge);
 
-        public Vector3 RightExitCordinates
-            => new Vector3(RT.GetRightExit(), inPosition.y, RT.localPosition.z);
+        public Vector2 RightExitCordinates
+            => new Vector2(RT.GetRightExit(), inPosition.y);
 
-        public Vector3 TopExitCordinates
-            => new Vector3(inPosition.x, RT.GetTopExit(), RT.localPosition.z);
+        public Vector2 TopExitCordinates
+            => new Vector2(inPosition.x, RT.GetTopExit());
 
-        public Vector3 LeftExitCordinates
-            => new Vector3(RT.GetLeftExit(), inPosition.y, RT.localPosition.z);
+        public Vector2 LeftExitCordinates
+            => new Vector2(RT.GetLeftExit(), inPosition.y);
 
-        public Vector3 BottomExitCordinates
-            => new Vector3(inPosition.x, RT.GetBottomExit(), RT.localPosition.z);
+        public Vector2 BottomExitCordinates
+            => new Vector2(inPosition.x, RT.GetBottomExit());
     }
 }

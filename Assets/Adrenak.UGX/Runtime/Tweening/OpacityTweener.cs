@@ -1,5 +1,4 @@
-﻿using NaughtyAttributes;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Adrenak.UGX {
@@ -9,7 +8,7 @@ namespace Adrenak.UGX {
         CanvasGroup cg;
         public CanvasGroup CG => cg == null ? cg = GetComponent<CanvasGroup>() : cg;
 
-        override async public UniTask TransitionInAsync() {
+        override async public UniTask TweenInAsync() {
             if (!Application.isPlaying) {
                 CG.alpha = 1;
                 CG.blocksRaycasts = true;
@@ -27,7 +26,7 @@ namespace Adrenak.UGX {
             CG.interactable = true;
         }
 
-        override async public UniTask TransitionOutAsync() {
+        override async public UniTask TweenOutAsync() {
             if (!Application.isPlaying) {
                 CG.alpha = 0;
                 CG.blocksRaycasts = false;

@@ -9,21 +9,5 @@ namespace Adrenak.UGX {
     [DisallowMultipleComponent]
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
-    public class View : UGXBehaviour {
-        /// <summary>
-        /// ID that can be used to identify the View
-        /// </summary>
-        public string ID;
-
-        /// <summary>
-        /// Returns a child View with the given ID. 
-        /// </summary>
-        public static View operator /(View me, string childID) {
-            var views = me.GetComponentsInChildren<View>();
-            foreach (var view in views)
-                if (view.ID.Equals(childID))
-                    return view;
-            return null;
-        }
-    }
+    public class View : UGXBehaviour { }
 }

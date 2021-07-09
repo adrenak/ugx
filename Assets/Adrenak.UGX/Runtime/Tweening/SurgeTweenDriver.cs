@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
-using Pixelplacement;
+using Adrenak.UGX;
 
 namespace Adrenak.UGX {
     public class SurgeTweenDriver : ITweenDriver {

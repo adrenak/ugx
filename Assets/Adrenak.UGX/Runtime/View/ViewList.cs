@@ -1,282 +1,142 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEngine.Events;
-using NaughtyAttributes;
-using UnityEngine.UI;
+
+using Object = UnityEngine.Object;
 
 namespace Adrenak.UGX {
-    /// <summary>
-    /// A component that populates view templates used solely on state data. ViewList implements
-    /// allows editing the UI using List-list methods such as .Add, .Remove.
-    /// </summary>
-    /// <typeparam name="T">The ViewState type that is used by the child Views</typeparam>
-    [Serializable]
-    public abstract class ViewList<T> : View, IReadOnlyList<T>, IReadOnlyCollection<T>, IEnumerable<T>, ICollection<T>, IList<T> where T : ViewState {
-        /// <summary>
-        /// The List may often need resizing due to the child element sizes often being dynamic over time.
-        /// Large values may lead to late correction in size, but are performance friendly.
-        /// Small values will lead to near instantanous correction, but requires more frequent checking, making it heavier.
-        /// Set as 0 to disable. 
-        /// </summary>
-        [Tooltip("The List may often need resizing due to the child element sizes often being dynamic over time." +
-        "Large values may lead to late correction in size, but are performance friendly." +
-        "Small values will lead to near instantanous correction, but requires more frequent checking, making it heavier." +
-        "Set as 0 to disable.")]
-        public int resizingCheckFrameStep = 5;
+    public class ViewList<T> : IEnumerable<T> where T : ViewModel {
+        Transform container;
+        public Transform Container {
+            get => container;
+            set => container = value;
+        }
 
-        /// <summary>
-        /// The parent under which the elements must be instantiated.
-        /// </summary>
-        [Tooltip("The parent under which the elements must be instantiated.")]
-        [BoxGroup("Instantiation")] public Transform container = null;
-
-        /// <summary>
-        /// Template of the element View. Can be prefab or GameObject.
-        /// </summary>
-        [Tooltip("Template of the element View. Can be prefab or GameObject.")]
-        [BoxGroup("Instantiation")] public View template = null;
-
-        /// <summary>
-        /// Whether the list uses the states list in the Start() method to
-        /// populate the elements. This can be used to author predefined UI.
-        /// </summary>
-        [Tooltip("Whether the list uses the states list in the Start() method to" +
-        "populate the elements. This can be used to author predefined UI.")]
-        public bool populateOnStart = false;
-
-        [Tooltip("The states of the current children views")]
-        [BoxGroup("State")] [SerializeField] List<T> currentStates = new List<T>();
-
-        List<StatefulView<T>> Instantiated { get; } = new List<StatefulView<T>>();
-        List<UnityAction<StatefulView<T>>> childViewMethods = new List<UnityAction<StatefulView<T>>>();
-
-        // ================================================
-        // API / PUBLIC
-        // ================================================
-        public int Count => currentStates.Count;
-        public bool IsReadOnly => false;
-        public T this[int index] {
-            get {
-                if (index < 0 || index > currentStates.Count - 1)
-                    throw new Exception("Index out of bounds");
-                return currentStates[index];
-            }
+        View<T> template;
+        public View<T> Template {
+            get => template;
             set {
-                if (index < 0 || index > currentStates.Count)
-                    throw new Exception("Index out of bounds");
-                Insert(index, value);
+                template = value;
+                if (template.gameObject.scene != null)
+                    template.gameObject.SetActive(false);
             }
         }
 
-        /// <summary>
-        /// Use to inject an action that runs on every view that has been instantiated.
-        /// </summary>
-        /// <param name="method">The action to run</param>
-        /// <param name="invokeOnFutureChildViews">Whether the action should be on future elements as well upons being created</param>
-        public void InvokeAllChildViews(UnityAction<StatefulView<T>> method, bool invokeOnFutureChildViews = true) {
-            Instantiated.ForEach(x => method(x));
-            if (invokeOnFutureChildViews)
-                childViewMethods.Add(method);
+        readonly List<View<T>> instances = new List<View<T>>();
+
+        public ViewList() { }
+
+        public ViewList(Transform container) {
+            Container = container;
         }
 
-        /// <summary>
-        /// Clears the state and instantiated child views
-        /// </summary>
+        public ViewList(Transform container, View<T> template){
+            Container = container;
+            Template = template;
+        }
+
+        public View<T> this[int index] => (instances[index]);
+
+        public int Count => instances.Count;
+
+        public View<T> Add(T item) {
+            if (template == null)
+                throw new NullReferenceException("Template can't be null");
+
+            var instance = Object.Instantiate(template, container);
+            instance.gameObject.SetActive(true);
+            instance.hideFlags = HideFlags.DontSave;
+            instance.Model = item;
+
+            instances.Add(instance);
+
+            return instance;
+        }
+
+        public List<View<T>> AddRange(T[] items) {
+            var result = new List<View<T>>();
+            foreach (var item in items)
+                result.Add(Add(item));
+            return result;
+        }
+
+        public List<View<T>> AddRange(List<T> items) =>
+            AddRange(items.ToArray());
+
         public void Clear() {
-            foreach (var state in currentStates)
-                Destroy(state);
-            currentStates.Clear();
+            foreach (var instance in instances)
+                MonoBehaviour.Destroy(instance.gameObject);
+            instances.Clear();
         }
 
-        /// <summary>
-        /// Repopulates all the instances using the current state
-        /// </summary>
-        [Button]
-        public void Refresh() {
-            foreach (var state in currentStates)
-                Destroy(state);
-            PopulateFromCurrentStates();
+        public bool Contains(T item) {
+            foreach (var instance in instances)
+                if (instance.Model == item)
+                    return true;
+            return false;
         }
 
-        /// <summary>
-        /// Returns if the List contains and element for the given state
-        /// </summary>
-        public bool Contains(T item) => currentStates.Contains(item);
-
-        /// <summary>
-        /// Adds a state to the list and instantiates a view for it
-        /// </summary>
-        public void Add(T item) => Insert(currentStates.Count, item);
-
-        /// <summary>
-        /// Adds a list of states and instantiate views for it
-        /// </summary>
-        /// <param name="items"></param>
-        public void AddRange(List<T> items) {
-            items.ForEach(x => Add(x));
+        public IEnumerator<T> GetEnumerator() {
+            return (IEnumerator<T>)new ViewListEnumerator<T>(
+                instances.Select(x => x.Model).ToArray()
+            );
         }
 
-        /// <summary>
-        /// This method isn't implemented yet.
-        /// </summary>
-        public void CopyTo(T[] array, int arrayIndex) =>
-            throw new NotImplementedException("ViewList doesn't support CopyTo yet.");
+        public int IndexOf(T item) {
+            for (int i = 0; i < instances.Count; i++) {
+                var instance = instances[i];
+                if (instance.Model == item)
+                    return i;
+            }
+            return -1;
+        }
 
-        /// <summary>
-        /// Removes the state as well as its corresponding View instance
-        /// </summary>
         public bool Remove(T item) {
-            if (Contains(item)) {
-                Destroy(item);
-                currentStates.Remove(item);
+            View<T> toBeRemoved = null;
+            foreach (var instance in instances)
+                if (instance.Model == item)
+                    toBeRemoved = instance;
+            if (toBeRemoved != null) {
+                instances.Remove(toBeRemoved);
+                Object.Destroy(toBeRemoved);
                 return true;
             }
             return false;
         }
 
-        /// <summary>
-        /// Returns the index of the state in the list
-        /// </summary>
-        public int IndexOf(T item) {
-            return currentStates.IndexOf(item);
-        }
-
-        /// <summary>
-        /// Inserts a state in the list, also moves its corersponding View instance
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
-        public void Insert(int index, T item) {
-            if (item == null)
-                throw new Exception("Inserted item cannot be null");
-
-            if (index < 0)
-                throw new IndexOutOfRangeException("Insert method index cannot be negative");
-
-            if (index > 0 && index > currentStates.Count)
-                throw new IndexOutOfRangeException("Insert method index out of bounds");
-
-            var instance = Instantiate(item);
-            if (instance != null) {
-                if (index > 0) {
-                    currentStates.Insert(index, item);
-                    Instantiated.Insert(index, instance);
-                    if (instance.transform.GetSiblingIndex() != index)
-                        instance.transform.SetSiblingIndex(index);
+        public bool RemoveAt(int index) {
+            try {
+                View<T> toBeRemoved = instances[index];
+                if (toBeRemoved != null) {
+                    Object.Destroy(toBeRemoved);
+                    instances.RemoveAt(index);
                 }
-                else {
-                    currentStates.Add(item);
-                    Instantiated.Add(instance);
-                    instance.transform.SetSiblingIndex(0);
-                }
+                return true;
             }
-        }
-
-        /// <summary>
-        /// Removes the state from the state list and destroys the corresponding View instance
-        /// </summary>
-        /// <param name="index"></param>
-        public void RemoveAt(int index) {
-            if (index < 0 || index >= currentStates.Count)
-                throw new IndexOutOfRangeException("RemoveAt method index was out of range");
-
-            var vm = currentStates[index];
-            Destroy(vm);
-            currentStates.RemoveAt(index);
-        }
-
-        public IEnumerator<T> GetEnumerator() {
-            return (IEnumerator<T>)new ViewListEnumerator<T>(currentStates.ToArray());
-        }
-
-        // ================================================
-        // UNITY ENIGNE LOOP
-        // ================================================
-        void Start() {
-            if (populateOnStart)
-                PopulateFromCurrentStates();
-        }
-
-        void PopulateFromCurrentStates(){
-            currentStates.ForEach(x => {
-                var instance = Instantiate(x);
-                if (instance != null)
-                    Instantiated.Add(instance);
-            });
-        }
-
-        void Update() {
-            TryResize();
-        }
-
-        int lastHeight, lastWidth, height, width;
-        RectTransform childRT;
-        void TryResize() {
-            if (resizingCheckFrameStep <= 0 || Time.frameCount % resizingCheckFrameStep != 0) return;
-
-            height = width = 0;
-            foreach (Transform child in container) {
-                childRT = child.GetComponent<RectTransform>();
-                height += (int)childRT.sizeDelta.y;
-                width += (int)childRT.sizeDelta.x;
-            }
-
-            if (height != lastHeight || width != lastWidth)
-                LayoutRebuilder.MarkLayoutForRebuild(container.GetComponent<RectTransform>());
-
-            lastHeight = height;
-            lastWidth = width;
-        }
-
-        // ================================================
-        // INSTANCE MANAGEMENT
-        // ================================================
-        StatefulView<T> Instantiate(T t) {
-            // We don't initialize when the application isn't playing.
-            // This sometimes happens with requests that are fullfilled after
-            // play mode exits in the editor and end up instantiation in editor mode.
-            if (!Application.isPlaying)
-                return null;
-
-            if (template == null)
-                throw new Exception("No ViewTemplate assigned! Cannot instantiate elements in ViewGroup.");
-
-            if (!(template is StatefulView<T>))
-                throw new Exception("The template View must be of type View<" + typeof(T) + ">");
-
-            var instance = MonoBehaviour.Instantiate(template, container);
-            instance.gameObject.SetActive(true);
-            instance.hideFlags = HideFlags.DontSave;
-            (instance as StatefulView<T>).State = t;
-
-            childViewMethods.ForEach(x => x?.Invoke(instance as StatefulView<T>));
-
-            return instance as StatefulView<T>;
-        }
-
-        void Destroy(T t) {
-            foreach (var instance in Instantiated) {
-                if (instance != null && instance.State.Equals(t) && instance.gameObject != null) {
-                    Instantiated.Remove(instance);
-                    MonoBehaviour.Destroy(instance.gameObject);
-                    break;
-                }
+            catch {
+                return false;
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator<T>)new ViewListEnumerator<T>(currentStates.ToArray());
+            return (IEnumerator<T>)new ViewListEnumerator<T>(
+                instances.Select(x => x.Model).ToArray()
+            );
         }
 
-        [Obsolete("Use .RunPerChildView instead")]
-        public void SubscribeToChildren(UnityAction<StatefulView<T>> subscription) =>
-            InvokeAllChildViews(subscription, true);
+        public void CopyTo(T[] array, int arrayIndex) {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(int index, T item) {
+            throw new NotImplementedException();
+        }
     }
 
     // When you implement IEnumerable, you must also implement IEnumerator.
-    public class ViewListEnumerator<T> : IEnumerator where T : ViewState {
+    public class ViewListEnumerator<T> : IEnumerator where T : ViewModel {
         public T[] array;
 
         // Enumerators are positioned before the first element

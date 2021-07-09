@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
-using NaughtyAttributes;
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -11,14 +10,30 @@ namespace Adrenak.UGX {
     /// Uses Tweeners to open (Transition Up) and close (Transition Down)
     /// </summary>
     public class Window : UGXBehaviour {
-        [ReadOnly] [SerializeField] WindowStatus status;
+        public Sprite icon;
+        public string title;
+        [SerializeField] WindowStatus status;
+        [SerializeField] TweenerBase[] tweeners;
+
         /// <summary>
         /// The current status of the window
         /// </summary>
         public WindowStatus Status {
             get => status;
-            private set => status = value; 
+            private set => status = value;
         }
+
+        /// <summary>
+        /// Returns true if the window is open or currently opening
+        /// </summary>
+        public bool IsOpenOrOpening =>
+            Status == WindowStatus.Opened || Status == WindowStatus.Opening;
+
+        /// <summary>
+        /// Returns true if the window is closed or currently closing
+        /// </summary>
+        public bool IsClosedOrOpening =>
+            Status == WindowStatus.Closed || Status == WindowStatus.Closing;
 
         /// <summary>
         /// Fired when the window starts opening
@@ -43,8 +58,13 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Opens the window
         /// </summary>
-        [Button]
         async public void OpenWindow() => await OpenWindowAsync();
+
+        void Awake() {
+            var navigation = GetComponentInParent<Navigator>();
+            if (navigation != null)
+                navigation.RegisterWindow(this);
+        }
 
         /// <summary>
         /// Opens the window and returns a task that completes when it's done opening
@@ -57,8 +77,10 @@ namespace Adrenak.UGX {
             onWindowStartOpening?.Invoke();
 
             Status = WindowStatus.Opening;
+            if (tweeners.Length == 0)
+                tweeners = Tweeners;
             var transitions = tweeners.Where(x => x.enabled)
-                .Select(x => x.TransitionInAsync())
+                .Select(x => x.TweenInAsync())
                 .ToList();
 
             await UniTask.WhenAll(transitions);
@@ -67,30 +89,27 @@ namespace Adrenak.UGX {
 
             OnWindowDoneOpening();
             onWindowDoneOpening?.Invoke();
-#pragma warning disable 0618
-            WindowOpened();
-#pragma warning restore 0618
         }
 
         /// <summary>
         /// Closes the window
         /// </summary>
-        [Button]
         async public void CloseWindow() => await CloseWindowAsync();
 
         /// <summary>
         /// Closes the window and returns a task that completes when it's done closing
         /// </summary>
         async public UniTask CloseWindowAsync() {
-            await UniTask.SwitchToMainThread();
             if (Status == WindowStatus.Closed || Status == WindowStatus.Closing) return;
 
             OnWindowStartClosing();
             onWindowStartClosing?.Invoke();
 
             Status = WindowStatus.Closing;
+            if (tweeners.Length == 0)
+                tweeners = Tweeners;
             var transitions = tweeners.Where(x => x.enabled)
-                .Select(x => x.TransitionOutAsync())
+                .Select(x => x.TweenOutAsync())
                 .ToList();
 
             await UniTask.WhenAll(transitions);
@@ -99,9 +118,6 @@ namespace Adrenak.UGX {
 
             OnWindowDoneClosing();
             onWindowDoneClosing?.Invoke();
-#pragma warning disable 0618
-            WindowClosed();
-#pragma warning restore 0618
         }
 
         /// <summary>
@@ -117,25 +133,11 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Called when the Window starts closing
         /// </summary>
-        protected virtual void OnWindowStartClosing() { }        
+        protected virtual void OnWindowStartClosing() { }
 
         /// <summary>
         /// Called when the Window finishes closing
         /// </summary>
         protected virtual void OnWindowDoneClosing() { }
-
-#region OBSOLETE
-        /// <summary>
-        /// Called when the Window finishes opening
-        /// </summary>
-        [Obsolete("Use OnWindowDoneOpening instead")]
-        protected virtual void WindowOpened() { }
-
-        /// <summary>
-        /// Called when the Window finishes closing
-        /// </summary>
-        [Obsolete("Use OnWindowDoneClosing instead")]
-        protected virtual void WindowClosed() { }
-#endregion
     }
 }

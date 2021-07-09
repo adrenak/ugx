@@ -3,9 +3,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-using Adrenak.Unex;
 using UnityEngine.Events;
-using NaughtyAttributes;
 
 namespace Adrenak.UGX {
     [Serializable]
@@ -26,24 +24,16 @@ namespace Adrenak.UGX {
             }
         }
 
-        #region OBSOLETE
-        [Obsolete("This enum does nothing and will soon be removed.")]
-        public enum Source {
-            Asset,
-            Resource,
-            URL
-        }
-        [Obsolete("This does nothing and will soon be removed")]
-        [HideInInspector] public Source source = Source.URL;
-        #endregion
-
         public UnityEvent onLoadStart;
         public UnityEvent onLoadSuccess;
         public UnityEvent onLoadFailure;
 
+        public GameObject statusRootObj;
+        public GameObject loaderObj;
+        public GameObject errorObj;
+
         public bool refreshOnStart;
         public bool updateWhenOffScreen;
-
 
         Texture2DCompression oldCompression = Texture2DCompression.None;
         public Texture2DCompression compression = Texture2DCompression.LowQuality;
@@ -63,7 +53,7 @@ namespace Adrenak.UGX {
                 Refresh();
         }
 
-        [Button("Refresh")]
+        [ContextMenu("Refresh")]
         public void Refresh() {
             if (!Application.isPlaying)
                 return;
@@ -76,10 +66,16 @@ namespace Adrenak.UGX {
 
             try {
                 Cache.Free(oldPath, oldCompression, this);
+                sprite = null;
+
+                SetStatusObjects(true, true, false);
                 onLoadStart.Invoke();
+
                 Cache.Get(
                     path, compression, this,
                     result => {
+                        SetStatusObjects(false, false, false);
+
                         if (sprite == null || sprite.texture == null) {
                             SetSprite(result);
                             onLoadSuccess.Invoke();
@@ -91,6 +87,8 @@ namespace Adrenak.UGX {
                         }
                     },
                     error => {
+                        SetStatusObjects(true, false, true);
+
                         Debug.LogError($"Dynamic Image Refresh from remote path failed: " + error);
                         onLoadFailure.Invoke();
                     }
@@ -101,6 +99,12 @@ namespace Adrenak.UGX {
             }
             oldPath = path;
             oldCompression = compression;
+        }
+
+        void SetStatusObjects(bool rootState, bool loaderState, bool errorState) {
+            if (statusRootObj != null) statusRootObj.SetActive(rootState);
+            if (loaderObj != null) loaderObj.SetActive(loaderState);
+            if (errorObj != null) errorObj.SetActive(errorState);
         }
 
         // NOTE: We ignore the first 2 frames because often times Pictures are visible for

@@ -5,7 +5,6 @@ using UnityEngine;
 
 using System.Collections.Generic;
 using System.Linq;
-using Adrenak.Unex;
 
 namespace Adrenak.UGX {
     public class PictureMemoryCache : PictureCacheBase {
@@ -59,7 +58,7 @@ namespace Adrenak.UGX {
         
         public override void Get(string location, Texture2DCompression compression, Picture instance, Action<Sprite> onSuccess, Action<Exception> onFailure) {
             if (string.IsNullOrEmpty(location)) {
-                onFailure?.Invoke(new ArgumentException("location cannot be null or empty", "location"));
+                onSuccess?.Invoke(null);
                 return;
             }
             var key = new Key(location, compression);
@@ -82,7 +81,12 @@ namespace Adrenak.UGX {
                 result => {
                     if (compression != Texture2DCompression.None)
                         result.Compress(compression == Texture2DCompression.HighQuality);
-                    var resultSprite = result.ToSprite();
+
+                    var resultSprite = Sprite.Create(
+                        result, 
+                        new Rect(0, 0, result.width, result.height), 
+                        new Vector2(.5F, .5F)
+                    );
 
                     freed.EnsureDoesntContain(key);
                     resources.EnsureKey(key, resultSprite);
