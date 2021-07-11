@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     abstract public class Navigator : MonoBehaviour {
-        public event Action<Window> OnOpen;
-        public event Action<Window> OnBack;
-        public event Action OnOver;
+        [Serializable]
+        public class WindowEvent : UnityEvent<Window> { }
+
+        public WindowEvent onOpen;
+        public WindowEvent onBack;
+        public UnityEvent onOver;
 
         [SerializeField] Window currentWindow;
         public Window CurrentWindow => currentWindow;
@@ -20,7 +24,7 @@ namespace Adrenak.UGX {
                     currentWindow.CloseWindow();
 
                 currentWindow = window;
-                OnOpen?.Invoke(window);
+                onOpen?.Invoke(window);
 
                 OnWindowOpen(window);
             });
@@ -36,10 +40,10 @@ namespace Adrenak.UGX {
             var toOpen = OnPressBack();
             if (toOpen != null) {
                 toOpen.OpenWindow();
-                OnBack?.Invoke(toOpen);
+                onBack?.Invoke(toOpen);
             }
             else
-                OnOver?.Invoke();
+                onOver?.Invoke();
         }
 
         protected abstract void OnWindowOpen(Window window);

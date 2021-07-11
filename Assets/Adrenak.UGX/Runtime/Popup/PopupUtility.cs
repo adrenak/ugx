@@ -29,7 +29,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Displays a popup and returns the response as a task. Optionally takes the zone ID too.
         /// </summary>
-        public async static UniTask<K> Show<T, K>(Popup<T, K> popup, string zoneID = DEFAULT) where T : ViewModel {
+        public async static UniTask<PopupResponse<K>> Show<T, K>(Popup<T, K> popup, string zoneID = DEFAULT) where T : ViewModel {
             await UniTask.WaitWhile(() => IsZoneFree(zoneID));
             zoneStateMap.SetPair(zoneID, true);
             var response = await popup.Show();
@@ -41,15 +41,15 @@ namespace Adrenak.UGX {
         /// Displays a popup and returns the response as a callback. Optionally takes the zone ID too.
         /// </summary>
         public async static void Show<T, K>(Popup<T, K> popup, Action<K> resultCallback, string zoneID = DEFAULT) where T : ViewModel =>
-            resultCallback?.Invoke(await Show(popup, zoneID));
+            resultCallback?.Invoke((await Show(popup, zoneID)).Data);
 
         /// <summary>
         /// Takes a popup, it's state and displays it before returning the response as a task. Optionally takes the zone ID too.
         /// </summary>
-        public async static UniTask<K> SetModelAndShow<T, K>(Popup<T, K> popup, T model, string zoneID = DEFAULT) where T : ViewModel {
+        public async static UniTask<PopupResponse<K>> SetModelAndShow<T, K>(Popup<T, K> popup, T model, string zoneID = DEFAULT) where T : ViewModel {
             await UniTask.WaitWhile(() => IsZoneFree(zoneID));
             zoneStateMap.SetPair(zoneID, true);
-            var response = await popup.Show(model);
+            var response = await popup.SetModelAndShow(model);
             zoneStateMap.SetPair(zoneID, false);
             return response;
         }
@@ -58,15 +58,15 @@ namespace Adrenak.UGX {
         /// Takes a popup, its model and displays it before returning the response as a callback. Optionally takes the zone ID too.
         /// </summary>
         public async static void SetModelAndShow<T, K>(Popup<T, K> popup, T model, Action<K> resultCallback, string zoneID = DEFAULT) where T : ViewModel =>
-            resultCallback?.Invoke(await SetModelAndShow(popup, model, zoneID));
+            resultCallback?.Invoke((await SetModelAndShow(popup, model, zoneID)).Data);
 
         /// <summary>
         /// Takes a popup and an Action for model change before displaying. Returns the response as a task and takes an optional zone ID
         /// </summary>
-        public async static UniTask<K> ModifyModelAndShow<T, K>(Popup<T, K> popup, Action<T> modification, string zoneID = DEFAULT) where T : ViewModel {
+        public async static UniTask<PopupResponse<K>> ModifyModelAndShow<T, K>(Popup<T, K> popup, Action<T> modification, string zoneID = DEFAULT) where T : ViewModel {
             await UniTask.WaitWhile(() => IsZoneFree(zoneID));
             zoneStateMap.SetPair(zoneID, true);
-            var response = await popup.Show(modification);
+            var response = await popup.ModifyModelAndShow(modification);
             zoneStateMap.SetPair(zoneID, false);
             return response;
         }
@@ -75,6 +75,6 @@ namespace Adrenak.UGX {
         /// Takes a popup and an Action for model change before displaying. Returns the response as a callback and takes an optional zone ID
         /// </summary>
         public async static void ModifyModelAndShow<T, K>(Popup<T, K> popup, Action<T> modification, Action<K> resultCallback, string zoneID = DEFAULT) where T : ViewModel =>
-            resultCallback?.Invoke(await ModifyModelAndShow(popup, modification, zoneID));
+            resultCallback?.Invoke((await ModifyModelAndShow(popup, modification, zoneID)).Data);
     }
 }

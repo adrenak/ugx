@@ -14,13 +14,13 @@ namespace Adrenak.UGX {
         [SerializeField] Text title;
 
         void Awake() {
-            navigator.OnOpen += window => {
+            navigator.onOpen.AddListener(window => {
                 if (title != null)
                     title.text = window.title;
 
                 if (icon != null && window.icon != null)
                     icon.sprite = window.icon;
-            };
+            });
         }
 
         protected override void OnViewModelUpdate() {

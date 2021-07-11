@@ -21,34 +21,34 @@ namespace Adrenak.UGX {
         public Edge enterEdge = Edge.Left;
         public Edge exitEdge = Edge.Right;
 
-        public void CaptureInPosition() => inPosition = RT.anchoredPosition;
+        public void CaptureInPosition() => inPosition = RT.localPosition;
 
-        public void CaptureOutPosition() => outPosition = RT.anchoredPosition;
+        public void CaptureOutPosition() => outPosition = RT.localPosition;
 
         override async public UniTask TweenInAsync() {
             if (!Application.isPlaying) {
-                RT.anchoredPosition = InPosition;
+                RT.localPosition = InPosition;
                 return;
             }
-            RT.anchoredPosition = DefaultEnterCordinates;
+            RT.localPosition = DefaultEnterCordinates;
             if (useSameArgsForInAndOut)
                 await TweenPosition(inPosition, args);
             else
                 await TweenPosition(inPosition, inArgs);
-            RT.anchoredPosition = InPosition;
+            RT.localPosition = InPosition;
         }
 
         override async public UniTask TweenOutAsync() {
             if (!Application.isPlaying) {
-                RT.anchoredPosition = OutPosition;
+                RT.localPosition = OutPosition;
                 return;
             }
-            RT.anchoredPosition = InPosition;
+            RT.localPosition = InPosition;
             if(useSameArgsForInAndOut)
                 await TweenPosition(DefaultExitCordinates, args);
             else
                 await TweenPosition(DefaultExitCordinates, outArgs);
-            RT.anchoredPosition = OutPosition;
+            RT.localPosition = OutPosition;
         }
 
         async public UniTask TweenPosition(Vector2 endValue, TweenArgs tween)

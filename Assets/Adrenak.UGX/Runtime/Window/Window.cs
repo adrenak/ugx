@@ -12,16 +12,24 @@ namespace Adrenak.UGX {
     public class Window : UGXBehaviour {
         public Sprite icon;
         public string title;
+
+        public bool canReopenWhileOpen;
+        public bool canReopenWhileOpening;
+        public bool canRecloseWhileClosed;
+        public bool canRecloseWhileClosing;
+
         [SerializeField] WindowStatus status;
-        [SerializeField] TweenerBase[] tweeners;
+        [SerializeField] TweenerBase[] activeTweeners;
 
         /// <summary>
         /// The current status of the window
         /// </summary>
-        public WindowStatus Status {
-            get => status;
-            private set => status = value;
-        }
+        public WindowStatus Status => status;
+
+        /// <summary>
+        /// Array of <see cref="TweenerBase"/> used by the window for animation
+        /// </summary>
+        public TweenerBase[] ActiveTweeners => activeTweeners;
 
         /// <summary>
         /// Returns true if the window is open or currently opening
@@ -32,7 +40,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns true if the window is closed or currently closing
         /// </summary>
-        public bool IsClosedOrOpening =>
+        public bool IsClosedOrClosing =>
             Status == WindowStatus.Closed || Status == WindowStatus.Closing;
 
         /// <summary>
@@ -61,9 +69,10 @@ namespace Adrenak.UGX {
         async public void OpenWindow() => await OpenWindowAsync();
 
         void Awake() {
-            var navigation = GetComponentInParent<Navigator>();
-            if (navigation != null)
-                navigation.RegisterWindow(this);
+            var parent = transform.parent;
+            var navigator = parent.GetComponent<Navigator>();
+            if (navigator != null)
+                navigator.RegisterWindow(this);
         }
 
         /// <summary>
@@ -71,21 +80,23 @@ namespace Adrenak.UGX {
         /// </summary>
         async public UniTask OpenWindowAsync() {
             await UniTask.SwitchToMainThread();
-            if (Status == WindowStatus.Opened || Status == WindowStatus.Opening) return;
+            if (Status == WindowStatus.Opened && !canReopenWhileOpen) return;
+            if (Status == WindowStatus.Opening && !canReopenWhileOpening) return;
+            if (!(await AllowOpeningWindow())) return;
 
+            status = WindowStatus.Opening;
             OnWindowStartOpening();
             onWindowStartOpening?.Invoke();
 
-            Status = WindowStatus.Opening;
-            if (tweeners.Length == 0)
-                tweeners = Tweeners;
-            var transitions = tweeners.Where(x => x.enabled)
+            if (activeTweeners.Length == 0)
+                activeTweeners = Tweeners;
+            var transitions = activeTweeners.Where(x => x.enabled)
                 .Select(x => x.TweenInAsync())
                 .ToList();
 
             await UniTask.WhenAll(transitions);
             await UniTask.SwitchToMainThread();
-            Status = WindowStatus.Opened;
+            status = WindowStatus.Opened;
 
             OnWindowDoneOpening();
             onWindowDoneOpening?.Invoke();
@@ -100,24 +111,34 @@ namespace Adrenak.UGX {
         /// Closes the window and returns a task that completes when it's done closing
         /// </summary>
         async public UniTask CloseWindowAsync() {
-            if (Status == WindowStatus.Closed || Status == WindowStatus.Closing) return;
+            if (Status == WindowStatus.Closed && !canRecloseWhileClosed) return;
+            if (Status == WindowStatus.Closing && !canRecloseWhileClosing) return;
+            if (!(await AllowClosingWindow())) return;
 
+            status = WindowStatus.Closing;
             OnWindowStartClosing();
             onWindowStartClosing?.Invoke();
 
-            Status = WindowStatus.Closing;
-            if (tweeners.Length == 0)
-                tweeners = Tweeners;
-            var transitions = tweeners.Where(x => x.enabled)
+            if (activeTweeners.Length == 0)
+                activeTweeners = Tweeners;
+            var transitions = activeTweeners.Where(x => x.enabled)
                 .Select(x => x.TweenOutAsync())
                 .ToList();
 
             await UniTask.WhenAll(transitions);
             await UniTask.SwitchToMainThread();
-            Status = WindowStatus.Closed;
+            status = WindowStatus.Closed;
 
             OnWindowDoneClosing();
             onWindowDoneClosing?.Invoke();
+        }
+
+        protected virtual UniTask<bool> AllowClosingWindow() {
+            return UniTask.FromResult(true);
+        }
+
+        protected virtual UniTask<bool> AllowOpeningWindow() {
+            return UniTask.FromResult(true);
         }
 
         /// <summary>

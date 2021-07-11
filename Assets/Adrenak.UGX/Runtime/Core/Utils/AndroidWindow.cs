@@ -1,8 +1,11 @@
 ﻿#if UNITY_ANDROID && !UNITY_EDITOR
-using System;
-using UnityEngine;
+#define USE_ANDROID
 #endif
 
+using System;
+using System.Collections.Generic;
+
+using UnityEngine;
 
 /**
  * @author zeh fernando

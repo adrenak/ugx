@@ -15,7 +15,7 @@ namespace Adrenak.UGX {
         [SerializeField] Text description = null;
 
         async protected override UniTask<UniTask> GetResponse() {
-            await UniTask.Delay(Model.delay, DelayType.DeltaTime, PlayerLoopTiming.Update);
+            await UniTask.Delay(Model.delay * 1000, DelayType.DeltaTime, PlayerLoopTiming.Update);
             return UniTask.CompletedTask;
         }
 
