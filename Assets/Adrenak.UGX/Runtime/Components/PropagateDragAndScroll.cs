@@ -7,10 +7,9 @@ using UnityEngine.EventSystems;
 
 namespace Adrenak.UGX {
     [RequireComponent(typeof(EventTrigger))]
-    public class PropagateDrag : MonoBehaviour {
+    public class PropagateDragAndScroll : MonoBehaviour {
         void Awake() {
-            var scrollViews = GetComponentsInParent<ScrollRect>();
-            scrollViews = scrollViews.Where(x => x.gameObject != gameObject).ToArray();
+            var scrollView = transform.parent.GetComponentInParent<ScrollRect>();
 
             EventTrigger trigger = GetComponent<EventTrigger>();
 
@@ -32,8 +31,8 @@ namespace Adrenak.UGX {
 
             entryBegin.eventID = EventTriggerType.BeginDrag;
             entryBegin.callback.AddListener((data) => {
-                foreach (var scrollView in scrollViews)
-                    scrollView.OnBeginDrag((PointerEventData)data);
+
+                scrollView.OnBeginDrag((PointerEventData)data);
                 foreach (var single in map)
                     single.Key.callback = null;
             });
@@ -41,15 +40,15 @@ namespace Adrenak.UGX {
 
             entryDrag.eventID = EventTriggerType.Drag;
             entryDrag.callback.AddListener((data) => {
-                foreach (var scrollView in scrollViews)
-                    scrollView.OnDrag((PointerEventData)data);
+
+                scrollView.OnDrag((PointerEventData)data);
             });
             trigger.triggers.Add(entryDrag);
 
             entryEnd.eventID = EventTriggerType.EndDrag;
             entryEnd.callback.AddListener((data) => {
-                foreach (var scrollView in scrollViews)
-                    scrollView.OnEndDrag((PointerEventData)data);
+
+                scrollView.OnEndDrag((PointerEventData)data);
                 foreach (var single in map)
                     single.Key.callback = single.Value;
             });
@@ -57,15 +56,15 @@ namespace Adrenak.UGX {
 
             entrypotential.eventID = EventTriggerType.InitializePotentialDrag;
             entrypotential.callback.AddListener((data) => {
-                foreach (var scrollView in scrollViews)
-                    scrollView.OnInitializePotentialDrag((PointerEventData)data);
+
+                scrollView.OnInitializePotentialDrag((PointerEventData)data);
             });
             trigger.triggers.Add(entrypotential);
 
             entryScroll.eventID = EventTriggerType.Scroll;
             entryScroll.callback.AddListener((data) => {
-                foreach (var scrollView in scrollViews)
-                    scrollView.OnScroll((PointerEventData)data);
+
+                scrollView.OnScroll((PointerEventData)data);
             });
             trigger.triggers.Add(entryScroll);
         }
