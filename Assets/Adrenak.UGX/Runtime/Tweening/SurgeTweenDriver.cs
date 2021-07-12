@@ -3,17 +3,15 @@ using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
-using Adrenak.UGX;
-
 namespace Adrenak.UGX {
     public class SurgeTweenDriver : ITweenDriver {
         public UniTask TransitionPosition(RectTransform rt, Vector3 endValue, TweenArgs tween) {
-            var source = new UniTaskCompletionSource<bool>();
-            TransitionPosition(rt, endValue, tween, () => source.TrySetResult(true));
-            return source.Task;
+            var pSource = new UniTaskCompletionSource<bool>();
+            TransitionPosition(rt, endValue, tween, () => pSource.TrySetResult(true));
+            return pSource.Task;
         }
 
-        public void TransitionPosition(RectTransform rt,Vector3 endValue, TweenArgs tween, Action onComplete) {
+        public void TransitionPosition(RectTransform rt, Vector3 endValue, TweenArgs tween, Action onComplete) {
             Tween.Value(
                 rt.localPosition,
                 endValue,
@@ -27,9 +25,9 @@ namespace Adrenak.UGX {
         }
 
         public UniTask TransitionOpacity(CanvasGroup group, float endValue, TweenArgs tween) {
-            var source = new UniTaskCompletionSource<bool>();
-            TransitionOpacity(group, endValue, tween, () => source.TrySetResult(true));
-            return source.Task;
+            var oSource = new UniTaskCompletionSource<bool>();
+            TransitionOpacity(group, endValue, tween, () => oSource.TrySetResult(true));
+            return oSource.Task;
         }
 
         public void TransitionOpacity(CanvasGroup group, float endValue, TweenArgs tween, Action onComplete) {

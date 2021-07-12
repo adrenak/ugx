@@ -7,7 +7,6 @@ namespace Adrenak.UGX {
     /// sets up the ratio to make sure the image on the gameobject
     /// isn't stretched by adapting to its ratio.
     /// </summary>
-    [ExecuteAlways]
     public class ImageAspectRatioFitter : AspectRatioFitter {
         Image image;
         Image Image => image == null ? image = GetComponent<Image>() : image;

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
@@ -12,11 +12,6 @@ namespace Adrenak.UGX {
     public class Window : UGXBehaviour {
         public Sprite icon;
         public string title;
-
-        public bool canReopenWhileOpen;
-        public bool canReopenWhileOpening;
-        public bool canRecloseWhileClosed;
-        public bool canRecloseWhileClosing;
 
         [SerializeField] WindowStatus status;
         [SerializeField] TweenerBase[] activeTweeners;
@@ -79,10 +74,11 @@ namespace Adrenak.UGX {
         /// Opens the window and returns a task that completes when it's done opening
         /// </summary>
         async public UniTask OpenWindowAsync() {
-            await UniTask.SwitchToMainThread();
-            if (Status == WindowStatus.Opened && !canReopenWhileOpen) return;
-            if (Status == WindowStatus.Opening && !canReopenWhileOpening) return;
             if (!(await AllowOpeningWindow())) return;
+            while (status != WindowStatus.Closed)
+                await UniTask.WaitForEndOfFrame();
+
+            await UniTask.SwitchToMainThread();
 
             status = WindowStatus.Opening;
             OnWindowStartOpening();
@@ -90,14 +86,15 @@ namespace Adrenak.UGX {
 
             if (activeTweeners.Length == 0)
                 activeTweeners = Tweeners;
+
             var transitions = activeTweeners.Where(x => x.enabled)
                 .Select(x => x.TweenInAsync())
                 .ToList();
 
             await UniTask.WhenAll(transitions);
-            await UniTask.SwitchToMainThread();
             status = WindowStatus.Opened;
 
+            await UniTask.SwitchToMainThread();
             OnWindowDoneOpening();
             onWindowDoneOpening?.Invoke();
         }
@@ -111,10 +108,11 @@ namespace Adrenak.UGX {
         /// Closes the window and returns a task that completes when it's done closing
         /// </summary>
         async public UniTask CloseWindowAsync() {
-            if (Status == WindowStatus.Closed && !canRecloseWhileClosed) return;
-            if (Status == WindowStatus.Closing && !canRecloseWhileClosing) return;
             if (!(await AllowClosingWindow())) return;
+            while (status != WindowStatus.Opened)
+                await UniTask.WaitForEndOfFrame();
 
+            await UniTask.SwitchToMainThread();
             status = WindowStatus.Closing;
             OnWindowStartClosing();
             onWindowStartClosing?.Invoke();
@@ -126,9 +124,9 @@ namespace Adrenak.UGX {
                 .ToList();
 
             await UniTask.WhenAll(transitions);
-            await UniTask.SwitchToMainThread();
             status = WindowStatus.Closed;
 
+            await UniTask.SwitchToMainThread();
             OnWindowDoneClosing();
             onWindowDoneClosing?.Invoke();
         }
