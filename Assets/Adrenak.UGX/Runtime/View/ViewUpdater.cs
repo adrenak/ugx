@@ -7,15 +7,15 @@ namespace Adrenak.UGX {
 
         void Awake() {
             if (updateViewOnAwake)
-                UpdateView();
+                UpdateTheView();
         }
 
         void Start() {
             if (updateViewOnStart)
-                UpdateView();
+                UpdateTheView();
         }
 
-        public void UpdateView() {
+        public void UpdateTheView() {
             gameObject.SendMessage("UpdateView");
         }
     }
