@@ -10,14 +10,14 @@ namespace Adrenak.UGX {
 
         List<Action<UGXEvent>> handlers = new List<Action<UGXEvent>>();
 
-        Dictionary<string, List<Func<GameObject, object, bool>>> idHandlers
-            = new Dictionary<string, List<Func<GameObject, object, bool>>>();
+        Dictionary<string, List<Func<UGXEvent, bool>>> idHandlers
+            = new Dictionary<string, List<Func<UGXEvent, bool>>>();
 
-        public void OnUGXEventWithID(string id, Func<GameObject, object, bool> handler) {
+        public void OnUGXEventWithID(string id, Func<UGXEvent, bool> handler) {
             if (idHandlers.ContainsKey(id))
                 idHandlers[id].Add(handler);
             else {
-                idHandlers.Add(id, new List<Func<GameObject, object, bool>>());
+                idHandlers.Add(id, new List<Func<UGXEvent, bool>>());
                 idHandlers[id].Add(handler);
             }
             if (debug) {
@@ -36,7 +36,7 @@ namespace Adrenak.UGX {
             }
         }
 
-        public bool ProcessUGXEvent(UGXEvent ugxEvent) {
+        public bool SendUGXEvent(UGXEvent ugxEvent) {
             if (debug) {
                 string msg = $"Received event: {ugxEvent}";
                 Debug.Log(msg, gameObject);
@@ -45,7 +45,7 @@ namespace Adrenak.UGX {
             if (idHandlers.ContainsKey(ugxEvent.id)) {
                 bool propagate = true;
                 foreach (var handler in idHandlers[ugxEvent.id]) {
-                    var response = handler(ugxEvent.sender, ugxEvent.data);
+                    var response = handler(ugxEvent);
                     if (!response)
                         propagate = false;
                 }

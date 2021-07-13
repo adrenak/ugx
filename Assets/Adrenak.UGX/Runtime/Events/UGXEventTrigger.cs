@@ -23,7 +23,7 @@ namespace Adrenak.UGX {
             while (loc != null) {
                 var listener = loc.GetComponent<UGXEventListener>();
                 if (listener != null) {
-                    if (!listener.ProcessUGXEvent(ugxEvent))
+                    if (!listener.SendUGXEvent(ugxEvent))
                         return;
                 }
                 loc = loc.parent;
