@@ -5,8 +5,8 @@ namespace Adrenak.UGX {
     public class WindowStatusView : View {
         public Window window;
 
-        public GameObject open;
-        public GameObject close;
+        public GameObject openedObj;
+        public GameObject closedObj;
 
         [Space(10)]
         public UnityEvent onWindowStartOpening;
@@ -53,8 +53,8 @@ namespace Adrenak.UGX {
         }
 
         void Set(bool _open, bool _close) {
-            Set(open, _open);
-            Set(close, _close);
+            Set(openedObj, _open);
+            Set(closedObj, _close);
         }
 
         void Set(GameObject go, bool state) {

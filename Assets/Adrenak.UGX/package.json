@@ -10,7 +10,6 @@
 		"url": "www.vatsalambastha.com"
 	},
 	"dependencies": {
-		"com.pixelplacement.surge.tween": "1.0.2",
 		"com.cysharp.unitask": "2.2.5"
 	},
 	"scopedRegistries": [

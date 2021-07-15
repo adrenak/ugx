@@ -3,11 +3,10 @@ using UnityEngine.Events;
 
 namespace Adrenak.UGX {
     public class SafeAreaPanel : MonoBehaviour {
-        public static UnityEvent OnResolutionOrOrientationChanged = new UnityEvent();
-         static Rect lastSafeArea = Rect.zero;
+        static Rect lastSafeArea = Rect.zero;
 
-         Canvas canvas;
-         RectTransform RT;
+        Canvas canvas;
+        RectTransform RT;
 
         void Start() {
             canvas = GetComponentInParent<Canvas>();
@@ -18,8 +17,10 @@ namespace Adrenak.UGX {
         }
 
         void Update() {
-            if (Screen.safeArea != lastSafeArea){
-                lastSafeArea = Screen.safeArea;
+            var safeArea = Screen.safeArea;
+
+            if (safeArea != lastSafeArea) {
+                lastSafeArea = safeArea;
                 ApplySafeArea();
             }
         }

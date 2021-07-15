@@ -1,4 +1,5 @@
-﻿#if UNITY_ANDROID && !UNITY_EDITOR
+﻿//#define USE_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
 #define USE_ANDROID
 #endif
 
@@ -227,7 +228,6 @@ namespace Adrenak.UGX {
 
         // ================================================================================================================
         // ACCESSOR INTERFACE ---------------------------------------------------------------------------------------------
-
         public static States navigationBarState {
             get { return _navigationBarState; }
             set {
