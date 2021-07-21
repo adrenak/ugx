@@ -71,7 +71,9 @@ namespace Adrenak.UGX {
         async public void TransitionIn() => await TransitionInAsync();
         public abstract UniTask TransitionInAsync();
 
+#if UGX_NAUGHTY_AVAILABLE
         [Button]
+#endif
         async public void TransitionOut() => await TransitionOutAsync();
         public abstract UniTask TransitionOutAsync();
 
