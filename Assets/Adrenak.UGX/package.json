@@ -11,7 +11,6 @@
 	},
 	"dependencies": {
 		"com.pixelplacement.surge.tween": "1.0.2",
-		"com.dbrizov.naughtyattributes": "2.0.4",
 		"com.adrenak.unex": "2.4.0",
 		"com.cysharp.unitask": "2.0.37"
 	},
@@ -20,7 +19,6 @@
 			"name": "package.openupm.com",
 			"url": "https://package.openupm.com",
 			"scopes": [
-				"com.dbrizov.naughtyattributes",
 				"com.cysharp.unitask",
 				"com.openupm"
 			]

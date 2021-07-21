@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
+
+#if UGX_NAUGHTY_AVAILABLE
 using NaughtyAttributes;
+#endif
 
 namespace Adrenak.UGX {
     public abstract class TweenerBase : UGXBehaviour {
@@ -27,7 +30,12 @@ namespace Adrenak.UGX {
             }
         }
 
-        [SerializeField] [ReadOnly] float progress;
+        [SerializeField]
+#if UGX_NAUGHTY_AVAILABLE
+        [ReadOnly]
+#endif
+        float progress;
+
         public float Progress {
             get => progress;
             set {
@@ -36,12 +44,30 @@ namespace Adrenak.UGX {
             }
         }
 
-        [BoxGroup("Tweening Args")] [SerializeField] public bool useSameArgsForInAndOut = true;
-        [BoxGroup("Tweening Args")] [ShowIf("useSameArgsForInAndOut")] public TweenArgs args;
-        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs inArgs;
-        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")] public TweenArgs outArgs;
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Tweening Args")]
+#endif
+        [SerializeField]
+        public bool useSameArgsForInAndOut = true;
 
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Tweening Args")] [ShowIf("useSameArgsForInAndOut")]
+#endif
+        public TweenArgs args;
+
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")]
+#endif
+        public TweenArgs inArgs;
+
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Tweening Args")] [HideIf("useSameArgsForInAndOut")]
+#endif
+        public TweenArgs outArgs;
+
+#if UGX_NAUGHTY_AVAILABLE
         [Button]
+#endif
         async public void TransitionIn() => await TransitionInAsync();
         public abstract UniTask TransitionInAsync();
 

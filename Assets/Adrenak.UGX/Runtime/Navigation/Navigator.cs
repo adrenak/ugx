@@ -1,8 +1,11 @@
-﻿using NaughtyAttributes;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 using System.Collections.Generic;
 using UnityEngine;
 using Adrenak.Unex;
+
+#if UGX_NAUGHTY_AVAILABLE
+using NaughtyAttributes;
+#endif
 
 namespace Adrenak.UGX {
     public abstract class Navigator : MonoBehaviour {
@@ -23,14 +26,23 @@ namespace Adrenak.UGX {
         [SerializeField] string browserID;
         [SerializeField] bool canPopAll;
 
-        [ReadOnly] [SerializeField] protected Window current = null;
+#if UGX_NAUGHTY_AVAILABLE
+        [ReadOnly]
+#endif
+        [SerializeField] protected Window current = null;
         public Window Current => current;
 
-        [ReadOnly] [ReorderableList] [SerializeField] protected List<Window> history = new List<Window>();
+#if UGX_NAUGHTY_AVAILABLE
+        [ReadOnly] [ReorderableList]
+#endif
+        [SerializeField] protected List<Window> history = new List<Window>();
         public List<Window> History => history;
 
         [SerializeField] protected bool useInitialWindow;
-        [ShowIf("useInitialWindow")] [SerializeField] protected Window initialWindow;
+#if UGX_NAUGHTY_AVAILABLE
+        [ShowIf("useInitialWindow")]
+#endif
+        [SerializeField] protected Window initialWindow;
 #pragma warning restore 0649
 
         // ================================================

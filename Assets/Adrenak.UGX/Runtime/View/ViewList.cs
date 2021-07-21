@@ -3,8 +3,11 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Events;
-using NaughtyAttributes;
 using UnityEngine.UI;
+
+#if UGX_NAUGHTY_AVAILABLE
+using NaughtyAttributes;
+#endif
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -30,13 +33,19 @@ namespace Adrenak.UGX {
         /// The parent under which the elements must be instantiated.
         /// </summary>
         [Tooltip("The parent under which the elements must be instantiated.")]
-        [BoxGroup("Instantiation")] public Transform container = null;
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Instantiation")]
+#endif
+        public Transform container = null;
 
         /// <summary>
         /// Template of the element View. Can be prefab or GameObject.
         /// </summary>
         [Tooltip("Template of the element View. Can be prefab or GameObject.")]
-        [BoxGroup("Instantiation")] public View template = null;
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Instantiation")]
+#endif
+        public View template = null;
 
         /// <summary>
         /// Whether the list uses the states list in the Start() method to
@@ -47,7 +56,10 @@ namespace Adrenak.UGX {
         public bool populateOnStart = false;
 
         [Tooltip("The states of the current children views")]
-        [BoxGroup("State")] [SerializeField] List<T> currentStates = new List<T>();
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("State")]
+#endif
+        [SerializeField] List<T> currentStates = new List<T>();
 
         List<StatefulView<T>> Instantiated { get; } = new List<StatefulView<T>>();
         List<UnityAction<StatefulView<T>>> childViewMethods = new List<UnityAction<StatefulView<T>>>();
@@ -93,7 +105,9 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Repopulates all the instances using the current state
         /// </summary>
+#if UGX_NAUGHTY_AVAILABLE
         [Button]
+#endif
         public void Refresh() {
             foreach (var state in currentStates)
                 Destroy(state);

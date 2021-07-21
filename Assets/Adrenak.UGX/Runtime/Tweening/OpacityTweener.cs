@@ -1,5 +1,4 @@
-﻿using NaughtyAttributes;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Adrenak.UGX {
