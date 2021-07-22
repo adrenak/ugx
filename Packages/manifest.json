@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "com.adrenak.unex": "2.4.0",
-    "com.dbrizov.naughtyattributes": "2.0.4",
     "com.pixelplacement.surge.tween": "1.0.2",
     "com.unity.package-manager-ui": "2.0.13",
     "com.unity.modules.ai": "1.0.0",
@@ -42,7 +41,6 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.cysharp.unitask",
-        "com.dbrizov.naughtyattributes",
         "com.openupm"
       ]
     },

@@ -1,8 +1,10 @@
 ﻿using Cysharp.Threading.Tasks;
 
-using NaughtyAttributes;
-
 using UnityEngine;
+
+#if UGX_NAUGHTY_AVAILABLE
+using NaughtyAttributes;
+#endif
 
 namespace Adrenak.UGX {
     [DisallowMultipleComponent]
@@ -14,19 +16,36 @@ namespace Adrenak.UGX {
             Right
         }
 
-        [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 inPosition;
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Positions")] [ReadOnly]
+#endif
+        [SerializeField] Vector3 inPosition;
         public Vector3 InPosition => inPosition;
 
-        [BoxGroup("Positions")] [ReadOnly] [SerializeField] Vector3 outPosition;
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Positions")] [ReadOnly]
+#endif
+        [SerializeField] Vector3 outPosition;
         public Vector3 OutPosition => outPosition;
 
-        [BoxGroup("Config")] public PositionType enterPosition = PositionType.Left;
-        [BoxGroup("Config")] public PositionType exitPosition = PositionType.Right;
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Config")]
+#endif
+        public PositionType enterPosition = PositionType.Left;
 
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("Config")]
+#endif
+        public PositionType exitPosition = PositionType.Right;
+
+#if UGX_NAUGHTY_AVAILABLE
         [Button("Set As In")]
+#endif
         public void CaptureInPosition() => inPosition = RT.localPosition;
 
+#if UGX_NAUGHTY_AVAILABLE
         [Button("Set As Out")]
+#endif
         public void CaptureOutPosition() => outPosition = RT.localPosition;
 
         override async public UniTask TransitionInAsync() {

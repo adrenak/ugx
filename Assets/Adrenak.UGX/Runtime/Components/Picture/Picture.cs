@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 using Adrenak.Unex;
 using UnityEngine.Events;
+
+#if UGX_NAUGHTY_AVAILABLE
 using NaughtyAttributes;
+#endif
 
 namespace Adrenak.UGX {
     [Serializable]
@@ -63,7 +66,9 @@ namespace Adrenak.UGX {
                 Refresh();
         }
 
+#if UGX_NAUGHTY_AVAILABLE
         [Button("Refresh")]
+#endif
         public void Refresh() {
             if (!Application.isPlaying)
                 return;

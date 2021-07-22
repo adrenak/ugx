@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-using NaughtyAttributes;
 using System;
+
+#if UGX_NAUGHTY_AVAILABLE
+using NaughtyAttributes;
+#endif
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -17,11 +20,19 @@ namespace Adrenak.UGX {
         /// Whether the View should update itself with the state it starts with.
         /// </summary>
         [Tooltip("Whether the View should update itself with the state it starts with.")]
-        [BoxGroup("View State")] public bool updateFromStateOnStart = false;
+
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("View State")]
+#endif 
+        public bool updateFromStateOnStart = false;
 
         [Tooltip("Current state of the view. Changing values inside it will not trigger Update" + 
         "automatically. You must click the Update View button on this component to see the changes.")]
-        [BoxGroup("View State")] [SerializeField] TState state;
+        
+#if UGX_NAUGHTY_AVAILABLE
+        [BoxGroup("View State")]
+#endif
+        [SerializeField] TState state;
 
         /// <summary>
         /// Current state of the View
@@ -53,7 +64,9 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Updates the View using the current state
         /// </summary>
+#if UGX_NAUGHTY_AVAILABLE
         [Button("Update View")]
+#endif
         public void UpdateView() {
 #if UNITY_EDITOR
             UnityEditor.Undo.RecordObject(gameObject, "Update View");

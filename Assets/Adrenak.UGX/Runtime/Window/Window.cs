@@ -3,7 +3,10 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
+
+#if UGX_NAUGHTY_AVAILABLE
 using NaughtyAttributes;
+#endif
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -11,7 +14,11 @@ namespace Adrenak.UGX {
     /// Uses Tweeners to open (Transition Up) and close (Transition Down)
     /// </summary>
     public class Window : UGXBehaviour {
-        [ReadOnly] [SerializeField] WindowStatus status;
+#if UGX_NAUGHTY_AVAILABLE
+        [ReadOnly]
+#endif
+        [SerializeField] WindowStatus status;
+
         /// <summary>
         /// The current status of the window
         /// </summary>
@@ -43,7 +50,9 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Opens the window
         /// </summary>
+#if UGX_NAUGHTY_AVAILABLE
         [Button]
+#endif
         async public void OpenWindow() => await OpenWindowAsync();
 
         /// <summary>
@@ -75,7 +84,9 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Closes the window
         /// </summary>
+#if UGX_NAUGHTY_AVAILABLE
         [Button]
+#endif
         async public void CloseWindow() => await CloseWindowAsync();
 
         /// <summary>

@@ -13,5 +13,13 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.dbrizov.naughtyattributes",
+            "expression": "2.0.4",
+            "define": "UGX_NAUGHTY_AVAILABLE"
+        }
+    ],
+    "noEngineReferences": false
 }
