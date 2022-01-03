@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
@@ -41,22 +40,22 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Fired when the window starts opening
         /// </summary>
-        public UnityEvent onWindowStartOpening;
+        public UnityEvent WindowStartedOpening;
 
         /// <summary>
         /// Fired when the window is finished opening
         /// </summary>
-        public UnityEvent onWindowDoneOpening;
+        public UnityEvent WindowDoneOpening;
 
         /// <summary>
         /// Fired when the window starts closing
         /// </summary>
-        public UnityEvent onWindowStartClosing;
+        public UnityEvent WindowStartedClosing;
 
         /// <summary>
         /// Fired when the window is finished closing
         /// </summary>
-        public UnityEvent onWindowDoneClosing;
+        public UnityEvent WindowDoneClosing;
 
         /// <summary>
         /// Opens the window
@@ -67,14 +66,13 @@ namespace Adrenak.UGX {
             var parent = transform.parent;
             var navigator = parent.GetComponent<Navigator>();
             if (navigator != null)
-                navigator.RegisterWindow(this);
+                navigator.SendMessage("RegisterWindow", this);
         }
 
         /// <summary>
-        /// Opens the window and returns a task that completes when it's done opening
+        /// Opens the window. Completion is awaitable.
         /// </summary>
         async public UniTask OpenWindowAsync() {
-            if (!(await AllowOpeningWindow())) return;
             while (status != WindowStatus.Closed)
                 await UniTask.WaitForEndOfFrame();
 
@@ -82,7 +80,7 @@ namespace Adrenak.UGX {
 
             status = WindowStatus.Opening;
             OnWindowStartOpening();
-            onWindowStartOpening?.Invoke();
+            WindowStartedOpening?.Invoke();
 
             if (activeTweeners.Length == 0)
                 activeTweeners = Tweeners;
@@ -96,7 +94,7 @@ namespace Adrenak.UGX {
 
             await UniTask.SwitchToMainThread();
             OnWindowDoneOpening();
-            onWindowDoneOpening?.Invoke();
+            WindowDoneOpening?.Invoke();
         }
 
         /// <summary>
@@ -105,17 +103,16 @@ namespace Adrenak.UGX {
         async public void CloseWindow() => await CloseWindowAsync();
 
         /// <summary>
-        /// Closes the window and returns a task that completes when it's done closing
+        /// Closes the window. Completion is awaitable.
         /// </summary>
         async public UniTask CloseWindowAsync() {
-            if (!(await AllowClosingWindow())) return;
             while (status != WindowStatus.Opened)
                 await UniTask.WaitForEndOfFrame();
 
             await UniTask.SwitchToMainThread();
             status = WindowStatus.Closing;
             OnWindowStartClosing();
-            onWindowStartClosing?.Invoke();
+            WindowStartedClosing?.Invoke();
 
             if (activeTweeners.Length == 0)
                 activeTweeners = Tweeners;
@@ -128,15 +125,7 @@ namespace Adrenak.UGX {
 
             await UniTask.SwitchToMainThread();
             OnWindowDoneClosing();
-            onWindowDoneClosing?.Invoke();
-        }
-
-        protected virtual UniTask<bool> AllowClosingWindow() {
-            return UniTask.FromResult(true);
-        }
-
-        protected virtual UniTask<bool> AllowOpeningWindow() {
-            return UniTask.FromResult(true);
+            WindowDoneClosing?.Invoke();
         }
 
         /// <summary>

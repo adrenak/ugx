@@ -4,14 +4,17 @@ using Cysharp.Threading.Tasks;
 
 namespace Adrenak.UGX {
     /// <summary>
-    /// Base class for popups. Inherit from this class to implement different kinds of popups
+    /// Base class for popups. Inherit from this class to 
+    /// implement different kinds of popups
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="K"></typeparam>
+    /// <typeparam name="T">
+    /// <see cref="State"/> for the popup display
+    /// </typeparam>
+    /// <typeparam name="K">The response captured by the popup</typeparam>
     [RequireComponent(typeof(Window))]
-    public abstract class Popup<T, K> : View<T> where T : ViewModel {
+    public abstract class Popup<T, K> : StateView<T> where T : State {
         /// <summary>
-        /// Called when the popup is shown.
+        /// Wait for user response and send it back as a <see cref="K"/> object
         /// </summary>
         /// <returns>The response object.</returns>
         protected abstract UniTask<K> GetResponse();
@@ -19,66 +22,55 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Displays the popup and returns the response as a task
         /// </summary>
-        async public UniTask<PopupResponse<K>> Show() {
+        async public UniTask<K> Show() {
             await UniTask.SwitchToMainThread();
-            await Window.OpenWindowAsync();
+
+            if (Window.IsClosedOrClosing)
+                await Window.OpenWindowAsync();
 
             var response = await GetResponse();
             await Window.CloseWindowAsync();
             await UniTask.SwitchToMainThread();
-            return new PopupResponse<K>(response);
+            return response;
         }
 
         /// <summary>
         /// Displays the popup and returns the response as a callback
         /// </summary>
-        async public void Show(Action<bool, K> responseCallback) {
+        async public void Show(Action<K> responseCallback) {
             var response = await Show();
-            responseCallback?.Invoke(response.HasData, response.Data);
+            responseCallback?.Invoke(response);
         }
 
         /// <summary>
-        /// Displays the popup with a given model and returns the response as a task
+        /// Sets state and displays the popup. Returns response in a task
         /// </summary>
-        async public UniTask<PopupResponse<K>> SetModelAndShow(T model) {
-            if (Window.Status == WindowStatus.Closed) {
-                Model = model;
-                return await Show();
-            }
-            return new PopupResponse<K>();
+        async public UniTask<K> SetStateAndShow(T state) {
+            Refresh(state);
+            return await Show();
         }
 
         /// <summary>
-        /// Displays the popup with a given model and returns the response as a callback
+        /// Sets state and displays the popup. Returns response as a callback
         /// </summary>
-        async public void SetModelAndShow(T model, Action<bool, K> responseCallback) {
-            if (Window.Status == WindowStatus.Closed) {
-                var response = await SetModelAndShow(model);
-                responseCallback?.Invoke(response.HasData, response.Data);
-            }
-            responseCallback?.Invoke(false, default);
+        async public void SetStateAndShow(T state, Action<K> response) =>
+            response?.Invoke(await SetStateAndShow(state));
+
+        /// <summary>
+        /// Gives access to the state for modification and displays the popup. 
+        /// Returns response as a task
+        /// </summary>
+        async public UniTask<K> ModifyStateAndShow(Action<T> access) {
+            Refresh(access);
+            return await Show();
         }
 
         /// <summary>
-        /// Displays the popup with a given model modifier action and returns the response as a task
+        /// Gives access to the state for modification and displays the popup.
+        /// Returns response as a callback
         /// </summary>
-        async public UniTask<PopupResponse<K>> ModifyModelAndShow(Action<T> viewModelAccess) {
-            if (Window.Status == WindowStatus.Closed) {
-                ModifyViewModel(viewModelAccess);
-                return await Show();
-            }
-            return new PopupResponse<K>();
-        }
-
-        /// <summary>
-        /// Displays the popup with a given model modifier action and returns the response as a callback
-        /// </summary>
-        async public void ModifyModelAndShow(Action<T> modifier, Action<bool, K> responseCallback) {
-            if (Window.Status == WindowStatus.Closed) {
-                var response = await ModifyModelAndShow(modifier);
-                responseCallback?.Invoke(response.HasData, response.Data);
-            }
-            responseCallback?.Invoke(false, default);
+        async public void ModifyStateAndShow(Action<T> access, Action<K> response) {
+            response?.Invoke(await ModifyStateAndShow(access));
         }
     }
 }

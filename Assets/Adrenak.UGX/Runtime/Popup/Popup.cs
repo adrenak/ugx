@@ -3,8 +3,12 @@
 using UnityEngine;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// Base class for popups with no return type or state type.
+    /// Inherit from this class to implement different kinds of popups.
+    /// </summary>
     [RequireComponent(typeof(Window))]
-    public class Popup : Popup<ViewModel> {
+    public class Popup : Popup<State> {
         async protected override UniTask<UniTask> GetResponse() {
             responded = false;
             while (!responded)
@@ -15,6 +19,7 @@ namespace Adrenak.UGX {
         bool responded;
         public void Close() => responded = true;
 
-        protected override void OnViewModelUpdate() { }
+        protected override void OnStart() { }
+        protected override void OnRefresh() { }
     }
 }

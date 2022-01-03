@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Adrenak.UGX {
     public static class UGXExtensions {
+        // ================================================
+        // RECT TRANSFORM
+        // ================================================
         /// <summary>
         /// Returns the minimum distance RectTransform should move to the left
         /// to get out of the bounds of the parent RectTransform.
@@ -34,10 +35,10 @@ namespace Adrenak.UGX {
         }
 
         /// <summary>
-        /// Returns the minimum distance RectTransform should move to the bottom
+        /// Returns the mindistance RectTransform should move to the bottom
         /// to get out of the bounds of the parent RectTransform.
         /// </summary>
-        public static float GetBottomExit(this RectTransform rt, bool screen = false) {
+        public static float GetBottomExit(this RectTransform rt) {
             Rect parentRect = rt.parent.GetComponent<RectTransform>().rect;
             return -parentRect.width / 2 - rt.rect.height / 2;
         }
@@ -89,7 +90,7 @@ namespace Adrenak.UGX {
         }
 
         /// <summary>
-        /// Returns the coordinate of the bottom left corner of the RectTransform
+        /// Returns the coordinate of the bottom left corner of a RectTransform
         /// </summary>
         public static Vector2 GetBottomLeft(this RectTransform rt) {
             var left = rt.GetLeft();
@@ -98,7 +99,7 @@ namespace Adrenak.UGX {
         }
 
         /// <summary>
-        /// Returns the coordinate of the bottom right corner of the RectTransform
+        /// Returns coordinates of the bottom right corner of a RectTransform
         /// </summary>
         public static Vector2 GetBottomRight(this RectTransform rt) {
             var right = rt.GetRight();
@@ -123,8 +124,8 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns if the RectTransform is visible 
         /// </summary>
-        /// <param name="partially">If true, the RT is partially visible</param>
-        public static bool IsVisible(this RectTransform rt, out bool? partially) {
+        /// <param name="part">Whether the RT is partially visible</param>
+        public static bool IsVisible(this RectTransform rt, out bool? part) {
             var points = new Vector2[]{
                 rt.GetTopLeft(),
                 rt.GetTopRight(),
@@ -145,7 +146,7 @@ namespace Adrenak.UGX {
                     count++;
 
             if (count == 4) {
-                partially = false;
+                part = false;
                 return true;
             }
 
@@ -159,7 +160,7 @@ namespace Adrenak.UGX {
             foreach (var point in points)
                 count += point.y > Screen.height + 1 ? 1 : 0;
             if (count == 4) {
-                partially = false;
+                part = false;
                 return false;
             }
 
@@ -168,7 +169,7 @@ namespace Adrenak.UGX {
             foreach (var point in points)
                 count += point.y < -1 ? 1 : 0;
             if (count == 4) {
-                partially = false;
+                part = false;
                 return false;
             }
 
@@ -177,7 +178,7 @@ namespace Adrenak.UGX {
             foreach (var point in points)
                 count += point.x > Screen.width + 1 ? 1 : 0;
             if (count == 4) {
-                partially = false;
+                part = false;
                 return false;
             }
 
@@ -186,21 +187,24 @@ namespace Adrenak.UGX {
             foreach (var point in points)
                 count += point.x < -1 ? 1 : 0;
             if (count == 4) {
-                partially = false;
+                part = false;
                 return false;
             }
 
             // Else we return true for both.
             // Means partial visibility/invisibility
-            partially = true;
+            part = true;
             return true;
         }
 
+        // ================================================
+        // IDICTIONARY
+        // ================================================
         /// <summary>
         /// Set a KeyValuePair entry in the Dictionary. If the key exists, 
         /// the value is change. If not, the pair is added.
         /// </summary>
-        public static void SetPair<K, V>(this IDictionary<K, V> dict, K k, V v) {
+        public static void Set<K, V>(this IDictionary<K, V> dict, K k, V v) {
             if (!dict.ContainsKey(k))
                 dict.Add(k, v);
             else
@@ -208,8 +212,8 @@ namespace Adrenak.UGX {
         }
 
         /// <summary>
-        /// Ensures the key is present in the dictionary. If it isn't, the provided
-        /// value is added along with the key.
+        /// Ensures the key is present in the dictionary. 
+        /// If it isn't, the provided value is added along with the key.
         /// </summary>
         /// <returns>If the key was already present</returns>
         public static bool EnsureKey<T, K>(this IDictionary<T, K> dict, T t, K k) {
@@ -220,11 +224,14 @@ namespace Adrenak.UGX {
             return true;
         }
 
+        // ================================================
+        // ILIST
+        // ================================================
         /// <summary>
         /// Ensures the list contains the element.
         /// </summary>
         /// <returns>If the element was already present</returns>
-        public static bool EnsureContains<T>(this List<T> list, T t) {
+        public static bool EnsureContains<T>(this IList<T> list, T t) {
             if (!list.Contains(t)){
                 list.Add(t);
                 return false;
@@ -236,7 +243,7 @@ namespace Adrenak.UGX {
         /// Ensures that the list doesn't contain the element
         /// </summary>
         /// <returns>Returns true if the list DID contain the element</returns>
-        public static bool EnsureDoesntContain<T>(this List<T> list, T t) {
+        public static bool EnsureDoesntContain<T>(this IList<T> list, T t) {
             if (list.Contains(t)){
                 list.Remove(t);
                 return true;

@@ -9,14 +9,9 @@ namespace Adrenak.UGX {
         public GameObject objOn;
         public GameObject objOff;
 
-#if UNITY_2019_OR_NEWER
-        new public void SetIsOnWithoutNotify(bool value) {
-            base.SetIsOnWithoutNotify(value);
-            RefreshLabel();
-        }
-#else
-        static ToggleEvent emptyToggleEvent = new ToggleEvent();
-        public void SetIsOnWithoutNotify(bool value) {
+        static readonly ToggleEvent emptyToggleEvent = new ToggleEvent();
+
+        public new void SetIsOnWithoutNotify(bool value) {
             var originalEvent = onValueChanged;
             onValueChanged = emptyToggleEvent;
             isOn = value;
@@ -24,7 +19,6 @@ namespace Adrenak.UGX {
 
             RefreshLabel();
         }
-#endif
 
         new void Awake() {
             base.Awake();

@@ -7,21 +7,24 @@ namespace Adrenak.UGX.Editor {
     public class NavigatorEditor : UnityEditor.Editor {
         public override void OnInspectorGUI() {
             var navigator = (Navigator)target;
-            
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onPush"), new GUIContent("On Window Push"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("onPop"), new GUIContent("On Window Pop"));
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ID"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("canPopAll"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("WindowPushed"), new GUIContent("On Window Push"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("WindowPopped"), new GUIContent("On Window Pop"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("WindowsOver"), new GUIContent("On WindowS Over"));
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("initialWindow"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("popOnEscape"));
 
-            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("current"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("history"));
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("currentWindow"));
+            }
             EditorGUI.EndDisabledGroup();
-            EditorGUILayout.EndVertical();
+
+            EditorGUI.BeginDisabledGroup(true);
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("windows"));
+            }
+            EditorGUI.EndDisabledGroup();
 
             serializedObject.ApplyModifiedProperties();
         }

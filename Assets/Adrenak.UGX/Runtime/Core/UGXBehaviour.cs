@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
 
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// The base <see cref="MonoBehaviour"/> class for UGX.
+    /// This class mainly provides easy access to UGX specific components
+    /// on its <see cref="GameObject"/>
+    /// </summary>
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
     public abstract class UGXBehaviour : MonoBehaviour {

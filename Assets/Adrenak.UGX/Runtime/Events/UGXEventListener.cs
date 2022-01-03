@@ -4,47 +4,50 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// Listens for <see cref="UGXEvent"/> being propagated through the scene
+    /// hierarchy and allows subscription as well as prevention of further 
+    /// propagation of the event in the hierarchy.
+    /// </summary>
     [DisallowMultipleComponent]
     public sealed class UGXEventListener : MonoBehaviour {
         public bool debug;
 
-        List<Action<UGXEvent>> handlers = new List<Action<UGXEvent>>();
+        List<Func<UGXEvent, bool>> subscribers = 
+            new List<Func<UGXEvent, bool>>();
 
-        Dictionary<string, List<Func<UGXEvent, bool>>> idHandlers
-            = new Dictionary<string, List<Func<UGXEvent, bool>>>();
-
-        public void OnUGXEventWithID(string id, Func<UGXEvent, bool> handler) {
-            if (idHandlers.ContainsKey(id))
-                idHandlers[id].Add(handler);
-            else {
-                idHandlers.Add(id, new List<Func<UGXEvent, bool>>());
-                idHandlers[id].Add(handler);
-            }
+        /// <summary>
+        /// Subscribes to any event received by this listener and returns
+        /// if the propagation should continue.
+        /// </summary>
+        /// <param name="handler">The handler </param>
+        public void Subscribe(Func<UGXEvent, bool> handler) {
+            subscribers.Add(handler);
             if (debug) {
-                string msg = $"Subscribed to {id}. " +
-                $"Total subscriptions for ID: {idHandlers[id].Count}";
+                var count = subscribers.Count;
+                string msg = $"New Subscription. Total subscriptions: {count}";
                 Debug.Log(msg, gameObject);
             }
         }
 
-        public void OnUGXEvent(Action<UGXEvent> handler) {
-            handlers.Add(handler);
-            if (debug) {
-                string msg = $"Subscribed to all events." +
-                $"Total subscriptions: {handlers.Count}";
-                Debug.Log(msg, gameObject);
-            }
-        }
-
-        public bool SendUGXEvent(UGXEvent ugxEvent) {
+        /// <summary>
+        /// Notifies the subscribers about this event and returns
+        /// if subscribers want this event to continue propagating
+        /// in the scene hierarchy.
+        /// </summary>
+        /// <param name="ugxEvent">The event instance</param>
+        /// <returns>Whether the event should continue propagating</returns>
+        public bool Notify(UGXEvent ugxEvent) {
             if (debug) {
                 string msg = $"Received event: {ugxEvent}";
                 Debug.Log(msg, gameObject);
             }
 
-            if (idHandlers.ContainsKey(ugxEvent.id)) {
+            // Notify all subscribers and check if any of the
+            // handlers want to prevent propagation
+            if (subscribers.Count > 0) {
                 bool propagate = true;
-                foreach (var handler in idHandlers[ugxEvent.id]) {
+                foreach (var handler in subscribers) {
                     var response = handler(ugxEvent);
                     if (!response)
                         propagate = false;

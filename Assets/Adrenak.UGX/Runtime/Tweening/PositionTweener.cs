@@ -3,8 +3,14 @@
 using UnityEngine;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// Tweens the position of a UI element using <see cref="RectTransform"/>
+    /// </summary>
     [DisallowMultipleComponent]
     public class PositionTweener : TweenerBase {
+        /// <summary>
+        /// The edge of a UI element
+        /// </summary>
         public enum Edge {
             Top,
             Bottom,
@@ -13,49 +19,94 @@ namespace Adrenak.UGX {
         }
 
         [SerializeField] Vector2 inPosition;
+        /// <summary>
+        /// The position at which the UI element is considered to be "in"
+        /// </summary>
         public Vector2 InPosition => inPosition;
 
         [SerializeField] Vector2 outPosition;
+        /// <summary>
+        /// The position at which the UI element is considers to be "out"
+        /// </summary>
         public Vector2 OutPosition => outPosition;
 
+        /// <summary>
+        /// The edge from which the UI element should tween in
+        /// </summary>
         public Edge enterEdge = Edge.Left;
+
+        /// <summary>
+        /// The edge to which the UI eement should tween out
+        /// </summary>
         public Edge exitEdge = Edge.Right;
 
+        /// <summary>
+        /// Sets the current local position of the <see cref="RectTransform"/>
+        /// as the <see cref="inPosition"/>
+        /// </summary>
         public void CaptureInPosition() => inPosition = RT.localPosition;
 
+        /// <summary>
+        /// Sets the current local position of the <see cref="RectTransform"/>
+        /// as the <see cref="OutPosition"/>
+        /// </summary>
         public void CaptureOutPosition() => outPosition = RT.localPosition;
 
+        /// <summary>
+        /// Tweens the position of the UI element towards 
+        /// <see cref="InPosition"/> using the applicable 
+        /// <see cref="TweenStyle"/>
+        /// </summary>
+        /// <returns></returns>
         override async public UniTask TweenInAsync() {
-            if (!Application.isPlaying) {
-                RT.localPosition = InPosition;
-                return;
-            }
-            RT.localPosition = DefaultEnterCordinates;
-            if (useSameArgsForInAndOut)
-                await TweenPosition(inPosition, args);
-            else
-                await TweenPosition(inPosition, inArgs);
+            RT.localPosition = GetExitCoordinates(enterEdge);
+            var stylesToUse = useSameStyleForInAndOut ? commonStyle : inStyle;
+            await TweenToPosition(inPosition, stylesToUse);
             RT.localPosition = InPosition;
         }
 
+        /// <summary>
+        /// Tweens the position of the UI element towards 
+        /// <see cref="OutPosition"/> using the applicable 
+        /// <see cref="TweenStyle"/>
+        /// </summary>
+        /// <returns></returns>
         override async public UniTask TweenOutAsync() {
-            if (!Application.isPlaying) {
-                RT.localPosition = OutPosition;
-                return;
-            }
             RT.localPosition = InPosition;
-            if(useSameArgsForInAndOut)
-                await TweenPosition(DefaultExitCordinates, args);
-            else
-                await TweenPosition(DefaultExitCordinates, outArgs);
+            var stylesToUse = useSameStyleForInAndOut ? commonStyle : outStyle;
+            await TweenToPosition(GetExitCoordinates(exitEdge), stylesToUse);
             RT.localPosition = OutPosition;
         }
 
-        async public UniTask TweenPosition(Vector2 endValue, TweenArgs tween)
-            => await Driver.TransitionPosition(RT, endValue, tween);
+        /// <summary>
+        /// Sets the tweening progress to a value between 0 and 1. 
+        /// Use this to have manual control over the position.
+        /// </summary>
+        /// <param name="value"></param>
+        protected override void SetProgress(float value) {
+            RT.localPosition = Vector2.Lerp(OutPosition, InPosition, value);
+            if (value == 0f)
+                RT.localPosition = OutPosition;
+            else if (value == 1f)
+                RT.localPosition = InPosition;
+        }
 
-        public Vector2 GetPositionVector2(Edge position) {
-            switch (position) {
+        /// <summary>
+        /// Tweens the position to an end value using the provided
+        /// <see cref="TweenStyle"/>
+        /// </summary>
+        /// <param name="to">The position to tween towards</param>
+        /// <param name="style">The tween styles to be used</param>
+        /// <returns></returns>
+        async public UniTask TweenToPosition(Vector2 to, TweenStyle style)
+            => await Driver.TweenToPosition(RT, to, style);
+
+        /// <summary>
+        /// Gets the nearest local position for this UI element to be outside 
+        /// of the screen at the given edge of the screen.
+        /// </summary>
+        public Vector2 GetExitCoordinates(Edge edge) {
+            switch (edge) {
                 case Edge.Left: return LeftExitCordinates;
                 case Edge.Right: return RightExitCordinates;
                 case Edge.Top: return TopExitCordinates;
@@ -64,29 +115,27 @@ namespace Adrenak.UGX {
             }
         }
 
-        protected override void OnProgressChanged(float value) {
-            RT.localPosition = Vector2.Lerp(OutPosition, InPosition, value);
-            if (value == 0f)
-                RT.localPosition = OutPosition;
-            else if (value == 1f)
-                RT.localPosition = InPosition;
-        }
-
-        public Vector2 DefaultExitCordinates
-            => GetPositionVector2(exitEdge);
-
-        public Vector2 DefaultEnterCordinates
-            => GetPositionVector2(enterEdge);
-
+        /// <summary>
+        /// The exit coordinates towards the right
+        /// </summary>
         public Vector2 RightExitCordinates
             => new Vector2(RT.GetRightExit(), inPosition.y);
 
+        /// <summary>
+        /// The exit coordinates towards the top
+        /// </summary>
         public Vector2 TopExitCordinates
             => new Vector2(inPosition.x, RT.GetTopExit());
 
+        /// <summary>
+        /// /// The exit coordinates towards the left
+        /// </summary>
         public Vector2 LeftExitCordinates
             => new Vector2(RT.GetLeftExit(), inPosition.y);
 
+        /// <summary>
+        /// /// The exit coordinates towards the bottom
+        /// </summary>
         public Vector2 BottomExitCordinates
             => new Vector2(inPosition.x, RT.GetBottomExit());
     }

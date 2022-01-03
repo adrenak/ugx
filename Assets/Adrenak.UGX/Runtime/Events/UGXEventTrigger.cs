@@ -1,32 +1,43 @@
 ﻿using UnityEngine;
 
 namespace Adrenak.UGX {
+    /// <summary>
+    /// Used to fire events for consumption by <see cref="UGXEventListener"/>
+    /// Currently supports sending events up the scene hierarchy.
+    /// </summary>
     public sealed class UGXEventTrigger : MonoBehaviour {
-        public bool debug;
-
-        public void SendUGXEventUpwards(string id) {
+        /// <summary>
+        /// Sends a <see cref="UGXEvent"/> up the scene hierarchy
+        /// </summary>
+        /// <param name="id">ID of the event</param>
+        public void NotifyUpwards(string id) {
             var ugxEvent = new UGXEvent { id = id, sender = gameObject };
-            SendUGXEventUpwards(ugxEvent);
+            NotifyUpwards(ugxEvent);
         }
 
-        public void SendUGXEventUpwards(string id, object data) {
+        /// <summary>
+        /// Sends a <see cref="UGXEvent"/> up the scene hierarchy
+        /// </summary>
+        /// <param name="id">ID of the event</param>
+        /// <param name="data">Data associated with the event</param>
+        public void NotifyUpwards(string id, object data) {
             var ugxEvent = new UGXEvent {
                 id = id,
                 data = data,
                 sender = gameObject
             };
-            SendUGXEventUpwards(ugxEvent);
+            NotifyUpwards(ugxEvent);
         }
 
-        void SendUGXEventUpwards(UGXEvent ugxEvent) {
-            Transform loc = transform;
-            while (loc != null) {
-                var listener = loc.GetComponent<UGXEventListener>();
+        void NotifyUpwards(UGXEvent ugxEvent) {
+            var current = transform;
+            while (current != null) {
+                var listener = current.GetComponent<UGXEventListener>();
                 if (listener != null) {
-                    if (!listener.SendUGXEvent(ugxEvent))
+                    if (!listener.Notify(ugxEvent))
                         return;
                 }
-                loc = loc.parent;
+                current = current.parent;
             }
         }
     }

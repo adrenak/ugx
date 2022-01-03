@@ -12,9 +12,7 @@ namespace Adrenak.UGX.Editor {
             GUI.backgroundColor = new Color(.7f, .7f, .7f);
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
 
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("progress"));
-            EditorGUI.EndDisabledGroup();
+            tweener.progress = EditorGUILayout.Slider("Progress", tweener.progress, 0, 1);
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Tweening Args", EditorStyles.boldLabel);
