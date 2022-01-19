@@ -28,15 +28,15 @@ namespace Adrenak.UGX {
         public bool refreshOnStateSwap = true;
 
         [Tooltip("Current state of the view.")]
-        [SerializeField] TState state;
+        [SerializeField] TState _state;
 
         /// <summary>
         /// Current state of the View
         /// </summary>
         public TState State {
-            get => state;
+            get => _state;
             set {
-                state = value ?? throw new Exception(nameof(State));
+                _state = value ?? throw new Exception(nameof(State));
                 if (refreshOnStateSwap)
                     RefreshFromState();
             }
@@ -65,7 +65,7 @@ namespace Adrenak.UGX {
             UnityEditor.Undo.RecordObject(gameObject, "Refresh");
 #endif
             OnRefresh();
-            Refreshed?.Invoke(this, state);
+            Refreshed?.Invoke(this, _state);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Adrenak.UGX {
         /// An Action defining how the state should be modified
         /// </param>
         public void Refresh(Action<TState> stateModification) {
-            stateModification?.Invoke(state);
+            stateModification?.Invoke(_state);
             RefreshFromState();
         }
 
@@ -84,7 +84,7 @@ namespace Adrenak.UGX {
         /// </summary>
         /// <param name="state">The new state to be used</param>
         public void Refresh(TState state) {
-            State = state;
+            this.State = state;
 
             // only if auto refresh is off we refresh manually
             if (!refreshOnStateSwap)

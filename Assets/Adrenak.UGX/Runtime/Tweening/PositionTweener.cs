@@ -44,13 +44,13 @@ namespace Adrenak.UGX {
         /// Sets the current local position of the <see cref="RectTransform"/>
         /// as the <see cref="inPosition"/>
         /// </summary>
-        public void CaptureInPosition() => inPosition = RT.localPosition;
+        public void CaptureInPosition() => inPosition = rectTransform.localPosition;
 
         /// <summary>
         /// Sets the current local position of the <see cref="RectTransform"/>
         /// as the <see cref="OutPosition"/>
         /// </summary>
-        public void CaptureOutPosition() => outPosition = RT.localPosition;
+        public void CaptureOutPosition() => outPosition = rectTransform.localPosition;
 
         /// <summary>
         /// Tweens the position of the UI element towards 
@@ -59,10 +59,10 @@ namespace Adrenak.UGX {
         /// </summary>
         /// <returns></returns>
         override async public UniTask TweenInAsync() {
-            RT.localPosition = GetExitCoordinates(enterEdge);
+            rectTransform.localPosition = GetExitCoordinates(enterEdge);
             var stylesToUse = useSameStyleForInAndOut ? commonStyle : inStyle;
             await TweenToPosition(inPosition, stylesToUse);
-            RT.localPosition = InPosition;
+            rectTransform.localPosition = InPosition;
         }
 
         /// <summary>
@@ -72,10 +72,10 @@ namespace Adrenak.UGX {
         /// </summary>
         /// <returns></returns>
         override async public UniTask TweenOutAsync() {
-            RT.localPosition = InPosition;
+            rectTransform.localPosition = InPosition;
             var stylesToUse = useSameStyleForInAndOut ? commonStyle : outStyle;
             await TweenToPosition(GetExitCoordinates(exitEdge), stylesToUse);
-            RT.localPosition = OutPosition;
+            rectTransform.localPosition = OutPosition;
         }
 
         /// <summary>
@@ -84,11 +84,11 @@ namespace Adrenak.UGX {
         /// </summary>
         /// <param name="value"></param>
         protected override void SetProgress(float value) {
-            RT.localPosition = Vector2.Lerp(OutPosition, InPosition, value);
+            rectTransform.localPosition = Vector2.Lerp(OutPosition, InPosition, value);
             if (value == 0f)
-                RT.localPosition = OutPosition;
+                rectTransform.localPosition = OutPosition;
             else if (value == 1f)
-                RT.localPosition = InPosition;
+                rectTransform.localPosition = InPosition;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Adrenak.UGX {
         /// <param name="style">The tween styles to be used</param>
         /// <returns></returns>
         async public UniTask TweenToPosition(Vector2 to, TweenStyle style)
-            => await Driver.TweenToPosition(RT, to, style);
+            => await Driver.TweenToPosition(rectTransform, to, style);
 
         /// <summary>
         /// Gets the nearest local position for this UI element to be outside 
@@ -119,24 +119,24 @@ namespace Adrenak.UGX {
         /// The exit coordinates towards the right
         /// </summary>
         public Vector2 RightExitCordinates
-            => new Vector2(RT.GetRightExit(), inPosition.y);
+            => new Vector2(rectTransform.GetRightExit(), inPosition.y);
 
         /// <summary>
         /// The exit coordinates towards the top
         /// </summary>
         public Vector2 TopExitCordinates
-            => new Vector2(inPosition.x, RT.GetTopExit());
+            => new Vector2(inPosition.x, rectTransform.GetTopExit());
 
         /// <summary>
         /// /// The exit coordinates towards the left
         /// </summary>
         public Vector2 LeftExitCordinates
-            => new Vector2(RT.GetLeftExit(), inPosition.y);
+            => new Vector2(rectTransform.GetLeftExit(), inPosition.y);
 
         /// <summary>
         /// /// The exit coordinates towards the bottom
         /// </summary>
         public Vector2 BottomExitCordinates
-            => new Vector2(inPosition.x, RT.GetBottomExit());
+            => new Vector2(inPosition.x, rectTransform.GetBottomExit());
     }
 }

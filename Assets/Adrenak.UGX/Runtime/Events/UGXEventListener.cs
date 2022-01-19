@@ -25,7 +25,18 @@ namespace Adrenak.UGX {
             subscribers.Add(handler);
             if (debug) {
                 var count = subscribers.Count;
-                string msg = $"New Subscription. Total subscriptions: {count}";
+                string msg = $"New Subscription. Total subscribers: {count}";
+                Debug.Log(msg, gameObject);
+            }
+        }
+
+        public void Unsubscribe(Func<UGXEvent, bool> handler) {
+            if (!subscribers.Contains(handler)) return;
+            
+            subscribers.Remove(handler);
+            if(debug) {
+                var count = subscribers.Count;
+                string msg = $"Subscription removed. Total subscribers: {count}";
                 Debug.Log(msg, gameObject);
             }
         }

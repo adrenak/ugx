@@ -25,11 +25,11 @@ namespace Adrenak.UGX {
         async public UniTask<K> Show() {
             await UniTask.SwitchToMainThread();
 
-            if (Window.IsClosedOrClosing)
-                await Window.OpenWindowAsync();
+            if (window.IsClosedOrClosing)
+                await window.OpenWindowAsync();
 
             var response = await GetResponse();
-            await Window.CloseWindowAsync();
+            await window.CloseWindowAsync();
             await UniTask.SwitchToMainThread();
             return response;
         }

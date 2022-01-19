@@ -83,7 +83,7 @@ namespace Adrenak.UGX {
             WindowStartedOpening?.Invoke();
 
             if (activeTweeners.Length == 0)
-                activeTweeners = Tweeners;
+                activeTweeners = tweeners;
 
             var transitions = activeTweeners.Where(x => x.enabled)
                 .Select(x => x.TweenInAsync())
@@ -115,7 +115,7 @@ namespace Adrenak.UGX {
             WindowStartedClosing?.Invoke();
 
             if (activeTweeners.Length == 0)
-                activeTweeners = Tweeners;
+                activeTweeners = tweeners;
             var transitions = activeTweeners.Where(x => x.enabled)
                 .Select(x => x.TweenOutAsync())
                 .ToList();

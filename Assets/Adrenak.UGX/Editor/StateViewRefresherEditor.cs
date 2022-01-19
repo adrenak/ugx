@@ -2,6 +2,7 @@
 using UnityEditor;
 
 namespace Adrenak.UGX.Editor {
+    [CustomEditor(typeof(StateViewRefresher))]
     public class StateViewRefresherEditor : UnityEditor.Editor {
         public override void OnInspectorGUI() {
             var refresher = (StateViewRefresher)target;

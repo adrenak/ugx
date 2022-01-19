@@ -7,6 +7,10 @@ namespace Adrenak.UGX {
     /// The base <see cref="MonoBehaviour"/> class for UGX.
     /// This class mainly provides easy access to UGX specific components
     /// on its <see cref="GameObject"/>
+    /// 
+    /// For consistency, properties here start with lower-case 
+    /// despite C# recommending upper-case because <see cref="Component"/> 
+    /// also has properties such as 'transform', 'gameObject'.
     /// </summary>
     [Serializable]
     [RequireComponent(typeof(RectTransform))]
@@ -15,7 +19,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns the RectTransform of the GameObject.
         /// </summary>
-        public RectTransform RT {
+        public RectTransform rectTransform {
             get {
                 if (rt == null)
                     rt = GetComponent<RectTransform>();
@@ -26,7 +30,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns the View on this GameObject, if any
         /// </summary>
-        public View View {
+        public View view {
             get {
                 var v = GetComponent<View>();
                 if (v == null) {
@@ -40,7 +44,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns the Window on this GameObject, if any
         /// </summary>
-        public Window Window {
+        public Window window {
             get {
                 var w = GetComponent<Window>();
                 if (w == null) {
@@ -54,7 +58,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns all the Tweeners on this GameObject, if any
         /// </summary>
-        public TweenerBase[] Tweeners {
+        public TweenerBase[] tweeners {
             get {
                 var t = GetComponents<TweenerBase>();
                 if (t == null || t.Length == 0) {
@@ -62,6 +66,24 @@ namespace Adrenak.UGX {
                     return null;
                 }
                 return t;
+            }
+        }
+
+        public UGXEventEmitter eventEmitter {
+            get {
+                var emitter = GetComponent<UGXEventEmitter>();
+                if (emitter == null)
+                    emitter = gameObject.AddComponent<UGXEventEmitter>();
+                return emitter;
+            }
+        }
+
+        public UGXEventListener eventListener {
+            get {
+                var listener = GetComponent<UGXEventListener>();
+                if (listener == null)
+                    listener = gameObject.AddComponent<UGXEventListener>();
+                return listener;
             }
         }
     }
