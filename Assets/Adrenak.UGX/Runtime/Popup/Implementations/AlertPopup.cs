@@ -23,7 +23,7 @@ namespace Adrenak.UGX {
             return UniTask.CompletedTask;
         }
 
-        protected override void OnRefresh() {
+        protected override void OnUpdateView() {
             headerDisplay.text = State.heading;
             bodyDisplay.text = State.body;
             ackDisplay.text = State.acknowledgment;
@@ -34,6 +34,6 @@ namespace Adrenak.UGX {
             responded = true;
         }
 
-        protected override void OnStart() { }
+        protected override void OnInitializeView() { }
     }
 }

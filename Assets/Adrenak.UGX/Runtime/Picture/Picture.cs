@@ -95,13 +95,13 @@ namespace Adrenak.UGX {
                     },
                     error => {
                         SetStatusObjects(false, true);
-                        Debug.LogError($"Refresh failed: " + error);
+                        UGX.Debug.LogError($"Refresh failed: " + error);
                         onLoadFailure.Invoke();
                     }
                 );
             }
             catch (Exception e) {
-                Debug.LogError(e);
+                UGX.Debug.LogError(e);
             }
             oldPath = path;
             oldCompression = compression;

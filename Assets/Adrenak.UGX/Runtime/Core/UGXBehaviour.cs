@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns the RectTransform of the GameObject.
         /// </summary>
-        public RectTransform rectTransform {
+        public RectTransform RectTransform {
             get {
                 if (rt == null)
                     rt = GetComponent<RectTransform>();
@@ -30,25 +31,23 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns the View on this GameObject, if any
         /// </summary>
-        public View view {
-            get {
-                var v = GetComponent<View>();
-                if (v == null) {
-                    Debug.LogError("No View component found", gameObject);
-                    return null;
-                }
-                return v;
+        public View<T> GetView<T>() where T : State {
+            var v = GetComponent<View<T>>();
+            if (v == null) {
+                UGX.Debug.LogError("No View component found", gameObject);
+                return null;
             }
+            return v;
         }
 
         /// <summary>
         /// Returns the Window on this GameObject, if any
         /// </summary>
-        public Window window {
+        public Window Window {
             get {
                 var w = GetComponent<Window>();
                 if (w == null) {
-                    Debug.LogError("No Window component found", gameObject);
+                    UGX.Debug.LogError("No Window component found", gameObject);
                     return null;
                 }
                 return w;
@@ -58,31 +57,31 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns all the Tweeners on this GameObject, if any
         /// </summary>
-        public TweenerBase[] tweeners {
+        public TweenerBase[] Tweeners {
             get {
                 var t = GetComponents<TweenerBase>();
                 if (t == null || t.Length == 0) {
-                    Debug.LogError("No Tweener components found", gameObject);
+                    UGX.Debug.LogError("No Tweener components found", gameObject);
                     return null;
                 }
                 return t;
             }
         }
 
-        public UGXEventEmitter eventEmitter {
+        public EventEmitter EventEmitter {
             get {
-                var emitter = GetComponent<UGXEventEmitter>();
+                var emitter = GetComponent<EventEmitter>();
                 if (emitter == null)
-                    emitter = gameObject.AddComponent<UGXEventEmitter>();
+                    emitter = gameObject.AddComponent<EventEmitter>();
                 return emitter;
             }
         }
 
-        public UGXEventListener eventListener {
+        public EventListener EventListener {
             get {
-                var listener = GetComponent<UGXEventListener>();
+                var listener = GetComponent<EventListener>();
                 if (listener == null)
-                    listener = gameObject.AddComponent<UGXEventListener>();
+                    listener = gameObject.AddComponent<EventListener>();
                 return listener;
             }
         }

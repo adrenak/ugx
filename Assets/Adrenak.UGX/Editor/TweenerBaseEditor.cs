@@ -16,14 +16,14 @@ namespace Adrenak.UGX.Editor {
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Tweening Args", EditorStyles.boldLabel);
-            var useSameArgsForInAndOut = serializedObject.FindProperty("useSameArgsForInAndOut");
+            var useSameArgsForInAndOut = serializedObject.FindProperty("useSameStyleForInAndOut");
             EditorGUILayout.PropertyField(useSameArgsForInAndOut);
 
             if (useSameArgsForInAndOut.boolValue)
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("args"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("commonStyle"));
             else {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("inArgs"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("outArgs"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("inStyle"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("outStyle"));
             }
             EditorGUILayout.EndVertical();
 

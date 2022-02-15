@@ -19,11 +19,11 @@ namespace Adrenak.UGX {
             return UniTask.CompletedTask;
         }
 
-        protected override void OnRefresh() {
+        protected override void OnUpdateView() {
             title.text = State.title;
             description.text = State.body;
         }
 
-        protected override void OnStart() { }
+        protected override void OnInitializeView() { }
     }
 }

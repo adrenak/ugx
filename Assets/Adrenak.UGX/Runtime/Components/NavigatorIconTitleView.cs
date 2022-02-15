@@ -15,27 +15,27 @@ namespace Adrenak.UGX {
     /// <see cref="Navigator"/>
     /// 
     /// If required, the text and icon displayed can also be changed manually
-    /// as this is a <see cref="StateView{TState}"/> implementation.
+    /// as this is a <see cref="View{TState}"/> implementation.
     /// </summary>
-    public class NavigatorIconTitleView : StateView<NavigatorIconTitleViewModel> {
+    public class NavigatorIconTitleView : View<NavigatorIconTitleViewModel> {
         public bool autoUpdateOnNavigatorPush = true;
 
         [SerializeField] Navigator navigator;
         [SerializeField] Image icon;
         [SerializeField] Text title;
 
-        protected override void OnStart() {
+        protected override void OnInitializeView() {
             navigator.WindowPushed.AddListener(window => {
                 if (!autoUpdateOnNavigatorPush) return;
 
-                Refresh(state => {
+                ModifyState(state => {
                     state.sprite = window.icon;
                     state.text = window.title;
                 });
             });
         }
 
-        protected override void OnRefresh() {
+        protected override void OnUpdateView() {
             if (icon != null)
                 icon.sprite = State.sprite;
 

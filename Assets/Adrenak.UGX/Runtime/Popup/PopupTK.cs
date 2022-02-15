@@ -12,7 +12,7 @@ namespace Adrenak.UGX {
     /// </typeparam>
     /// <typeparam name="K">The response captured by the popup</typeparam>
     [RequireComponent(typeof(Window))]
-    public abstract class Popup<T, K> : StateView<T> where T : State {
+    public abstract class Popup<T, K> : View<T> where T : State {
         /// <summary>
         /// Wait for user response and send it back as a <see cref="K"/> object
         /// </summary>
@@ -25,11 +25,11 @@ namespace Adrenak.UGX {
         async public UniTask<K> Show() {
             await UniTask.SwitchToMainThread();
 
-            if (window.IsClosedOrClosing)
-                await window.OpenWindowAsync();
+            if (Window.IsClosedOrClosing)
+                await Window.OpenWindowAsync();
 
             var response = await GetResponse();
-            await window.CloseWindowAsync();
+            await Window.CloseWindowAsync();
             await UniTask.SwitchToMainThread();
             return response;
         }
@@ -46,7 +46,7 @@ namespace Adrenak.UGX {
         /// Sets state and displays the popup. Returns response in a task
         /// </summary>
         async public UniTask<K> SetStateAndShow(T state) {
-            Refresh(state);
+            State = state;
             return await Show();
         }
 
@@ -61,7 +61,7 @@ namespace Adrenak.UGX {
         /// Returns response as a task
         /// </summary>
         async public UniTask<K> ModifyStateAndShow(Action<T> access) {
-            Refresh(access);
+            ModifyState(access);
             return await Show();
         }
 

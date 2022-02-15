@@ -5,11 +5,6 @@
     /// </summary>
     public interface INavigationRule {
         /// <summary>
-        /// A title used to identify this navigation rule
-        /// </summary>
-        string Title { get; }
-
-        /// <summary>
         /// Process a push. Provided is a unique identifier for
         /// the <see cref="Window"/> that the <see cref="Navigator"/> wants
         /// to push. Access to <see cref="Window"/> directly isn't provided

@@ -26,10 +26,10 @@ namespace Adrenak.UGX.Editor {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             showEvents = EditorGUILayout.Foldout(showEvents, new GUIContent("Events"), true);
             if (showEvents) {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("onWindowStartOpening"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("onWindowDoneOpening"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("onWindowStartClosing"));
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("onWindowDoneClosing"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("WindowStartedOpening"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("WindowDoneOpening"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("WindowStartedClosing"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("WindowDoneClosing"));
             }
             EditorGUILayout.EndVertical();
 

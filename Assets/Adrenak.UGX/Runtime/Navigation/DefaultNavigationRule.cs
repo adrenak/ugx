@@ -11,8 +11,6 @@ namespace Adrenak.UGX {
     public class DefaultNavigationRule : INavigationRule {
         [SerializeField] List<int> history;
 
-        public string Title => "Default Navigation Rule";
-
         public void Push(int window) {
             if (history.Contains(window)) {
                 var index = history.IndexOf(window);

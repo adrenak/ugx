@@ -29,7 +29,17 @@ namespace Adrenak.UGX {
         public UnityEvent WindowsOver;
 
         /// <summary>
-        /// Whether the navigator should pop a window on escape button press
+        /// Whether the <see cref="Window"/> instances open and close
+        /// in a sequential manner. If false, a window will start opening
+        /// at the same at time one starts closing. If true, the 
+        /// opening window will wait for the closing window to finish
+        /// closing before it starts to open.
+        /// </summary>
+        public bool sequential = false;
+
+        /// <summary>
+        /// Whether the navigator should pop the active window on 
+        /// escape button press
         /// </summary>
         [Tooltip("Whether the navigator should pop on escape button press")]
         public bool popOnEscape = true;
@@ -37,13 +47,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Currently opened window
         /// </summary>
-        [Tooltip("Currently opened window")]
-        [SerializeField] Window currentWindow;
-
-        /// <summary>
-        /// Currently open window
-        /// </summary>
-        public Window CurrentWindow => currentWindow;
+        public Window CurrentWindow => router.ActiveWindow;
 
         /// <summary>
         /// Windows that this navigator can operate on
@@ -51,19 +55,21 @@ namespace Adrenak.UGX {
         [Tooltip("Windows that this navigator can operate on")]
         [SerializeField] List<Window> windows;
 
+        [SerializeField] Router router;
+
         INavigationRule navigationRule;
         /// <summary>
         /// The navigation style in use by this navigator. Can only set this
         /// once.
         /// </summary>
-        INavigationRule NavigationRule {
+        public INavigationRule NavigationRule {
             get => navigationRule;
             set {
                 if (navigationRule == null)
                     navigationRule = value;
                 else
-                    Debug.LogWarning($"Navigation already set to " +
-                        $"{navigationRule.Title}", gameObject);
+                    UGX.Debug.LogWarning($"Navigation already set to " +
+                        $"{navigationRule.GetType().FullName}", gameObject);
             }
         }
 
@@ -74,15 +80,11 @@ namespace Adrenak.UGX {
         /// Instead <see cref="GameObject.SendMessage(string, object)"/> has
         /// been used to invoke it.
         /// </summary>
-        void RegisterWindow(object obj) {
+        public void RegisterWindow(object obj) {
             var window = obj as Window;
             window.WindowStartedOpening.AddListener(() => {
-                if (currentWindow != null)
-                    currentWindow.CloseWindow();
-
-                currentWindow = window;
+                router.SetActiveWindow(window);;
                 WindowPushed.Invoke(window);
-
                 NavigationRule.Push(window.GetInstanceID());
             });
             windows.Add(window);
@@ -92,9 +94,9 @@ namespace Adrenak.UGX {
         /// Pop the currently opened window (if any)
         /// </summary>
         public void Back() {
-            var toOpen = GetWindowByInstanceID(navigationRule.Pop().Value);
+            var toOpen = GetWindowByInstanceID(NavigationRule.Pop().Value);
             if (toOpen != null) {
-                toOpen.OpenWindow();
+                router.SetActiveWindow(toOpen);
                 WindowPopped.Invoke(toOpen);
             }
             else

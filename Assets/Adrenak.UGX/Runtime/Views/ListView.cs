@@ -8,29 +8,29 @@ using Object = UnityEngine.Object;
 
 namespace Adrenak.UGX {
     /// <summary>
-    /// Allows instantiation of <see cref="StateView{T}"/> through
+    /// Allows instantiation of <see cref="View{T}"/> through
     /// a List-like API.
     /// </summary>
     /// <typeparam name="T">
     /// The <see cref="State"/> type that represents the state of the elements
     /// </typeparam>
-    public sealed class ListView<T> : IList<T> where T : State {
+    public class ListView<T> : IList<T> where T : State {
         Transform container;
         /// <summary>
         /// The <see cref="Transform"/> under which the 
-        /// <see cref="StateView{T}"/> views will be instantiated
+        /// <see cref="View{T}"/> views will be instantiated
         /// </summary>
         public Transform Container {
             get => container;
             set => container = value;
         }
 
-        StateView<T> template;
+        View<T> template;
         /// <summary>
-        /// The <see cref="StateView{T}"/> to be used as the template 
+        /// The <see cref="View{T}"/> to be used as the template 
         /// for instantiation
         /// </summary>
-        public StateView<T> Template {
+        public View<T> Template {
             get => template;
             set {
                 template = value;
@@ -40,10 +40,10 @@ namespace Adrenak.UGX {
         }
 
         /// <summary>
-        /// Returns the <see cref="StateView{T}"/> that have been instantiated
+        /// Returns the <see cref="View{T}"/> that have been instantiated
         /// so far. 
         /// </summary>
-        public readonly List<StateView<T>> views = new List<StateView<T>>();
+        public List<View<T>> Views { get; private set; } = new List<View<T>>();
 
         /// <summary>
         /// Creates an view. <see cref="Container"/> and 
@@ -64,7 +64,7 @@ namespace Adrenak.UGX {
         /// Creates an view with a <see cref="Container"/> and 
         /// <see cref="Template"/>
         /// </summary>
-        public ListView(Transform container, StateView<T> template){
+        public ListView(Transform container, View<T> template) {
             Container = container;
             Template = template;
         }
@@ -72,7 +72,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Returns the length of the state list
         /// </summary>
-        public int Count => views.Count;
+        public int Count => Views.Count;
 
         public bool IsReadOnly => false;
 
@@ -80,13 +80,35 @@ namespace Adrenak.UGX {
         /// Gets and sets the <see cref="State"/> at index
         /// </summary>
         public T this[int index] {
-            get => views[index].State;
-            set => views[index].Refresh(value);
+            get => Views[index].State;
+            set => Views[index].State = value;
+        }
+
+        /// <summary>
+        /// The values of the <see cref="ListView{T}"/> returned as a list.
+        /// Setting this clears the views and adds the values again using 
+        /// <see cref="AddRange(List{T})"/>
+        /// </summary>
+        public List<T> Values {
+            get => Views.Select(x => x.State).ToList();
+            set {
+                //Clear();
+                //AddRange(value);
+                //return;
+                for (int i = 0; i < value.Count; i++) {
+                    if (i < Views.Count)
+                        Views[i].State = value[i];
+                    else
+                        Add(value[i]);
+                }
+                while(Views.Count > value.Count) 
+                    RemoveAt(value.Count);
+            }
         }
 
         /// <summary>
         /// Adds a new <see cref="State"/> to the list and instantiates
-        /// a <see cref="StateView{T}"/> for it
+        /// a <see cref="View{T}"/> for it
         /// </summary>
         public void Add(T state) {
             if (template == null)
@@ -97,37 +119,37 @@ namespace Adrenak.UGX {
             view.hideFlags = HideFlags.DontSave;
             view.State = state;
 
-            views.Add(view);
+            Views.Add(view);
         }
 
         /// <summary>
         /// Adds an array of <see cref="State"/> to the inner list and 
-        /// instantiates the <see cref="StateView{T}"/> objects for each.
+        /// instantiates the <see cref="View{T}"/> objects for each.
         /// </summary>
-        public List<StateView<T>> AddRange(T[] states) {
-            var result = new List<StateView<T>>();
-            foreach (var state in states){
+        public List<View<T>> AddRange(T[] states) {
+            var result = new List<View<T>>();
+            foreach (var state in states) {
                 Add(state);
-                result.Add(views[views.Count - 1]);
+                result.Add(Views[Views.Count - 1]);
             }
             return result;
         }
 
         /// <summary>
         /// Adds a list of <see cref="T"/> to the inner list and instantiates
-        /// the <see cref="StateView{T}"/> objects for each.
+        /// the <see cref="View{T}"/> objects for each.
         /// </summary>
-        public List<StateView<T>> AddRange(List<T> items) =>
+        public List<View<T>> AddRange(List<T> items) =>
             AddRange(items.ToArray());
 
         /// <summary>
         /// Clears the state list and destroys all the instantiated
-        /// <see cref="StateView{T}"/>
+        /// <see cref="View{T}"/>
         /// </summary>
         public void Clear() {
-            foreach (var view in views)
+            foreach (var view in Views)
                 MonoBehaviour.Destroy(view.gameObject);
-            views.Clear();
+            Views.Clear();
         }
 
         /// <summary>
@@ -137,7 +159,7 @@ namespace Adrenak.UGX {
         /// <param name="item"></param>
         /// <returns></returns>
         public bool Contains(T item) {
-            foreach (var view in views)
+            foreach (var view in Views)
                 if (view.State == item)
                     return true;
             return false;
@@ -147,8 +169,8 @@ namespace Adrenak.UGX {
         /// Whether a state object with a given ID has been added yet.
         /// (Will be checked against <see cref="State"/> ID.
         /// </summary>
-        public bool ContainsID(string id){
-            foreach (var view in views)
+        public bool ContainsID(string id) {
+            foreach (var view in Views)
                 if (view.State.ID.Equals(id))
                     return true;
             return false;
@@ -161,8 +183,8 @@ namespace Adrenak.UGX {
         /// <param name="item"></param>
         /// <returns></returns>
         public int IndexOf(T item) {
-            for (int i = 0; i < views.Count; i++) {
-                var view = views[i];
+            for (int i = 0; i < Views.Count; i++) {
+                var view = Views[i];
                 if (view.State == item)
                     return i;
             }
@@ -171,15 +193,15 @@ namespace Adrenak.UGX {
 
         /// <summary>
         /// Removes a <see cref="State"/> object from the inner list 
-        /// and destroys the <see cref="StateView{T}"/> object for it.
+        /// and destroys the <see cref="View{T}"/> object for it.
         /// </summary>
         public bool Remove(T item) {
-            StateView<T> toBeRemoved = null;
-            foreach (var view in views)
+            View<T> toBeRemoved = null;
+            foreach (var view in Views)
                 if (view.State == item)
                     toBeRemoved = view;
             if (toBeRemoved != null) {
-                views.Remove(toBeRemoved);
+                Views.Remove(toBeRemoved);
                 Object.Destroy(toBeRemoved);
                 return true;
             }
@@ -188,21 +210,21 @@ namespace Adrenak.UGX {
 
         /// <summary>
         /// Removes a <see cref="State"/> object fromthe inner list at a given
-        /// index and destroyes the <see cref="StateView{T}"/> for it.
+        /// index and destroyes the <see cref="View{T}"/> for it.
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
         public void RemoveAt(int index) {
-            var toBeRemoved = views[index];
+            var toBeRemoved = Views[index];
             if (toBeRemoved != null) {
                 Object.Destroy(toBeRemoved);
-                views.RemoveAt(index);
+                Views.RemoveAt(index);
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
             return (IEnumerator<T>)new ListViewEnumerator<T>(
-                views.Select(x => x.State).ToArray()
+                Views.Select(x => x.State).ToArray()
             );
         }
 
@@ -218,7 +240,7 @@ namespace Adrenak.UGX {
 
         public IEnumerator<T> GetEnumerator() {
             return (IEnumerator<T>)new ListViewEnumerator<T>(
-                views.Select(x => x.State).ToArray()
+                Views.Select(x => x.State).ToArray()
             );
         }
     }
