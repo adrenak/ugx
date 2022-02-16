@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,18 +34,48 @@ namespace Adrenak.UGX {
         public TState State {
             get => _state;
             set {
-                _state = value ?? throw new Exception(nameof(State));
+                if(value == null) {
+                    Debug.LogError("Cannot set State to null");
+                    return;
+                }
+
+                // Update the listeners of the binding sources that
+                // have changed after state object set
+                TriggerBindingsIfChanged(_state, value);
+
+                _state = value;
                 UpdateView_Internal();
             }
         }
 
-        Dictionary<Func<TState, object>, List<Action<object>>> bindings = new Dictionary<Func<TState, object>, List<Action<object>>>();
+        List<object> GetBindingSources(TState state) =>
+            bindings.Keys.Select(x => x(state)).ToList();
 
-        protected void Bind(Func<TState, object> source, Action<object> destination) {
+        void TriggerBindingsIfChanged(TState oldState, TState newState) {
+            foreach (var binding in bindings) {
+                var oldSource = binding.Key(oldState);
+                var newSource = binding.Key(newState);
+                if (!oldSource.Equals(newSource))
+                    foreach (var destination in binding.Value)
+                        destination(newSource);
+            }
+        }
+
+        void TriggerAllBindings() {
+            foreach(var binding in bindings) {
+                var value = binding.Key(State);
+                foreach (var destination in binding.Value)
+                    destination(value);
+            }
+        }
+
+        SortedDictionary<Func<TState, object>, List<Action<object>>> bindings = new SortedDictionary<Func<TState, object>, List<Action<object>>>();
+
+        protected void Bind(Func<TState, object> source, Action<object> listener) {
             if (bindings.ContainsKey(source))
-                bindings[source].Add(destination);
+                bindings[source].Add(listener);
             else
-                bindings.Add(source, new List<Action<object>> { destination });
+                bindings.Add(source, new List<Action<object>> { listener });
         }
 
         /// <summary>
@@ -71,6 +102,10 @@ namespace Adrenak.UGX {
             isBeingDestroyed = true;
         }
 
+        private void OnValidate() {
+            TriggerAllBindings();
+        }
+
         /// <summary>
         /// Updates the View using the current state
         /// </summary>
@@ -82,6 +117,7 @@ namespace Adrenak.UGX {
             UnityEditor.Undo.RecordObject(gameObject, "Refresh");
 #endif
             if (State != null) {
+                //TriggerAllBindings();
                 OnUpdateView();
                 Updated?.Invoke(this, _state);
             }
@@ -94,7 +130,9 @@ namespace Adrenak.UGX {
         /// An Action defining how the state should be modified
         /// </param>
         public void ModifyState(Action<TState> stateModification) {
+            var oldState = _state.ShallowClone();
             stateModification?.Invoke(_state);
+            TriggerBindingsIfChanged(oldState, _state);
             UpdateView_Internal();
         }
 
