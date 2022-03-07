@@ -10,7 +10,6 @@ namespace Adrenak.UGX {
     /// A View with a state object
     /// </summary>
     [Serializable]
-    [RequireComponent(typeof(ViewInspectorHelper))]
     public abstract class View<TState> : UGXBehaviour where TState : State {
         /// <summary>
         /// Fired when the <see cref="State"/> field is set
@@ -27,6 +26,7 @@ namespace Adrenak.UGX {
 
         bool isBeingDestroyed = false;
         bool initialized = false;
+        long age;
 
         /// <summary>
         /// Current state of the View
@@ -39,43 +39,9 @@ namespace Adrenak.UGX {
                     return;
                 }
 
-                // Update the listeners of the binding sources that
-                // have changed after state object set
-                TriggerBindingsIfChanged(_state, value);
-
                 _state = value;
                 UpdateView_Internal();
             }
-        }
-
-        List<object> GetBindingSources(TState state) =>
-            bindings.Keys.Select(x => x(state)).ToList();
-
-        void TriggerBindingsIfChanged(TState oldState, TState newState) {
-            foreach (var binding in bindings) {
-                var oldSource = binding.Key(oldState);
-                var newSource = binding.Key(newState);
-                if (!oldSource.Equals(newSource))
-                    foreach (var destination in binding.Value)
-                        destination(newSource);
-            }
-        }
-
-        void TriggerAllBindings() {
-            foreach(var binding in bindings) {
-                var value = binding.Key(State);
-                foreach (var destination in binding.Value)
-                    destination(value);
-            }
-        }
-
-        SortedDictionary<Func<TState, object>, List<Action<object>>> bindings = new SortedDictionary<Func<TState, object>, List<Action<object>>>();
-
-        protected void Bind(Func<TState, object> source, Action<object> listener) {
-            if (bindings.ContainsKey(source))
-                bindings[source].Add(listener);
-            else
-                bindings.Add(source, new List<Action<object>> { listener });
         }
 
         /// <summary>
@@ -98,12 +64,20 @@ namespace Adrenak.UGX {
                 UpdateView_Internal();
         }
 
+        protected void Update() {
+            age++;
+        }
+
         private void OnDestroy() {
             isBeingDestroyed = true;
         }
 
         private void OnValidate() {
-            TriggerAllBindings();
+            try {
+                if(age > 1)
+                    OnUpdateView();
+            }
+            catch { }
         }
 
         /// <summary>
@@ -114,10 +88,9 @@ namespace Adrenak.UGX {
             await UniTask.WaitWhile(() => !initialized);
 
 #if UNITY_EDITOR
-            UnityEditor.Undo.RecordObject(gameObject, "Refresh");
+            UnityEditor.Undo.RecordObject(gameObject, "UpdateView");
 #endif
             if (State != null) {
-                //TriggerAllBindings();
                 OnUpdateView();
                 Updated?.Invoke(this, _state);
             }
@@ -130,9 +103,7 @@ namespace Adrenak.UGX {
         /// An Action defining how the state should be modified
         /// </param>
         public void ModifyState(Action<TState> stateModification) {
-            var oldState = _state.ShallowClone();
             stateModification?.Invoke(_state);
-            TriggerBindingsIfChanged(oldState, _state);
             UpdateView_Internal();
         }
 

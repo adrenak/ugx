@@ -11,8 +11,6 @@ namespace Adrenak.UGX {
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class EventListener : UGXBehaviour {
-        
-
         public bool debug;
 
         List<Func<Event, bool>> subscribers =

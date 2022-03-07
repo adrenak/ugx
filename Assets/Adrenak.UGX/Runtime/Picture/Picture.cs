@@ -46,7 +46,7 @@ namespace Adrenak.UGX {
         public string path = string.Empty;
 
         RectTransform rt;
-        RectTransform RT => rt ?? (rt = GetComponent<RectTransform>());
+        RectTransform RT => rt == null ? (rt = GetComponent<RectTransform>()) : rt;
 
         Visibility currentVisibility = Visibility.None;
         public Visibility CurrentVisibility => currentVisibility;
@@ -101,6 +101,7 @@ namespace Adrenak.UGX {
                 );
             }
             catch (Exception e) {
+                Debug.LogError(e);
                 UGX.Debug.LogError(e);
             }
             oldPath = path;
@@ -108,9 +109,14 @@ namespace Adrenak.UGX {
         }
 
         void SetStatusObjects(bool loaderState, bool errorState) {
-            statusRootObj?.SetActive(loaderState || errorState);
-            loaderObj?.SetActive(loaderState);
-            errorObj?.SetActive(errorState);
+            if(statusRootObj != null)
+                statusRootObj.SetActive(loaderState || errorState);
+
+            if(loaderObj != null)
+                loaderObj.SetActive(loaderState);
+
+            if(errorObj != null)
+                errorObj.SetActive(errorState);
         }
 
         // NOTE: We ignore the first 2 frames because often times Pictures are

@@ -45,6 +45,7 @@
 
         void EmitUpwards(Event e) {
             var current = transform;
+
             while (current != null) {
                 var listener = current.GetComponent<EventListener>();
                 if (listener != null) {

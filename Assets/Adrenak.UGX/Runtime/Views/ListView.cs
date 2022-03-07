@@ -92,11 +92,8 @@ namespace Adrenak.UGX {
         public List<T> Values {
             get => Views.Select(x => x.State).ToList();
             set {
-                //Clear();
-                //AddRange(value);
-                //return;
                 for (int i = 0; i < value.Count; i++) {
-                    if (i < Views.Count)
+                    if (i < Views.Count) 
                         Views[i].State = value[i];
                     else
                         Add(value[i]);
@@ -147,23 +144,32 @@ namespace Adrenak.UGX {
         /// <see cref="View{T}"/>
         /// </summary>
         public void Clear() {
-            foreach (var view in Views)
+            foreach (var view in Views) {
                 MonoBehaviour.Destroy(view.gameObject);
+            }
             Views.Clear();
         }
 
         /// <summary>
-        /// Whether a state object has been added yet.
-        /// (Will be checked against reference)
+        /// Returns the <see cref="View{T}"/> object of the 
+        /// <see cref="T"/> element with the given ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>False if no state with this ID</returns>
+        public View<T> GetByID(string id) {
+            foreach (var view in Views)
+                if (view.State.ID == id)
+                    return view;
+            return null;
+        }
+
+        /// <summary>
+        /// Returns whether the inner list contains a <see cref="T"/> 
+        /// (uses <see cref="T.ID"/> for comparision
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Contains(T item) {
-            foreach (var view in Views)
-                if (view.State == item)
-                    return true;
-            return false;
-        }
+        public bool Contains(T item) => ContainsID(item.ID);
 
         /// <summary>
         /// Whether a state object with a given ID has been added yet.
@@ -195,14 +201,26 @@ namespace Adrenak.UGX {
         /// Removes a <see cref="State"/> object from the inner list 
         /// and destroys the <see cref="View{T}"/> object for it.
         /// </summary>
-        public bool Remove(T item) {
+        public bool Remove(T item) => RemoveByID(item.ID);
+
+        /// <summary>
+        /// Removes a <see cref="State"/> object from the inner ist
+        /// using the ID and destroys the <see cref="View{T}"/> 
+        /// object for it.
+        /// </summary>
+        /// <param name="id">The ID of the state that should be removed</param>
+        public bool RemoveByID(string id) {
+            if (!ContainsID(id)) return false;
             View<T> toBeRemoved = null;
-            foreach (var view in Views)
-                if (view.State == item)
+            foreach (var view in Views) {
+                if (view.State.ID.Equals(id)) {
                     toBeRemoved = view;
-            if (toBeRemoved != null) {
+                    break;
+                }
+            }
+            if(toBeRemoved != null) {
                 Views.Remove(toBeRemoved);
-                Object.Destroy(toBeRemoved);
+                Object.Destroy(toBeRemoved.gameObject);
                 return true;
             }
             return false;
@@ -217,15 +235,13 @@ namespace Adrenak.UGX {
         public void RemoveAt(int index) {
             var toBeRemoved = Views[index];
             if (toBeRemoved != null) {
-                Object.Destroy(toBeRemoved);
+                Object.Destroy(toBeRemoved.gameObject);
                 Views.RemoveAt(index);
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return (IEnumerator<T>)new ListViewEnumerator<T>(
-                Views.Select(x => x.State).ToArray()
-            );
+            return GetEnumerator();
         }
 
         [Obsolete("Not implemented", true)]
@@ -238,49 +254,7 @@ namespace Adrenak.UGX {
             throw new NotImplementedException();
         }
 
-        public IEnumerator<T> GetEnumerator() {
-            return (IEnumerator<T>)new ListViewEnumerator<T>(
-                Views.Select(x => x.State).ToArray()
-            );
-        }
-    }
-
-    // When you implement IEnumerable, you must also implement IEnumerator.
-    public class ListViewEnumerator<T> : IEnumerator where T : State {
-        public T[] array;
-
-        // Enumerators are positioned before the first element
-        // until the first MoveNext() call.
-        int position = -1;
-
-        public ListViewEnumerator(T[] list) {
-            array = list;
-        }
-
-        public bool MoveNext() {
-            position++;
-            return (position < array.Length);
-        }
-
-        public void Reset() {
-            position = -1;
-        }
-
-        object IEnumerator.Current {
-            get {
-                return Current;
-            }
-        }
-
-        public T Current {
-            get {
-                try {
-                    return array[position];
-                }
-                catch (IndexOutOfRangeException) {
-                    throw new InvalidOperationException();
-                }
-            }
-        }
+        public IEnumerator<T> GetEnumerator() =>
+            Views.Select(x => x.State).GetEnumerator();
     }
 }
