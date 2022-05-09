@@ -14,19 +14,12 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Fired when the <see cref="State"/> field is set
         /// </summary>
-        public event EventHandler<TState> Updated;
+        public event EventHandler<TState> ViewStateUpdated;
 
-        /// <summary>
-        /// Whether the view should update on start
-        /// </summary>
-        public bool updateOnStart = true;
+        public bool IsViewInitialized { get; private set; } = false;
 
         [Tooltip("Current state of the view.")]
         [SerializeField] TState _state;
-
-        bool isBeingDestroyed = false;
-        bool initialized = false;
-        long age;
 
         /// <summary>
         /// Current state of the View
@@ -47,8 +40,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Marked protected to draw attention to the following:
         /// If you are creating a Start() method in your subclass,
-        /// be use to call base.Start() inside it. Otherwise Unity
-        /// will not call Start() inside View<T>
+        /// be sure to call base.Start() inside it in the first line. 
         /// 
         /// Consider using <see cref="OnInitializeView"/> instead
         /// </summary>
@@ -59,23 +51,12 @@ namespace Adrenak.UGX {
             catch (Exception e) {
                 Debug.LogError(e);
             }
-            initialized = true;
-            if (updateOnStart)
-                UpdateView_Internal();
-        }
-
-        protected void Update() {
-            age++;
-        }
-
-        private void OnDestroy() {
-            isBeingDestroyed = true;
+            IsViewInitialized = true;
         }
 
         private void OnValidate() {
             try {
-                if(age > 1)
-                    OnUpdateView();
+                OnStateChange();
             }
             catch { }
         }
@@ -83,16 +64,15 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Updates the View using the current state
         /// </summary>
-        async void UpdateView_Internal() {
-            if (isBeingDestroyed) return;
-            await UniTask.WaitWhile(() => !initialized);
+        void UpdateView_Internal() {
+            //await UniTask.WaitUntil(() => IsViewInitialized);
 
 #if UNITY_EDITOR
             UnityEditor.Undo.RecordObject(gameObject, "UpdateView");
 #endif
             if (State != null) {
-                OnUpdateView();
-                Updated?.Invoke(this, _state);
+                OnStateChange();
+                ViewStateUpdated?.Invoke(this, _state);
             }
         }
 
@@ -109,6 +89,6 @@ namespace Adrenak.UGX {
 
         protected abstract void OnInitializeView();
 
-        protected abstract void OnUpdateView();
+        protected abstract void OnStateChange();
     }
 }

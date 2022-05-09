@@ -60,7 +60,7 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Opens the window
         /// </summary>
-        async public void OpenWindow() => await OpenWindowAsync();
+        public void OpenWindow() => OpenWindowAsync();
 
         void Awake() {
             // Add this window to a parent navigator, if present
@@ -73,9 +73,10 @@ namespace Adrenak.UGX {
         /// Opens the window. Completion is awaitable.
         /// </summary>
         async public UniTask OpenWindowAsync() {
-            while (status != WindowStatus.Closed || status != WindowStatus.Closing)
-                await UniTask.WaitForEndOfFrame();
+            if (IsOpenOrOpening) return;
 
+            while (status == WindowStatus.Closing)
+                await UniTask.WaitForEndOfFrame();
             await UniTask.SwitchToMainThread();
 
             status = WindowStatus.Opening;
@@ -100,13 +101,15 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Closes the window
         /// </summary>
-        async public void CloseWindow() => await CloseWindowAsync();
+        public void CloseWindow() => CloseWindowAsync();
 
         /// <summary>
         /// Closes the window. Completion is awaitable.
         /// </summary>
         async public UniTask CloseWindowAsync() {
-            while (status != WindowStatus.Opened || status != WindowStatus.Opening)
+            if (IsClosedOrClosing) return;
+
+            while (status == WindowStatus.Opening)
                 await UniTask.WaitForEndOfFrame();
 
             await UniTask.SwitchToMainThread();

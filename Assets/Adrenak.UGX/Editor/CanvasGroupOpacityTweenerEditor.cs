@@ -3,6 +3,7 @@
 using UnityEngine;
 
 namespace Adrenak.UGX.Editor {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(CanvasGroupOpacityTweener))]
     public class CanvasGroupOpacityTweenerEditor : TweenerBaseEditor {
         public override void OnInspectorGUI() {

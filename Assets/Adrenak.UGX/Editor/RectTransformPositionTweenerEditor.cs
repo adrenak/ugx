@@ -4,6 +4,7 @@ using UnityEditor.UI;
 using UnityEngine;
 
 namespace Adrenak.UGX.Editor {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(RectTransformPositionTweener))]
     public class RectTransformPositionTweenerEditor : TweenerBaseEditor {
         public override void OnInspectorGUI() {

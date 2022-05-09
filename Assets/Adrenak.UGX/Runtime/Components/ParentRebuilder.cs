@@ -13,6 +13,7 @@ namespace Adrenak.UGX {
     [RequireComponent(typeof(RectTransform))]
     public class ParentRebuilder : MonoBehaviour {
         public float frameStep = 2;
+        public Vector2 threshold = new Vector2(1, 1);
         RectTransform RT;
 
         void Start() => RT = GetComponent<RectTransform>();
@@ -32,7 +33,8 @@ namespace Adrenak.UGX {
                 width += (int)childRT.sizeDelta.x;
             }
 
-            if (height != lastHeight || width != lastWidth)
+            if (Mathf.Abs(height - lastHeight) > threshold.y 
+            || (Mathf.Abs(width - lastWidth) > threshold.x))
                 LayoutRebuilder.MarkLayoutForRebuild(RT);
 
             lastHeight = height;

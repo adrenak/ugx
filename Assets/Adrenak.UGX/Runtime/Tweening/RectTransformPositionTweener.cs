@@ -18,17 +18,17 @@ namespace Adrenak.UGX {
             Right
         }
 
-        [SerializeField] Vector2 inPosition;
+        [SerializeField] Vector3 inPosition;
         /// <summary>
         /// The position at which the UI element is considered to be "in"
         /// </summary>
-        public Vector2 InPosition => inPosition;
+        public Vector3 InPosition => inPosition;
 
-        [SerializeField] Vector2 outPosition;
+        [SerializeField] Vector3 outPosition;
         /// <summary>
         /// The position at which the UI element is considers to be "out"
         /// </summary>
-        public Vector2 OutPosition => outPosition;
+        public Vector3 OutPosition => outPosition;
 
         /// <summary>
         /// The edge from which the UI element should tween in
@@ -84,10 +84,10 @@ namespace Adrenak.UGX {
         /// </summary>
         /// <param name="value"></param>
         protected override void SetProgress(float value) {
-            RectTransform.localPosition = Vector2.Lerp(OutPosition, InPosition, value);
+            RectTransform.localPosition = Vector3.Lerp(OutPosition, InPosition, value);
             if (value == 0f)
                 RectTransform.localPosition = OutPosition;
-            else if (value == 1f)
+            else if (value == 1f) 
                 RectTransform.localPosition = InPosition;
         }
 
@@ -98,7 +98,7 @@ namespace Adrenak.UGX {
         /// <param name="to">The position to tween towards</param>
         /// <param name="style">The tween styles to be used</param>
         /// <returns></returns>
-        async public UniTask TweenToPosition(Vector2 to, TweenStyle style)
+        async public UniTask TweenToPosition(Vector3 to, TweenStyle style)
             => await Driver.TweenToPosition(RectTransform, to, style);
 
         /// <summary>

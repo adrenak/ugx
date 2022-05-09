@@ -10,7 +10,13 @@ namespace Adrenak.UGX {
     [RequireComponent(typeof(CanvasGroup))]
     public class CanvasGroupOpacityTweener : TweenerBase {
         CanvasGroup cg;
-        public CanvasGroup CG => cg ?? (cg = GetComponent<CanvasGroup>());
+        public CanvasGroup CG {
+            get {
+                if (cg == null)
+                    cg = GetComponent<CanvasGroup>();
+                return cg;
+            }
+        }
 
         /// <summary>
         /// Tweens the opacity of <see cref="CanvasGroup"/> from 0 to 1.
@@ -39,7 +45,7 @@ namespace Adrenak.UGX {
             CG.blocksRaycasts = false;
             CG.interactable = false;
             var styleToUse = useSameStyleForInAndOut ? commonStyle : outStyle;
-            await TweenToOpacity(1, styleToUse);
+            await TweenToOpacity(0, styleToUse);
             CG.alpha = 0;
         }
 

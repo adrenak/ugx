@@ -24,6 +24,7 @@ namespace Adrenak.UGX {
         [SerializeField] Image icon;
         [SerializeField] Text title;
 
+
         protected override void OnInitializeView() {
             navigator.WindowPushed.AddListener(window => {
                 if (!autoUpdateOnNavigatorPush) return;
@@ -35,7 +36,7 @@ namespace Adrenak.UGX {
             });
         }
 
-        protected override void OnUpdateView() {
+        protected override void OnStateChange() {
             if (icon != null)
                 icon.sprite = State.sprite;
 
