@@ -11,15 +11,15 @@ namespace Adrenak.UGX {
             return pSource.Task;
         }
 
-        public void TweenToPosition(RectTransform rt, Vector3 endValue, TweenStyle tween, Action onComplete) {
+        public void TweenToPosition(RectTransform rt, Vector3 endValue, TweenStyle style, Action onComplete) {
             Tween.Value(
                 rt.localPosition,
                 endValue,
                 v => rt.localPosition = v,
-                Mathf.Clamp(tween.Duration, 1f / int.MaxValue, Mathf.Infinity), // Make sure duration is not 0 else tweener jumps to final value
-                tween.Delay,
-                loop: Convert(tween.Loop),
-                easeCurve: Convert(tween.Curve),
+                Mathf.Clamp(style.Duration, 0.001f, Mathf.Infinity), // Make sure duration is not 0 else tweener jumps to final value
+                style.Delay,
+                loop: Convert(style.Loop),
+                easeCurve: Convert(style.Curve),
                 completeCallback: () => onComplete?.Invoke()
             );
         }
@@ -34,7 +34,7 @@ namespace Adrenak.UGX {
             Tween.CanvasGroupAlpha(
                 group,
                 endValue,
-                Mathf.Clamp(tween.Duration, 1f / int.MaxValue, Mathf.Infinity), // Make sure duration is not 0 else tweener jumps to final value
+                Mathf.Clamp(tween.Duration, .001f, Mathf.Infinity), // Make sure duration is not 0 else tweener jumps to final value
                 tween.Delay,
                 easeCurve: Convert(tween.Curve),
                 loop: Convert(tween.Loop),

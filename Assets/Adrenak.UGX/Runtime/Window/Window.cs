@@ -76,7 +76,7 @@ namespace Adrenak.UGX {
             if (IsOpenOrOpening) return;
 
             while (status == WindowStatus.Closing)
-                await UniTask.WaitForEndOfFrame();
+                return;
             await UniTask.SwitchToMainThread();
 
             status = WindowStatus.Opening;
@@ -110,7 +110,7 @@ namespace Adrenak.UGX {
             if (IsClosedOrClosing) return;
 
             while (status == WindowStatus.Opening)
-                await UniTask.WaitForEndOfFrame();
+                return;
 
             await UniTask.SwitchToMainThread();
             status = WindowStatus.Closing;
