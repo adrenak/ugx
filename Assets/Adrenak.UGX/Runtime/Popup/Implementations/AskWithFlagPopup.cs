@@ -30,7 +30,7 @@ namespace Adrenak.UGX {
         bool confirmed, denied;
 
         async protected override UniTask<AskWithFlagPopupResponse> GetResponse() {
-            confirmed = denied = true;
+            confirmed = denied = false;
 
             while (!confirmed && !denied)
                 await UniTask.Delay(100);
