@@ -10,21 +10,26 @@ namespace Adrenak.UGX {
     /// A View with a state object
     /// </summary>
     [Serializable]
-    public abstract class View<TState> : UGXBehaviour where TState : State {
+    public abstract class View<T> : UGXBehaviour where T : State {
         /// <summary>
         /// Fired when the <see cref="State"/> field is set
         /// </summary>
-        public event EventHandler<TState> ViewStateUpdated;
+        public event EventHandler<T> ViewStateUpdated;
 
         public bool IsViewInitialized { get; private set; } = false;
 
+        [SerializeField] bool autoInitilalizeOnStart = true;
+        public bool AutoInitializeOnStart {
+            get => autoInitilalizeOnStart;
+            set => autoInitilalizeOnStart = value;
+        }
         [Tooltip("Current state of the view.")]
-        [SerializeField] TState _state;
+        [SerializeField] T _state;
 
         /// <summary>
         /// Current state of the View
         /// </summary>
-        public TState State {
+        public T State {
             get => _state;
             set {
                 if(value == null) {
@@ -46,17 +51,20 @@ namespace Adrenak.UGX {
         /// </summary>
         protected void Start() {
             try {
-                OnInitializeView();
+                if(AutoInitializeOnStart) {
+                    OnInitializeView();
+                    IsViewInitialized = true;
+                }
             }
             catch (Exception e) {
                 Debug.LogError(e);
             }
-            IsViewInitialized = true;
         }
 
         private void OnValidate() {
             try {
-                OnStateChange();
+                if(!Application.isPlaying)
+                    OnStateChange();
             }
             catch { }
         }
@@ -65,8 +73,6 @@ namespace Adrenak.UGX {
         /// Updates the View using the current state
         /// </summary>
         void UpdateView_Internal() {
-            //await UniTask.WaitUntil(() => IsViewInitialized);
-
 #if UNITY_EDITOR
             UnityEditor.Undo.RecordObject(gameObject, "UpdateView");
 #endif
@@ -82,7 +88,7 @@ namespace Adrenak.UGX {
         /// <param name="stateModification">
         /// An Action defining how the state should be modified
         /// </param>
-        public void ModifyState(Action<TState> stateModification) {
+        public void ModifyState(Action<T> stateModification) {
             stateModification?.Invoke(_state);
             UpdateView_Internal();
         }

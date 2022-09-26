@@ -7,7 +7,7 @@ namespace Adrenak.UGX {
     [Serializable]
     public abstract class State {
         /// <summary>
-        /// An ID that can be used to identify it.
+        /// An ID that can be used to identify this object
         /// </summary>
         public string ID;
     }
