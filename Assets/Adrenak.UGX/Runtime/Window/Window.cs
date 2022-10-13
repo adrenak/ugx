@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
@@ -76,7 +76,7 @@ namespace Adrenak.UGX {
             if (IsOpenOrOpening) return;
 
             while (status == WindowStatus.Closing)
-                return;
+                await UniTask.Yield();
             await UniTask.SwitchToMainThread();
 
             status = WindowStatus.Opening;
@@ -110,9 +110,9 @@ namespace Adrenak.UGX {
             if (IsClosedOrClosing) return;
 
             while (status == WindowStatus.Opening)
-                return;
-
+                await UniTask.Yield();
             await UniTask.SwitchToMainThread();
+
             status = WindowStatus.Closing;
             OnWindowStartClosing();
             WindowStartedClosing?.Invoke();
