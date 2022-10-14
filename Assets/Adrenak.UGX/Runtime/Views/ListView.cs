@@ -17,6 +17,7 @@ namespace Adrenak.UGX {
     public class ListView<T> : IList<T> where T : State {
         Transform container;
         List<View<T>> available = new List<View<T>>();
+        Transform hiddenContainer;
 
         View<T> Get() {
             if (available.Count == 0) {
@@ -25,16 +26,25 @@ namespace Adrenak.UGX {
             }
             var toReturn = available[0];
             available.RemoveAt(0);
+            toReturn.transform.SetParent(Container);
             return toReturn;
         }
 
         void Free(View<T> instance) {
-            if(!available.Contains(instance))
+            if(!available.Contains(instance)) {
+                instance.ResetView();
+
                 available.Add(instance);
+                instance.transform.SetParent(hiddenContainer);
+            }
         }
 
         void Create() {
             var newInstance = MonoBehaviour.Instantiate(Template, container);
+            newInstance.gameObject.hideFlags = HideFlags.DontSave;
+            if (!newInstance.gameObject.activeSelf)
+                newInstance.gameObject.SetActive(true);
+            newInstance.transform.SetParent(Container);
             available.Add(newInstance);
         }
 
@@ -44,7 +54,13 @@ namespace Adrenak.UGX {
         /// </summary>
         public Transform Container {
             get => container;
-            set => container = value;
+            set {
+                container = value;
+                var go = new GameObject("Hidden Container");
+                go.SetActive(false);
+                hiddenContainer = go.transform;
+                hiddenContainer.SetParent(value.parent);
+            }
         }
 
         View<T> template;
@@ -56,11 +72,12 @@ namespace Adrenak.UGX {
             get => template;
             set {
                 template = value;
-                template.AutoInitializeOnStart = false;
                 if (template.gameObject.scene != null)
                     template.gameObject.SetActive(false);
             }
         }
+
+        public Action<View<T>> CleanUp;
 
         /// <summary>
         /// Returns the <see cref="View{T}"/> that have been instantiated
@@ -137,8 +154,6 @@ namespace Adrenak.UGX {
             //var view = Object.Instantiate(template, container);
             var view = Get();
             view.State = state;
-            view.gameObject.SetActive(true);
-            view.hideFlags = HideFlags.DontSave;
 
             Views.Add(view);
         }
@@ -168,10 +183,8 @@ namespace Adrenak.UGX {
         /// <see cref="View{T}"/>
         /// </summary>
         public void Clear() {
-            foreach (var view in Views) {
+            foreach (var view in Views) 
                 Free(view);
-                view.gameObject.SetActive(false);
-            }
             Views.Clear();
         }
 
@@ -245,9 +258,7 @@ namespace Adrenak.UGX {
             }
             if(toBeRemoved != null) {
                 Views.Remove(toBeRemoved);
-                toBeRemoved.gameObject.SetActive(false);
                 Free(toBeRemoved);
-                //Object.Destroy(toBeRemoved.gameObject);
                 return true;
             }
             return false;
@@ -262,9 +273,7 @@ namespace Adrenak.UGX {
         public void RemoveAt(int index) {
             var toBeRemoved = Views[index];
             if (toBeRemoved != null) {
-                toBeRemoved.gameObject.SetActive(false);
                 Free(toBeRemoved);
-                //Object.Destroy(toBeRemoved.gameObject);
                 Views.RemoveAt(index);
             }
         }

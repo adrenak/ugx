@@ -41,9 +41,7 @@ namespace Adrenak.UGX {
             };            
         }
 
-        protected override void OnInitializeView() { }
-
-        protected override void OnStateChange() {
+        protected override void OnViewStateChange() {
             headerDisplay.text = State.header;
             bodyDisplay.text = State.body;
             positiveDisplay.text = State.positive;

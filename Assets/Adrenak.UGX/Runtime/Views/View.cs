@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Linq;
-using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -16,13 +12,6 @@ namespace Adrenak.UGX {
         /// </summary>
         public event EventHandler<T> ViewStateUpdated;
 
-        public bool IsViewInitialized { get; private set; } = false;
-
-        [SerializeField] bool autoInitilalizeOnStart = true;
-        public bool AutoInitializeOnStart {
-            get => autoInitilalizeOnStart;
-            set => autoInitilalizeOnStart = value;
-        }
         [Tooltip("Current state of the view.")]
         [SerializeField] T _state;
 
@@ -43,44 +32,17 @@ namespace Adrenak.UGX {
         }
 
         /// <summary>
-        /// Marked protected to draw attention to the following:
-        /// If you are creating a Start() method in your subclass,
-        /// be sure to call base.Start() inside it in the first line. 
-        /// 
-        /// Consider using <see cref="OnInitializeView"/> instead
+        /// Invoked to reset the View's UI and state.
+        /// Also, use this to provide a method to "cleanup" the
+        /// View so that it can be used in a ListView
         /// </summary>
-        protected void Start() {
-            try {
-                if(AutoInitializeOnStart) {
-                    OnInitializeView();
-                    IsViewInitialized = true;
-                }
-            }
-            catch (Exception e) {
-                Debug.LogError(e);
-            }
-        }
-
-        private void OnValidate() {
-            try {
-                if(!Application.isPlaying)
-                    OnStateChange();
-            }
-            catch { }
-        }
+        public virtual void ResetView() { }
 
         /// <summary>
-        /// Updates the View using the current state
+        /// Called by View<T> when the View State has been
+        /// swapped or modified.
         /// </summary>
-        void UpdateView_Internal() {
-#if UNITY_EDITOR
-            UnityEditor.Undo.RecordObject(gameObject, "UpdateView");
-#endif
-            if (State != null) {
-                OnStateChange();
-                ViewStateUpdated?.Invoke(this, _state);
-            }
-        }
+        protected virtual void OnViewStateChange() { }
 
         /// <summary>
         /// Modifies the state and refreshes the view
@@ -93,8 +55,17 @@ namespace Adrenak.UGX {
             UpdateView_Internal();
         }
 
-        protected abstract void OnInitializeView();
-
-        protected abstract void OnStateChange();
+        /// <summary>
+        /// Updates the View using the current state
+        /// </summary>
+        void UpdateView_Internal() {
+#if UNITY_EDITOR
+            UnityEditor.Undo.RecordObject(gameObject, "UpdateView");
+#endif
+            if (State != null) {
+                OnViewStateChange();
+                ViewStateUpdated?.Invoke(this, _state);
+            }
+        }
     }
 }

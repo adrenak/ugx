@@ -19,7 +19,6 @@ namespace Adrenak.UGX {
         bool responded;
         public void Close() => responded = true;
 
-        protected override void OnInitializeView() { }
-        protected override void OnStateChange() { }
+        protected override void OnViewStateChange() { }
     }
 }

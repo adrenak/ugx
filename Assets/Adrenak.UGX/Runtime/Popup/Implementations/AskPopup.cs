@@ -33,7 +33,7 @@ namespace Adrenak.UGX {
             return confirmed;
         }
 
-        protected override void OnStateChange() {
+        protected override void OnViewStateChange() {
             headerDisplay.text = State.header;
             bodyDisplay.text = State.body;
             positiveDisplay.text = State.positive;
@@ -43,7 +43,5 @@ namespace Adrenak.UGX {
         public void Confirm() => confirmed = true;
 
         public void Deny() => denied = true;
-
-        protected override void OnInitializeView() { }
     }
 }

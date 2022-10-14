@@ -25,7 +25,7 @@ namespace Adrenak.UGX {
         [SerializeField] Text title;
 
 
-        protected override void OnInitializeView() {
+        void Start() {
             navigator.WindowPushed.AddListener(window => {
                 if (!autoUpdateOnNavigatorPush) return;
 
@@ -36,7 +36,7 @@ namespace Adrenak.UGX {
             });
         }
 
-        protected override void OnStateChange() {
+        protected override void OnViewStateChange() {
             if (icon != null)
                 icon.sprite = State.sprite;
 
