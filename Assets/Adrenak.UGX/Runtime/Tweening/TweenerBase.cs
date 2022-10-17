@@ -1,48 +1,31 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System.Threading;
+using Pixelplacement;
 
 namespace Adrenak.UGX {
     /// <summary>
     /// Base class for creating tweening behaviour.
     /// </summary>
     public abstract class TweenerBase : UGXBehaviour {
-        // Ambient context dependency pattern. Set driver
-        // implementation before ever using it. Best to set 
-        // it at the start of the application.
-        static ITweenDriver driver;
-
-        public static bool IsDriverLocked => driver != null;
-
-        /// <summary>
-        /// The <see cref="ITweenDriver"/> implementation to use used.
-        /// Defaults to <see cref="SurgeTweenDriver"/>
-        /// </summary>
-        public static ITweenDriver Driver {
-            get {
-                if (driver == null)
-                    driver = new SurgeTweenDriver();
-                return driver;
-            }
-            set {
-                if (driver != null){
-                    var msg = "Driver can only be set once and " +
-                    "before any get calls";
-                    Debug.LogError(msg);
-                }
-
-                if (value == null)
-                    Debug.LogError("Cannot set driver to null!");
-
-                driver = value;
-            }
-        }
-
         float lastProgress = -1;
 
         /// <summary>
         /// The tween progress (from 0 to 1)
         /// </summary>
         public float progress;
+
+        /// <summary>
+        /// If set to true, while tweening progress will always go
+        /// from 0 to 1 for IN and 1 to 0 for OUT regardless of 
+        /// current progress value. This will likely cause a disruptive
+        /// UI experience, hence set to false.
+        /// </summary>
+        [Tooltip("If set to true, while tweening progress will always go" +
+        "from 0 to 1 for IN and 1 to 0 for OUT regardless of " +
+        "current progress value. This will likely cause a disruptive" +
+        "UI experience, hence set to false.")]
+        public bool tweenEndToEnd = false;
 
         /// <summary>
         /// Should same tween style be used for in and out tweens.
@@ -71,9 +54,9 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Tweens in. When not in play mode, instantly jumps to progress 1
         /// </summary>
-        async public void TweenIn() {
+        async public void TweenIn(CancellationToken token = default) {
             if (Application.isPlaying)
-                await TweenInAsync();
+                await TweenInAsync(token);
             else
                 SetProgress(1);
         }
@@ -81,9 +64,9 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Tweens out. When not in play mode, instantly jumps to progress 0
         /// </summary>
-        async public void TweenOut() {
+        async public void TweenOut(CancellationToken token = default) {
             if (Application.isPlaying)
-                await TweenOutAsync();
+                await TweenOutAsync(token);
             else
                 SetProgress(0);
         }
@@ -91,12 +74,54 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Awaitable Tween in from 0 to 1 
         /// </summary>
-        public abstract UniTask TweenInAsync();
+        public UniTask TweenInAsync(CancellationToken token = default) {
+            var source = new UniTaskCompletionSource();
+            var style = useSameStyleForInAndOut ? commonStyle : inStyle;
+            var tweenBase = Tween.Value(tweenEndToEnd ? 0 : progress, 1f,
+                x => SetProgressInternal(x),
+                style.Duration + .001f,
+                style.Delay + .001f,
+                Convert(style.Curve),
+                Convert(style.Loop),
+                () => { },
+                () => {
+                    SetProgressInternal(1);
+                    source.TrySetResult();
+                }
+            );
+            if (token != default)
+                token.Register(() => tweenBase.Stop());
+
+            return source.Task;
+        }
 
         /// <summary>
         /// Awaitable Tween out from 1 to 0
         /// </summary>
-        public abstract UniTask TweenOutAsync();
+        public UniTask TweenOutAsync(CancellationToken token = default) {
+            var source = new UniTaskCompletionSource();
+            var style = useSameStyleForInAndOut ? commonStyle : outStyle;
+            var tweenBase = Tween.Value(tweenEndToEnd ? 1 : progress, 0f,
+                y => SetProgressInternal(y),
+                style.Duration + .001f,
+                style.Delay + .001f,
+                Convert(style.Curve),
+                Convert(style.Loop),
+                () => { },
+                () => {
+                    SetProgressInternal(0);
+                    source.TrySetResult();
+                }
+            );
+            if(token != default)
+                token.Register(() => tweenBase.Stop());
+            return source.Task;
+        }
+
+        void SetProgressInternal(float value) {
+            progress = value;
+            SetProgress(value);
+        }
 
         /// <summary>
         /// Implement in derived class for setting 
@@ -114,6 +139,44 @@ namespace Adrenak.UGX {
             if (lastProgress != progress)
                 SetProgress(progress);
             lastProgress = progress;
+        }
+
+
+        public static Tween.LoopType Convert(LoopType loop) {
+            return (Tween.LoopType)(int)loop;
+        }
+
+        public static AnimationCurve Convert(CurveType curve) {
+            switch (curve) {
+                case CurveType.EaseBounce:
+                    return Tween.EaseBounce;
+                case CurveType.EaseIn:
+                    return Tween.EaseIn;
+                case CurveType.EaseInBack:
+                    return Tween.EaseInBack;
+                case CurveType.EaseInOut:
+                    return Tween.EaseInOut;
+                case CurveType.EaseInOutBack:
+                    return Tween.EaseInOutBack;
+                case CurveType.EaseInOutStrong:
+                    return Tween.EaseInOutStrong;
+                case CurveType.EaseInStrong:
+                    return Tween.EaseInStrong;
+                case CurveType.EaseLinear:
+                    return Tween.EaseLinear;
+                case CurveType.EaseOut:
+                    return Tween.EaseOut;
+                case CurveType.EaseOutBack:
+                    return Tween.EaseOutBack;
+                case CurveType.EaseOutStrong:
+                    return Tween.EaseOutStrong;
+                case CurveType.EaseSpring:
+                    return Tween.EaseSpring;
+                case CurveType.EaseWobble:
+                    return Tween.EaseWobble;
+                default:
+                    return null;
+            }
         }
     }
 }

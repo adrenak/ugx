@@ -1,16 +1,17 @@
 {
 	"name": "com.adrenak.ugx",
-	"version": "6.4.2",
+	"version": "6.5.0",
 	"displayName": "Adrenak.UGX",
 	"description": "UGX: UGUI Extended. UI framework for Unity UI.",
 	"unity": "2018.4",
 	"author": {
 		"name": "Vatsal Ambastha",
 		"email": "ambastha.vatsal@gmail.com",
-		"url": "www.vatsalambastha.com"
+		"url": "http://www.vatsalambastha.com"
 	},
 	"dependencies": {
-		"com.cysharp.unitask": "2.2.5"
+		"com.cysharp.unitask": "2.2.5",
+		"com.pixelplacement.surge.tween":"1.0.2"
 	},
 	"scopedRegistries": [
 		{
@@ -18,6 +19,7 @@
 			"url": "https://package.openupm.com",
 			"scopes": [
 				"com.cysharp.unitask",
+				"com.pixelplacement.surge.tween",
 				"com.openupm"
 			]
 		}

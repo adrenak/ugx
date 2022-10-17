@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 using UnityEngine;
 
@@ -53,53 +53,13 @@ namespace Adrenak.UGX {
         public void CaptureOutPosition() => outPosition = RectTransform.localPosition;
 
         /// <summary>
-        /// Tweens the position of the UI element towards 
-        /// <see cref="InPosition"/> using the applicable 
-        /// <see cref="TweenStyle"/>
-        /// </summary>
-        /// <returns></returns>
-        override async public UniTask TweenInAsync() {
-            RectTransform.localPosition = GetExitCoordinates(enterEdge);
-            var stylesToUse = useSameStyleForInAndOut ? commonStyle : inStyle;
-            await TweenToPosition(inPosition, stylesToUse);
-            RectTransform.localPosition = InPosition;
-        }
-
-        /// <summary>
-        /// Tweens the position of the UI element towards 
-        /// <see cref="OutPosition"/> using the applicable 
-        /// <see cref="TweenStyle"/>
-        /// </summary>
-        /// <returns></returns>
-        override async public UniTask TweenOutAsync() {
-            RectTransform.localPosition = InPosition;
-            var stylesToUse = useSameStyleForInAndOut ? commonStyle : outStyle;
-            await TweenToPosition(GetExitCoordinates(exitEdge), stylesToUse);
-            RectTransform.localPosition = OutPosition;
-        }
-
-        /// <summary>
         /// Sets the tweening progress to a value between 0 and 1. 
         /// Use this to have manual control over the position.
         /// </summary>
         /// <param name="value"></param>
         protected override void SetProgress(float value) {
             RectTransform.localPosition = Vector3.Lerp(OutPosition, InPosition, value);
-            if (value == 0f)
-                RectTransform.localPosition = OutPosition;
-            else if (value == 1f) 
-                RectTransform.localPosition = InPosition;
         }
-
-        /// <summary>
-        /// Tweens the position to an end value using the provided
-        /// <see cref="TweenStyle"/>
-        /// </summary>
-        /// <param name="to">The position to tween towards</param>
-        /// <param name="style">The tween styles to be used</param>
-        /// <returns></returns>
-        async public UniTask TweenToPosition(Vector3 to, TweenStyle style)
-            => await Driver.TweenToPosition(RectTransform, to, style);
 
         /// <summary>
         /// Gets the nearest local position for this UI element to be outside 

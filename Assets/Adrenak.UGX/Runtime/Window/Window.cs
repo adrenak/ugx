@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -9,9 +11,11 @@ namespace Adrenak.UGX {
     /// Uses Tweeners to open (Transition Up) and close (Transition Down)
     /// </summary>
     public class Window : UGXBehaviour {
+        // TODO: Get rid of these two
         public Sprite icon;
         public string title;
 
+        [SerializeField] bool dontTweenToSameStatus = true;
         [SerializeField] WindowStatus status;
         [SerializeField] TweenerBase[] activeTweeners;
 
@@ -62,7 +66,10 @@ namespace Adrenak.UGX {
         /// </summary>
         public void OpenWindow() => OpenWindowAsync();
 
+        List<CancellationTokenSource> cancellationSources;
+
         void Awake() {
+            cancellationSources = new List<CancellationTokenSource>();
             // Add this window to a parent navigator, if present
             var navigator = transform.parent.GetComponent<Navigator>();
             if (navigator != null)
@@ -73,11 +80,8 @@ namespace Adrenak.UGX {
         /// Opens the window. Completion is awaitable.
         /// </summary>
         async public UniTask OpenWindowAsync() {
-            if (IsOpenOrOpening) return;
-
-            while (status == WindowStatus.Closing)
-                await UniTask.Yield();
-            await UniTask.SwitchToMainThread();
+            if (status == WindowStatus.Opened && !dontTweenToSameStatus) 
+                return;
 
             status = WindowStatus.Opening;
             OnWindowStartOpening();
@@ -86,14 +90,24 @@ namespace Adrenak.UGX {
             if (activeTweeners.Length == 0)
                 activeTweeners = Tweeners;
 
-            var transitions = activeTweeners.Where(x => x.enabled)
-                .Select(x => x.TweenInAsync())
+            if (cancellationSources.Count > 0) {
+                cancellationSources.ForEach(x => x.Cancel());
+                cancellationSources.Clear();
+            }
+
+            var transitions = activeTweeners
+                .Select(x => {
+                    var cancelSource = new CancellationTokenSource();
+                    cancellationSources.Add(cancelSource);
+                    return x.TweenInAsync(cancelSource.Token);
+                })
                 .ToList();
 
             await UniTask.WhenAll(transitions);
+            await UniTask.SwitchToMainThread();
+            cancellationSources.Clear();
             status = WindowStatus.Opened;
 
-            await UniTask.SwitchToMainThread();
             OnWindowDoneOpening();
             WindowDoneOpening?.Invoke();
         }
@@ -107,26 +121,33 @@ namespace Adrenak.UGX {
         /// Closes the window. Completion is awaitable.
         /// </summary>
         async public UniTask CloseWindowAsync() {
-            if (IsClosedOrClosing) return;
-
-            while (status == WindowStatus.Opening)
-                await UniTask.Yield();
-            await UniTask.SwitchToMainThread();
+            if (status == WindowStatus.Closed && !dontTweenToSameStatus) 
+                return;
 
             status = WindowStatus.Closing;
             OnWindowStartClosing();
             WindowStartedClosing?.Invoke();
 
+            if (cancellationSources.Count > 0) {
+                cancellationSources.ForEach(x => x.Cancel());
+                cancellationSources.Clear();
+            }
+
             if (activeTweeners.Length == 0)
                 activeTweeners = Tweeners;
-            var transitions = activeTweeners.Where(x => x.enabled)
-                .Select(x => x.TweenOutAsync())
+                var transitions = activeTweeners
+                .Select(x => {
+                    var cancelSource = new CancellationTokenSource();
+                    cancellationSources.Add(cancelSource);
+                    return x.TweenOutAsync(cancelSource.Token);
+                })
                 .ToList();
 
             await UniTask.WhenAll(transitions);
+            await UniTask.SwitchToMainThread();
+            cancellationSources.Clear();
             status = WindowStatus.Closed;
 
-            await UniTask.SwitchToMainThread();
             OnWindowDoneClosing();
             WindowDoneClosing?.Invoke();
         }

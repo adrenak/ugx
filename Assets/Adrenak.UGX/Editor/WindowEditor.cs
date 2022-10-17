@@ -16,8 +16,11 @@ namespace Adrenak.UGX.Editor {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("status"));
             EditorGUI.EndDisabledGroup();
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("icon"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("title"));
+            // TODO: want to get rid of these from Window.cs
+            // In the meantime I'll stop drawing them.
+            //EditorGUILayout.PropertyField(serializedObject.FindProperty("icon"));
+            //EditorGUILayout.PropertyField(serializedObject.FindProperty("title"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dontTweenToSameStatus"));
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("activeTweeners"));
