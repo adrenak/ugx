@@ -9,7 +9,7 @@ namespace Adrenak.UGX {
     /// are forgotten.
     /// </summary>
     public class DefaultNavigationRule : INavigationRule {
-        [SerializeField] List<int> history;
+        [SerializeField] List<int> history = new List<int>();
 
         public void Push(int window) {
             if (history.Contains(window)) {
