@@ -22,8 +22,8 @@ namespace Adrenak.UGX {
 
         public int? Pop() {
             if (history.Count > 1) {
-                var toReturn = history[history.Count - 1 - 1];
-                history.Remove(toReturn);
+                var toReturn = history[history.Count - 2];
+                history.Remove(history[history.Count-1]);
                 return toReturn;
             }
             else

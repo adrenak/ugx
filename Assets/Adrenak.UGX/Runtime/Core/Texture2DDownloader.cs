@@ -22,7 +22,7 @@ namespace Adrenak.UGX {
         }
 
         int maxConcurrentDownloads;
-        float textureLoadPeriod;
+        float textureLoadPeriod = .16f;
         List<Request> pending = new List<Request>();
         List<Request> ongoing = new List<Request>();
         List<Action> textureLoads = new List<Action>();

@@ -80,21 +80,23 @@ namespace Adrenak.UGX {
         /// Instead <see cref="GameObject.SendMessage(string, object)"/> has
         /// been used to invoke it.
         /// </summary>
-        public void RegisterWindow(object obj) {
-            var window = obj as Window;
-            window.WindowStartedOpening.AddListener(() => {
-                router.SetActiveWindow(window);;
-                WindowPushed.Invoke(window);
-                NavigationRule.Push(window.GetInstanceID());
-            });
-            windows.Add(window);
+        public void Awake() {
+            foreach(var window  in windows) {
+                window.WindowStartedOpening.AddListener(() => {
+                    router.SetActiveWindow(window);;
+                    WindowPushed.Invoke(window);
+                    NavigationRule.Push(window.GetInstanceID());
+                });
+            }
         }
 
         /// <summary>
         /// Pop the currently opened window (if any)
         /// </summary>
         public void Back() {
-            var toOpen = GetWindowByInstanceID(NavigationRule.Pop().Value);
+            var pop = NavigationRule.Pop();
+            if (pop == null) return;
+            var toOpen = GetWindowByInstanceID(pop.Value);
             if (toOpen != null) {
                 router.SetActiveWindow(toOpen);
                 WindowPopped.Invoke(toOpen);

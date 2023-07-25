@@ -25,16 +25,28 @@ namespace Adrenak.UGX {
         void UpdateWithStatus() {
             switch (window.Status) {
                 case WindowStatus.Opening:
-                    Set(true, false, false, false);
+                    Set(openedObj, false);
+                    Set(closingObj, false);
+                    Set(closedObj, false);
+                    Set(openingObj, true);
                     break;
                 case WindowStatus.Opened:
-                    Set(false, true, false, false);
+                    Set(closingObj, false);
+                    Set(closedObj, false);
+                    Set(openingObj, false);
+                    Set(openedObj, true);
                     break;
                 case WindowStatus.Closing:
-                    Set(false, false, true, false);
+                    Set(openedObj, false);
+                    Set(closedObj, false);
+                    Set(openingObj, false);
+                    Set(closingObj, true);
                     break;
                 case WindowStatus.Closed:
-                    Set(false, false, false, true);
+                    Set(openedObj, false);
+                    Set(closingObj, false);
+                    Set(openingObj, false);
+                    Set(closedObj, true);
                     break;
             }
         }
@@ -58,13 +70,6 @@ namespace Adrenak.UGX {
                 UpdateWithStatus();
                 onWindowDoneClosing.Invoke();
             });
-        }
-
-        void Set(bool opening, bool opened, bool closing, bool closed) {
-            Set(openingObj, opening);
-            Set(openedObj, opened);
-            Set(closingObj, closing);
-            Set(closedObj, closed);
         }
 
         void Set(GameObject go, bool state) {

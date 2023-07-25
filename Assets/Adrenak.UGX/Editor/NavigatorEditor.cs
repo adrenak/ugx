@@ -16,12 +16,8 @@ namespace Adrenak.UGX.Editor {
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty("sequential"));
 
-            EditorGUI.BeginDisabledGroup(true);
-            {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("windows"));
-            }
-            EditorGUI.EndDisabledGroup();
-
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("windows"));
+            
             EditorGUILayout.Space(-20);
             EditorGUI.BeginDisabledGroup(true);
             {

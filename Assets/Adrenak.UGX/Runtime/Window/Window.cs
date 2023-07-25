@@ -15,7 +15,8 @@ namespace Adrenak.UGX {
         public Sprite icon;
         public string title;
 
-        [SerializeField] bool dontTweenToSameStatus = true;
+        [SerializeField] bool dontTweenTowardSameStatus = true;
+        [SerializeField] bool dontTweenAlongSameStatus = true;
         [SerializeField] WindowStatus status;
         [SerializeField] TweenerBase[] activeTweeners;
 
@@ -61,26 +62,20 @@ namespace Adrenak.UGX {
         /// </summary>
         public UnityEvent WindowDoneClosing;
 
+        List<CancellationTokenSource> cancellationSources = new List<CancellationTokenSource>();
+
         /// <summary>
         /// Opens the window
         /// </summary>
         public void OpenWindow() => OpenWindowAsync();
 
-        List<CancellationTokenSource> cancellationSources;
-
-        void Awake() {
-            cancellationSources = new List<CancellationTokenSource>();
-            // Add this window to a parent navigator, if present
-            var navigator = transform.parent.GetComponent<Navigator>();
-            if (navigator != null)
-                navigator.SendMessage("RegisterWindow", this);
-        }
-
         /// <summary>
         /// Opens the window. Completion is awaitable.
         /// </summary>
         async public UniTask OpenWindowAsync() {
-            if (status == WindowStatus.Opened && !dontTweenToSameStatus) 
+            if (status == WindowStatus.Opened && !dontTweenTowardSameStatus) 
+                return;
+            if (status == WindowStatus.Opening && !dontTweenAlongSameStatus)
                 return;
 
             status = WindowStatus.Opening;
@@ -121,7 +116,9 @@ namespace Adrenak.UGX {
         /// Closes the window. Completion is awaitable.
         /// </summary>
         async public UniTask CloseWindowAsync() {
-            if (status == WindowStatus.Closed && !dontTweenToSameStatus) 
+            if (status == WindowStatus.Closed && dontTweenTowardSameStatus) 
+                return;
+            if (status == WindowStatus.Closing && dontTweenAlongSameStatus)
                 return;
 
             status = WindowStatus.Closing;

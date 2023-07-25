@@ -20,7 +20,8 @@ namespace Adrenak.UGX.Editor {
             // In the meantime I'll stop drawing them.
             //EditorGUILayout.PropertyField(serializedObject.FindProperty("icon"));
             //EditorGUILayout.PropertyField(serializedObject.FindProperty("title"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("dontTweenToSameStatus"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dontTweenTowardSameStatus"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("dontTweenAlongSameStatus"));
 
             EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("activeTweeners"));

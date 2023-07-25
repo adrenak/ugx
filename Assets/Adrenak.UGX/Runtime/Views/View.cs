@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -55,6 +57,13 @@ namespace Adrenak.UGX {
             UpdateView_Internal();
         }
 
+        async public void ModifyState(Func<T, Task> stateModification) {
+            if(stateModification != null) {
+                await stateModification(_state);
+                UpdateView_Internal();
+            }
+        }
+
         /// <summary>
         /// Updates the View using the current state
         /// </summary>
@@ -66,6 +75,22 @@ namespace Adrenak.UGX {
                 OnViewStateChange();
                 ViewStateUpdated?.Invoke(this, _state);
             }
+        }
+
+        static Dictionary<Type, Dictionary<string, View<T>>> res = new Dictionary<Type, Dictionary<string, View<T>>>();
+
+        public static View<T> Load(string resourcePath) {
+            Type t = typeof(T);
+            if (res.ContainsKey(t)) {
+                if (res[t].ContainsKey(resourcePath))
+                    return res[t][resourcePath];
+            }
+            else
+                res.Add(t, new Dictionary<string, View<T>>());
+
+            var resource = Resources.Load<View<T>>(resourcePath);
+            res[t][resourcePath] = resource;
+            return resource;
         }
     }
 }

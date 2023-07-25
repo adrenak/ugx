@@ -23,6 +23,8 @@ namespace Adrenak.UGX {
 
         public async void SetActiveWindow(Window window, bool async = true) {
             if (activeWindow != null) {
+                if (window == activeWindow) return;
+
                 if (async)
                     await activeWindow.CloseWindowAsync();
                 else
