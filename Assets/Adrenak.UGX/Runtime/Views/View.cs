@@ -69,7 +69,8 @@ namespace Adrenak.UGX {
         /// </summary>
         void UpdateView_Internal() {
 #if UNITY_EDITOR
-            UnityEditor.Undo.RecordObject(gameObject, "UpdateView");
+            if(gameObject != null) 
+                UnityEditor.Undo.RecordObject(gameObject, "UpdateView");
 #endif
             if (State != null) {
                 OnViewStateChange();

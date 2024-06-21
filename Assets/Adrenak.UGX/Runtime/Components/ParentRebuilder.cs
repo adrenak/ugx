@@ -28,12 +28,14 @@ namespace Adrenak.UGX {
 
             height = width = 0;
             foreach (Transform child in transform) {
-                childRT = child.GetComponent<RectTransform>();
-                height += (int)childRT.sizeDelta.y;
-                width += (int)childRT.sizeDelta.x;
+                if (child.TryGetComponent(out childRT)) {
+                    height += (int)childRT.sizeDelta.y;
+                    width += (int)childRT.sizeDelta.x;
+
+                }
             }
 
-            if (Mathf.Abs(height - lastHeight) > threshold.y 
+            if (Mathf.Abs(height - lastHeight) > threshold.y
             || (Mathf.Abs(width - lastWidth) > threshold.x))
                 LayoutRebuilder.MarkLayoutForRebuild(RT);
 

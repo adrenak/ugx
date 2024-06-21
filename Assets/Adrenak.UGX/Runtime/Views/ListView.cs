@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Collections;
 
 using Object = UnityEngine.Object;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Adrenak.UGX {
     /// <summary>
@@ -17,8 +20,7 @@ namespace Adrenak.UGX {
     public class ListView<T> : IList<T> where T : State {
         Transform container;
         List<View<T>> available = new List<View<T>>();
-        Transform hiddenContainer;
-
+        
         View<T> Get() {
             if (available.Count == 0) {
                 Create();
@@ -26,16 +28,17 @@ namespace Adrenak.UGX {
             }
             var toReturn = available[0];
             available.RemoveAt(0);
-            toReturn.transform.SetParent(Container);
+            toReturn.gameObject.SetActive(true);
             return toReturn;
         }
 
         void Free(View<T> instance) {
-            if(!available.Contains(instance)) {
+            if (!available.Contains(instance)) {
                 instance.ResetView();
 
                 available.Add(instance);
-                instance.transform.SetParent(hiddenContainer);
+                instance.gameObject.name = "Cached";
+                instance.gameObject.SetActive(false);
             }
         }
 
@@ -54,13 +57,7 @@ namespace Adrenak.UGX {
         /// </summary>
         public Transform Container {
             get => container;
-            set {
-                container = value;
-                var go = new GameObject("Hidden Container");
-                go.SetActive(false);
-                hiddenContainer = go.transform;
-                hiddenContainer.SetParent(value.parent);
-            }
+            set => container = value;
         }
 
         View<T> template;
@@ -72,7 +69,7 @@ namespace Adrenak.UGX {
             get => template;
             set {
                 template = value;
-                if (template.gameObject.scene != null)
+                if (template.gameObject.scene.name != null)
                     template.gameObject.SetActive(false);
             }
         }
@@ -133,12 +130,12 @@ namespace Adrenak.UGX {
             get => Views.Select(x => x.State).ToList();
             set {
                 for (int i = 0; i < value.Count; i++) {
-                    if (i < Views.Count) 
+                    if (i < Views.Count)
                         Views[i].State = value[i];
                     else
                         Add(value[i]);
                 }
-                while(Views.Count > value.Count) 
+                while (Views.Count > value.Count)
                     RemoveAt(value.Count);
             }
         }
@@ -183,9 +180,24 @@ namespace Adrenak.UGX {
         /// <see cref="View{T}"/>
         /// </summary>
         public void Clear() {
-            foreach (var view in Views) 
+            foreach (var view in Views)
                 Free(view);
             Views.Clear();
+        }
+
+        public void Reset() {
+            Clear();
+            foreach(var _available in available) {
+#if UNITY_EDITOR
+                if(!EditorApplication.isPlayingOrWillChangePlaymode) 
+                    Object.DestroyImmediate(_available);
+                else
+                    Object.Destroy(_available);
+#else
+                Object.Destroy(_available);
+#endif
+            }
+            available.Clear();
         }
 
         /// <summary>
@@ -256,7 +268,7 @@ namespace Adrenak.UGX {
                     break;
                 }
             }
-            if(toBeRemoved != null) {
+            if (toBeRemoved != null) {
                 Views.Remove(toBeRemoved);
                 Free(toBeRemoved);
                 return true;
