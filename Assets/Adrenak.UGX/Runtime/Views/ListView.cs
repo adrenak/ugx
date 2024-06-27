@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Linq;
 using System;
 using System.Collections.Generic;
@@ -69,6 +69,8 @@ namespace Adrenak.UGX {
             get => template;
             set {
                 template = value;
+                //if (!string.IsNullOrEmpty(template.gameObject.scene.name))
+                Debug.Log(template.gameObject.scene.name == null);
                 if (template.gameObject.scene.name != null)
                     template.gameObject.SetActive(false);
             }
