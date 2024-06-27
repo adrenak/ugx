@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Linq;
 using System;
 using System.Collections.Generic;
@@ -152,6 +152,8 @@ namespace Adrenak.UGX {
 
             //var view = Object.Instantiate(template, container);
             var view = Get();
+            view.gameObject.name = 
+                $"{(string.IsNullOrEmpty(state.ID) ? "" : state.ID)} ({typeof(T).Name})";
             view.State = state;
 
             Views.Add(view);
