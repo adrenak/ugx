@@ -69,9 +69,7 @@ namespace Adrenak.UGX {
             get => template;
             set {
                 template = value;
-                //if (!string.IsNullOrEmpty(template.gameObject.scene.name))
-                Debug.Log(template.gameObject.scene.name == null);
-                if (template.gameObject.scene.name != null)
+                if (!string.IsNullOrEmpty(template.gameObject.scene.name))
                     template.gameObject.SetActive(false);
             }
         }
