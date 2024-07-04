@@ -188,18 +188,34 @@ namespace Adrenak.UGX {
         }
 
         public void Reset() {
-            Clear();
-            foreach(var _available in available) {
 #if UNITY_EDITOR
-                if(!EditorApplication.isPlayingOrWillChangePlaymode) 
-                    Object.DestroyImmediate(_available);
-                else
-                    Object.Destroy(_available);
-#else
-                Object.Destroy(_available);
-#endif
+            var children = container.GetComponentsInChildren<Transform>(true);
+            foreach (var child in children) {
+                if (child == null
+                || child.gameObject == null
+                || child.parent == null 
+                || child.parent.gameObject == null
+                || child == container) 
+                    continue;
+                
+                if (child.parent.transform == container) {
+                    if(!EditorApplication.isPlayingOrWillChangePlaymode) {
+                        if(child.gameObject != null)
+                            Object.DestroyImmediate(child.gameObject);
+                    }
+                    else {
+                        if (child.gameObject != null)
+                            Object.Destroy(child.gameObject);
+                    }
+                }
             }
+#else
+            foreach(var _available in available)
+                if(_available.gameObject != null)
+                    Object.Destroy(_available.gameObject);
+#endif
             available.Clear();
+            Views.Clear();
         }
 
         /// <summary>
