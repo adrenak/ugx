@@ -39,6 +39,7 @@ namespace Adrenak.UGX {
                 available.Add(instance);
                 instance.gameObject.name = "Cached";
                 instance.gameObject.SetActive(false);
+                instance.transform.SetAsLastSibling();
             }
         }
 
@@ -155,6 +156,7 @@ namespace Adrenak.UGX {
             view.State = state;
 
             Views.Add(view);
+            //view.transform.SetSiblingIndex(Views.Count - 1 + Template.gameObject.scene);
         }
 
         /// <summary>
