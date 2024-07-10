@@ -191,8 +191,30 @@ namespace Adrenak.UGX {
 
         public void Reset() {
 #if UNITY_EDITOR
+            // This gets us ALL Transform under container, including container itself
             var children = container.GetComponentsInChildren<Transform>(true);
             foreach (var child in children) {
+                // We never delete the container
+                if (child == container)
+                    continue;
+
+                // We check if the child is inside the template and never delete it if that's true.
+                // This is because the template could be a prefab and in edit mode we cannot delete
+                // any children of a prefab.
+                Transform t = child;
+                bool insideTemplate = false;
+                while(t != container) {
+                    if(t == template.transform) {
+                        insideTemplate = true; 
+                        break;
+                    }
+                    if (t == null || t.parent == null)
+                        break;
+                    t = t.parent;
+                }
+                if (insideTemplate)
+                    continue;
+
                 if (child == null
                 || child.gameObject == null
                 || child.parent == null 
