@@ -18,7 +18,7 @@ namespace Adrenak.UGX {
                 return repo;
             }
             set {
-                if(repo == null)
+                if(repo != null)
                     throw new Exception("Cannot set Cache to null!");
 
                 if (repo != null)
