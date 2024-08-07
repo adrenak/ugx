@@ -153,6 +153,11 @@ namespace Adrenak.UGX {
             var view = Get();
             view.gameObject.name = 
                 $"{(string.IsNullOrEmpty(state.ID) ? "" : state.ID)} ({typeof(T).Name})";
+            int active = 0;
+            for (int i = 0; i < container.childCount; i++)
+                if (container.GetChild(i).gameObject.activeSelf)
+                    active++;
+            view.transform.SetSiblingIndex(active);
             view.State = state;
 
             Views.Add(view);
