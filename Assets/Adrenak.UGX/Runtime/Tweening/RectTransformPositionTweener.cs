@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-
 using UnityEngine;
 
 namespace Adrenak.UGX {
@@ -22,13 +20,19 @@ namespace Adrenak.UGX {
         /// <summary>
         /// The position at which the UI element is considered to be "in"
         /// </summary>
-        public Vector3 InPosition => inPosition;
+        public Vector3 InPosition {
+            get => inPosition;
+            set => inPosition = value;
+        }
 
         [SerializeField] Vector3 outPosition;
         /// <summary>
         /// The position at which the UI element is considers to be "out"
         /// </summary>
-        public Vector3 OutPosition => outPosition;
+        public Vector3 OutPosition {
+            get => outPosition;
+            set => outPosition = value;
+        }
 
         /// <summary>
         /// The edge from which the UI element should tween in
