@@ -35,7 +35,9 @@ namespace Adrenak.UGX {
 
         protected override void OnViewStateChange() {
             headerDisplay.text = State.header;
+            headerDisplay.gameObject.SetActive(!string.IsNullOrEmpty(State.header));
             bodyDisplay.text = State.body;
+            bodyDisplay.gameObject.SetActive(!string.IsNullOrEmpty(State.body));
             positiveDisplay.text = State.positive;
             negativeDisplay.text = State.negative;
         }
