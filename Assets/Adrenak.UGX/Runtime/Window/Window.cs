@@ -15,10 +15,25 @@ namespace Adrenak.UGX {
         public Sprite icon;
         public string title;
 
-        [SerializeField] bool dontTweenTowardSameStatus = true;
-        [SerializeField] bool dontTweenAlongSameStatus = true;
+        [SerializeField] bool dontChangeToSameEndStatus = true;
+        [SerializeField] bool dontChangeAlongSameTransitoryStatus = true;
         [SerializeField] WindowStatus status;
-        [SerializeField] TweenerBase[] activeTweeners;
+
+        /// <summary>
+        /// Whether the window should 
+        /// </summary>
+        public bool DontChangeToSameEndStatus {
+            get => dontChangeToSameEndStatus;
+            set => dontChangeToSameEndStatus = value;
+        }
+
+        /// <summary>
+        /// Whether the window should tween along the same sta
+        /// </summary>
+        public bool DontChangeAlongSameTransitoryStatus {
+            get => dontChangeAlongSameTransitoryStatus;
+            set => dontChangeAlongSameTransitoryStatus = value;
+        }
 
         /// <summary>
         /// The current status of the window
@@ -26,15 +41,31 @@ namespace Adrenak.UGX {
         public WindowStatus Status => status;
 
         /// <summary>
-        /// Array of <see cref="TweenerBase"/> used by the window for animation
+        /// If the window is currently open
         /// </summary>
-        public TweenerBase[] ActiveTweeners => activeTweeners;
+        public bool IsOpened => Status == WindowStatus.Opened;
+
+        /// <summary>
+        /// If the window is currently opening
+        /// </summary>
+        public bool IsOpening => Status == WindowStatus.Opening;
+
+        /// <summary>
+        /// If the window is currently closed
+        /// </summary>
+        public bool IsClosed => Status == WindowStatus.Closed;
+
+        /// <summary>
+        /// If the window is currently closing
+        /// </summary>
+        public bool IsClosing => Status == WindowStatus.Closing;
 
         /// <summary>
         /// Returns true if the window is open or currently opening
         /// </summary>
         public bool IsOpenOrOpening =>
             Status == WindowStatus.Opened || Status == WindowStatus.Opening;
+
 
         /// <summary>
         /// Returns true if the window is closed or currently closing
@@ -67,30 +98,28 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Opens the window
         /// </summary>
-        public void OpenWindow() => OpenWindowAsync();
+        public void OpenWindow(bool force = false) => OpenWindowAsync(force);
 
         /// <summary>
         /// Opens the window. Completion is awaitable.
         /// </summary>
-        async public UniTask OpenWindowAsync() {
-            if (status == WindowStatus.Opened && !dontTweenTowardSameStatus) 
+        async public UniTask OpenWindowAsync(bool force = false) {
+            if (status == WindowStatus.Opened && !dontChangeToSameEndStatus && !force)
                 return;
-            if (status == WindowStatus.Opening && !dontTweenAlongSameStatus)
+            if (status == WindowStatus.Opening && !dontChangeAlongSameTransitoryStatus && !force)
                 return;
 
             status = WindowStatus.Opening;
             OnWindowStartOpening();
             WindowStartedOpening?.Invoke();
 
-            if (activeTweeners.Length == 0)
-                activeTweeners = Tweeners;
-
             if (cancellationSources.Count > 0) {
                 cancellationSources.ForEach(x => x.Cancel());
                 cancellationSources.Clear();
             }
 
-            var transitions = activeTweeners
+            var transitions = Tweeners
+                .Where(x => x.enabled)
                 .Select(x => {
                     var cancelSource = new CancellationTokenSource();
                     cancellationSources.Add(cancelSource);
@@ -110,15 +139,15 @@ namespace Adrenak.UGX {
         /// <summary>
         /// Closes the window
         /// </summary>
-        public void CloseWindow() => CloseWindowAsync();
+        public void CloseWindow(bool force = false) => CloseWindowAsync(force);
 
         /// <summary>
         /// Closes the window. Completion is awaitable.
         /// </summary>
-        async public UniTask CloseWindowAsync() {
-            if (status == WindowStatus.Closed && dontTweenTowardSameStatus) 
+        async public UniTask CloseWindowAsync(bool force = false) {
+            if (status == WindowStatus.Closed && dontChangeToSameEndStatus && !force)
                 return;
-            if (status == WindowStatus.Closing && dontTweenAlongSameStatus)
+            if (status == WindowStatus.Closing && dontChangeAlongSameTransitoryStatus && !force)
                 return;
 
             status = WindowStatus.Closing;
@@ -130,9 +159,8 @@ namespace Adrenak.UGX {
                 cancellationSources.Clear();
             }
 
-            if (activeTweeners.Length == 0)
-                activeTweeners = Tweeners;
-                var transitions = activeTweeners
+            var transitions = Tweeners
+                .Where(x => x.enabled)
                 .Select(x => {
                     var cancelSource = new CancellationTokenSource();
                     cancellationSources.Add(cancelSource);
